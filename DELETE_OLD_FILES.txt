@@ -1,0 +1,3 @@
+Obsolete files from the earlier static-only v0.1 UI; remove from the existing project after applying this patch:
+- assets/css/auth.css
+- assets/js/auth.js

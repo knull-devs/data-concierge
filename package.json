@@ -1,0 +1,17 @@
+{
+  "name": "date-concierge",
+  "version": "0.2.0",
+  "private": true,
+  "type": "module",
+  "description": "Date Concierge mobile-first landing page and Vercel authentication foundation",
+  "engines": {
+    "node": "22.x"
+  },
+  "scripts": {
+    "check": "node --check assets/js/site.js && node --check assets/js/dashboard.js && node --check api/_lib/auth.js && node --check api/auth/register.js && node --check api/auth/login.js && node --check api/auth/me.js && node --check api/auth/logout.js && node --check api/health.js && python tools/verify_project.py",
+    "test:auth": "node tools/smoke-auth.mjs"
+  },
+  "dependencies": {
+    "@neondatabase/serverless": "1.2.0"
+  }
+}

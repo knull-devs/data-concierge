@@ -2,65 +2,202 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#fbf7f2">
-  <meta name="description" content="Date Concierge — thoughtful introductions and meaningful connections.">
-  <title>Sign in — Date Concierge</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#160d14">
+  <meta name="description" content="Thoughtful introductions, compatible people and help turning a promising connection into a real date.">
+  <title>Date Concierge — More than just a match</title>
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-  <link rel="stylesheet" href="/assets/css/auth.css">
-  <script src="/assets/js/auth.js" defer></script>
+  <link rel="preload" as="image" href="/assets/img/hero-couple.webp" fetchpriority="high">
+  <link rel="stylesheet" href="/assets/css/site.css">
+  <script src="/assets/js/site.js" defer></script>
 </head>
 <body>
-  <main id="main-content">
-    <div class="dc-preview-notice" role="status" aria-live="polite">Static UI preview only — login is not connected to the backend yet.</div>
-    <div class="dc-auth-shell dc-auth-login">
-      <div class="dc-auth-ambient dc-auth-ambient-one" aria-hidden="true"></div>
-      <div class="dc-auth-ambient dc-auth-ambient-two" aria-hidden="true"></div>
-      <div class="dc-auth-wrap">
-        <a class="dc-auth-brand" href="/" aria-label="Date Concierge home">
-          <span class="dc-brand-mark" aria-hidden="true"><span>♥</span></span>
-          <span class="dc-brand-name">date <strong>concierge</strong></span>
-        </a>
-        <div class="dc-auth-columns">
-          <section class="dc-auth-story" aria-label="Welcome to Date Concierge">
-            <div class="dc-auth-eyebrow"><span class="dc-live-dot" aria-hidden="true"></span> A MORE INTENTIONAL WAY TO DATE</div>
-            <h1>Make room for<br><em>something real.</em></h1>
-            <p class="dc-story-copy">Meet people who are looking for the same kind of connection you are. Thoughtful introductions, more meaningful conversations, and a little help with that first hello.</p>
-            <div class="dc-trust-points">
-              <div class="dc-trust-point"><span class="dc-check" aria-hidden="true">✓</span><span>Compatibility over endless swiping</span></div>
-              <div class="dc-trust-point"><span class="dc-check" aria-hidden="true">✓</span><span>Privacy and mutual consent come first</span></div>
-              <div class="dc-trust-point"><span class="dc-check" aria-hidden="true">✓</span><span>Real help turning introductions into dates</span></div>
-            </div>
-            <div class="dc-connection-art" aria-hidden="true">
-              <div class="dc-art-orbit dc-art-orbit-one"></div><div class="dc-art-orbit dc-art-orbit-two"></div>
-              <div class="dc-art-glow"></div><div class="dc-art-heart">♥</div>
-              <div class="dc-art-spark dc-art-spark-one">✦</div><div class="dc-art-spark dc-art-spark-two">✧</div>
-              <div class="dc-art-note dc-art-note-one"><span class="dc-art-note-icon">♡</span><span><b>A thoughtful hello</b><small>One good conversation can change everything.</small></span></div>
-              <div class="dc-art-note dc-art-note-two"><span class="dc-art-avatar">✦</span><span><b>Made for real connection</b><small>Less noise. More intention.</small></span></div>
-            </div>
-            <p class="dc-story-footnote">Your story, at your pace. <span>♡</span></p>
-          </section>
-          <section class="dc-auth-panel" aria-labelledby="dc-login-title">
-            <div class="dc-panel-topline"><span class="dc-panel-kicker">YOUR NEXT CHAPTER</span><span class="dc-panel-flourish" aria-hidden="true">✳</span></div>
-            <h2 id="dc-login-title">Welcome back<span class="dc-title-period">.</span></h2>
-            <p class="dc-panel-subtitle">Good to see you again. Let's pick up where your story left off.</p>
-            <div class="dc-auth-form-slot">
-              <form id="login-form" class="dc-form" data-preview-form>
-                <div class="dc-form-field"><label class="dc-form-label" for="login-email">Your email</label><input class="dc-form-input" id="login-email" name="email" type="email" autocomplete="email" placeholder="you@example.com" required></div>
-                <div class="dc-form-field"><label class="dc-form-label" for="login-password">Your password</label><input class="dc-form-input" id="login-password" name="password" type="password" autocomplete="current-password" placeholder="Enter your password" required></div>
-                <div class="dc-form-field dc-form-checkbox"><label><input type="checkbox" name="remember"> Stay signed in (for up to 30 days)</label></div>
-                <div class="dc-form-field"><button class="dc-submit-button" type="submit">Sign in <span aria-hidden="true">→</span></button></div>
-              </form>
-            </div>
-            <div class="dc-auth-form-links"><a href="#forgot-password" data-preview-link>Forgot password?</a><a href="#resend-activation" data-preview-link>Resend activation email</a></div>
-            <div class="dc-auth-divider"><span>NEW AROUND HERE?</span></div>
-            <a class="dc-auth-secondary-cta" href="/register.html">Create your free profile <span aria-hidden="true">→</span></a>
-            <p class="dc-auth-legal">By continuing, you agree to treat every member with honesty, respect and care.</p>
-          </section>
-        </div>
-        <div class="dc-auth-bottom"><span>Thoughtfully connecting people.</span><span>Made with <b aria-label="love">♥</b> and intention</span></div>
-      </div>
+  <a class="skip-link" href="#main-content">Skip to content</a>
+  <header class="site-header" id="top">
+    <a class="brand" href="/" aria-label="Date Concierge home">
+      <span class="brand-symbol" aria-hidden="true">♡</span>
+      <span class="brand-wordmark">date concierge<span class="brand-period">.</span></span>
+    </a>
+    <button class="mobile-nav-toggle" id="mobile-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Open navigation">
+      <span></span><span></span>
+    </button>
+    <nav class="primary-nav" id="primary-nav" aria-label="Main navigation">
+      <a href="#how-it-works">How it works</a>
+      <a href="#about">About</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#terms">T&amp;C</a>
+      <button class="mobile-nav-auth mobile-nav-login" type="button" data-auth-open="login">Log in</button>
+      <button class="mobile-nav-auth mobile-nav-signup" type="button" data-auth-open="register">Create account ↗</button>
+    </nav>
+    <div class="header-actions">
+      <button class="button button-quiet header-login" type="button" data-auth-open="login">Log in</button>
+      <button class="button button-primary header-signup" type="button" data-auth-open="register">Create account <span aria-hidden="true">↗</span></button>
+      <a class="button button-primary header-dashboard is-hidden" id="header-dashboard" href="/dashboard.html">My space <span aria-hidden="true">↗</span></a>
     </div>
+  </header>
+
+  <main id="main-content">
+    <section class="hero-section" aria-labelledby="hero-title">
+      <div class="hero-image-layer" aria-hidden="true"></div>
+      <div class="hero-grain" aria-hidden="true"></div>
+      <div class="hero-content page-shell">
+        <div class="hero-copy reveal is-visible">
+          <div class="eyebrow eyebrow-light"><span class="eyebrow-flower" aria-hidden="true">✳</span> DATING, WITH INTENTION</div>
+          <h1 id="hero-title">More than<br>just a match,<br><em>a meaningful<br class="mobile-line-break"> connection.</em></h1>
+          <p class="hero-description">Meet compatible people with a little more thought and a lot less noise. We help with introductions, meaningful conversations and the details of that first date.</p>
+          <div class="hero-actions">
+            <button class="button button-primary button-large" type="button" data-auth-open="register">Find your person <span aria-hidden="true">↗</span></button>
+            <a class="button button-outline-light button-large" href="#how-it-works"><span class="play-icon" aria-hidden="true">▷</span> Discover how it works</a>
+          </div>
+          <div class="hero-points" aria-label="What makes Date Concierge different">
+            <div class="hero-point"><span class="point-icon" aria-hidden="true">✧</span><span><b>Thoughtful matches</b><small>Quality over quantity</small></span></div>
+            <div class="hero-point"><span class="point-icon" aria-hidden="true">♡</span><span><b>Mutual consent</b><small>Your pace, your choice</small></span></div>
+            <div class="hero-point"><span class="point-icon" aria-hidden="true">✦</span><span><b>Human assistance</b><small>From hello to date</small></span></div>
+          </div>
+        </div>
+        <div class="hero-visual" aria-hidden="true">
+          <div class="floating-glass match-card">
+            <span class="glass-kicker">A MORE THOUGHTFUL INTRODUCTION</span>
+            <div class="match-card-row"><span class="match-heart">♡</span><span><strong>Compatibility begins with conversation.</strong><small>Shared values. Clear intentions. Room to be yourself.</small></span></div>
+            <div class="match-card-tags"><span>Intentions</span><span>Values</span><span>Connection</span></div>
+          </div>
+          <div class="hero-handwritten">Real people.<br>Real intentions.<br><span>Real dates.</span> ♡</div>
+          <div class="hero-orbit-dot hero-orbit-dot-one"></div><div class="hero-orbit-dot hero-orbit-dot-two"></div>
+        </div>
+        <a class="scroll-cue" href="#how-it-works"><span></span> Scroll to explore</a>
+      </div>
+      <div class="hero-bottom-curve" aria-hidden="true"></div>
+    </section>
+
+    <section class="intro-strip" aria-label="Our approach">
+      <div class="page-shell intro-strip-inner">
+        <p>For people who want more than a swipe.</p>
+        <div class="intro-strip-divider" aria-hidden="true"></div>
+        <p>For connections that have room to grow. <span>♡</span></p>
+      </div>
+    </section>
+
+    <section class="section section-light how-section" id="how-it-works" aria-labelledby="how-title">
+      <div class="page-shell">
+        <div class="section-heading reveal">
+          <div class="eyebrow"><span aria-hidden="true">♡</span> HOW IT WORKS</div>
+          <h2 id="how-title">From first hello<br>to <em>something real.</em></h2>
+          <p>A calmer, more considered way to meet someone. You set the pace; we help with the details.</p>
+        </div>
+        <div class="steps-grid">
+          <article class="step-card reveal"><div class="step-top"><span class="step-number">01</span><span class="step-icon" aria-hidden="true">♙</span></div><h3>Build your profile</h3><p>Tell us what matters to you, the relationship you're looking for and what makes you, you.</p><span class="step-foot">A little about you <span>↗</span></span></article>
+          <article class="step-card reveal"><div class="step-top"><span class="step-number">02</span><span class="step-icon" aria-hidden="true">♡</span></div><h3>Meet with intention</h3><p>Explore compatible members and request introductions. Both people choose whether to connect.</p><span class="step-foot">Compatibility first <span>↗</span></span></article>
+          <article class="step-card reveal"><div class="step-top"><span class="step-number">03</span><span class="step-icon" aria-hidden="true">✧</span></div><h3>Plan the date</h3><p>When the feeling is mutual, get thoughtful help with scheduling and first-date details.</p><span class="step-foot">Take it offline <span>↗</span></span></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section story-section" id="about" aria-labelledby="about-title">
+      <div class="page-shell story-grid">
+        <div class="story-visual reveal">
+          <img src="/assets/img/hero-couple.webp" alt="A couple enjoying a warm, candlelit conversation over dinner" loading="lazy" width="1672" height="941">
+          <div class="story-caption"><span class="story-caption-mark">♡</span><span><b>Less pressure.</b><small>More room for a real connection.</small></span></div>
+          <div class="story-frame-line" aria-hidden="true"></div>
+        </div>
+        <div class="story-copy reveal">
+          <div class="eyebrow eyebrow-light"><span aria-hidden="true">✧</span> A DIFFERENT KIND OF DATING</div>
+          <h2 id="about-title">The little things<br>make <em>the difference.</em></h2>
+          <p>Dating shouldn't feel like another feed to keep up with. Date Concierge is designed around intentions, respectful introductions and thoughtful support when you're ready to meet in real life.</p>
+          <div class="story-benefits">
+            <div><span class="benefit-icon" aria-hidden="true">◇</span><span><b>Introductions with context</b><small>Understand what you may have in common before you say hello.</small></span></div>
+            <div><span class="benefit-icon" aria-hidden="true">♡</span><span><b>Your privacy, respected</b><small>Personal details stay protected and connections are mutual.</small></span></div>
+            <div><span class="benefit-icon" aria-hidden="true">✦</span><span><b>A human touch when you need it</b><small>Optional assistance with profile feedback and date planning.</small></span></div>
+          </div>
+          <button class="button button-light-outline" type="button" data-auth-open="register">Begin your story <span aria-hidden="true">↗</span></button>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-light pricing-section" id="pricing" aria-labelledby="pricing-title">
+      <div class="page-shell">
+        <div class="section-heading section-heading-centered reveal">
+          <div class="eyebrow"><span aria-hidden="true">♡</span> MEMBERSHIP</div>
+          <h2 id="pricing-title">Choose how you'd like<br>to <em>meet.</em></h2>
+          <p>Start for free, then choose the level of support that feels right for you.</p>
+        </div>
+        <div class="pricing-grid">
+          <article class="price-card reveal"><div class="price-name"><span class="price-icon">♡</span><span>Explorer</span></div><div class="price-amount">Free</div><p class="price-description">Get started and explore the experience.</p><ul><li>Create your profile</li><li>Complete compatibility preferences</li><li>Explore eligible member previews</li></ul><button class="button button-price-outline" type="button" data-auth-open="register">Join for free <span>↗</span></button></article>
+          <article class="price-card price-card-featured reveal"><div class="popular-ribbon">A thoughtful next step</div><div class="price-name"><span class="price-icon">✦</span><span>Date Plus</span></div><div class="price-amount">₹1,499 <small>/ month</small></div><p class="price-description">For those ready to date with more intention.</p><ul><li>Up to 3 introduction requests each month</li><li>Compatibility-based recommendations</li><li>Basic date-planning assistance</li><li>Welcome and monthly service credits</li></ul><button class="button button-primary button-full" type="button" data-auth-open="register">Choose Date Plus <span>↗</span></button></article>
+          <article class="price-card reveal"><div class="price-name"><span class="price-icon">✧</span><span>Private Concierge</span></div><div class="price-amount">₹2,999 <small>/ month</small></div><p class="price-description">A little more personal support, when it matters.</p><ul><li>Up to 5 introduction requests each month</li><li>Human-reviewed profile feedback</li><li>Priority introduction handling</li><li>Date coordination and follow-up</li></ul><button class="button button-price-outline" type="button" data-auth-open="register">Explore Concierge <span>↗</span></button></article>
+        </div>
+        <p class="pricing-note">Launch pricing is planned and may change before paid memberships open. Introduction requests do not guarantee a match or romantic outcome; availability depends on compatible active members in your area.</p>
+      </div>
+    </section>
+
+    <section class="section safety-section" aria-labelledby="safety-title">
+      <div class="page-shell safety-layout">
+        <div class="safety-copy reveal"><div class="eyebrow eyebrow-light"><span aria-hidden="true">✧</span> TRUST &amp; SAFETY</div><h2 id="safety-title">Care is part of<br>the <em>connection.</em></h2><p>Trust isn't an extra feature. It's the foundation of a respectful dating experience.</p></div>
+        <div class="safety-list reveal"><div><span aria-hidden="true">◇</span><span><b>Profile review</b><small>We are building clear profile and verification workflows.</small></span></div><div><span aria-hidden="true">♡</span><span><b>Mutual consent</b><small>Both members choose whether to accept an introduction.</small></span></div><div><span aria-hidden="true">⌑</span><span><b>Block and report</b><small>Safety tools and moderation are part of the planned member experience.</small></span></div></div>
+      </div>
+    </section>
+
+    <section class="section terms-section section-light" id="terms" aria-labelledby="terms-title">
+      <div class="page-shell terms-grid">
+        <div><div class="eyebrow"><span aria-hidden="true">♡</span> THE IMPORTANT DETAILS</div><h2 id="terms-title">Clarity, before<br><em>connection.</em></h2><p>We want every member to understand how the service works before they join.</p></div>
+        <div class="terms-points"><article><h3>Adults only</h3><p>Date Concierge is intended for adults aged 18 and over. Members must provide accurate information and respect other members' boundaries.</p></article><article><h3>Introductions, not guarantees of chemistry</h3><p>We can support the introduction and date-planning process, but cannot guarantee attraction, compatibility in practice or a relationship outcome.</p></article><article><h3>Subscriptions and refunds</h3><p>Plan limits, renewal terms and any service-delivery guarantee will be shown clearly before checkout. No paid subscription is activated on this preview.</p></article><a class="text-link" href="/terms.html">Read the full terms overview <span aria-hidden="true">↗</span></a></div>
+      </div>
+    </section>
+
+    <section class="final-cta" aria-labelledby="final-cta-title"><div class="final-cta-image" aria-hidden="true"></div><div class="page-shell final-cta-inner reveal"><div><div class="eyebrow eyebrow-light">YOUR NEXT CHAPTER</div><h2 id="final-cta-title">Ready for a<br><em>real connection?</em></h2><p>Start with a thoughtful introduction. See where the conversation leads.</p></div><button class="button button-cream button-large" type="button" data-auth-open="register">Create your free profile <span aria-hidden="true">↗</span></button></div></section>
   </main>
+
+  <footer class="site-footer"><div class="page-shell footer-inner"><a class="brand footer-brand" href="#top"><span class="brand-symbol" aria-hidden="true">♡</span><span class="brand-wordmark">date concierge<span class="brand-period">.</span></span></a><p>Thoughtfully connecting people.</p><div class="footer-links"><a href="#how-it-works">How it works</a><a href="#about">About</a><a href="#pricing">Pricing</a><a href="/terms.html">Terms</a><a href="/privacy.html">Privacy</a></div><small>© <span id="current-year">2026</span> Date Concierge. Made with care.</small></div></footer>
+
+  <dialog class="auth-modal" id="auth-modal" aria-labelledby="auth-title">
+    <div class="auth-modal-layout">
+      <section class="auth-modal-story" aria-label="Date Concierge introduction">
+        <div class="modal-brand"><span class="brand-symbol" aria-hidden="true">♡</span><span class="brand-wordmark">date concierge<span class="brand-period">.</span></span></div>
+        <div class="modal-story-copy"><div class="eyebrow eyebrow-light">DATING, WITH INTENTION</div><h2>More than<br>just a match,<br><em>a meaningful<br>connection.</em></h2><p>Thoughtful introductions and real dates — with a little help from people who care.</p>
+          <div class="modal-feature-list"><div><span>◇</span><span><b>Curated introductions</b><small>Thoughtful people, not endless scrolling.</small></span></div><div><span>♡</span><span><b>Human assistance</b><small>Help with the details when you're ready.</small></span></div><div><span>⌑</span><span><b>Respectful by design</b><small>Your privacy and choices come first.</small></span></div></div>
+        </div>
+        <p class="modal-story-footer">Real people. Real intentions. <em>Real dates.</em> ♡</p>
+      </section>
+      <section class="auth-modal-content">
+        <button class="modal-close" type="button" data-auth-close aria-label="Close sign-in dialog">×</button>
+        <div class="auth-mobile-image" aria-hidden="true"></div>
+        <div class="auth-form-heading"><span class="auth-heading-heart" aria-hidden="true">♡</span><h2 id="auth-title">Welcome back<span>.</span></h2><p id="auth-subtitle">Sign in to continue your journey.</p></div>
+        <div class="auth-tabs" role="tablist" aria-label="Account access">
+          <button class="auth-tab is-active" id="login-tab" type="button" role="tab" aria-selected="true" aria-controls="login-view" data-auth-tab="login">Login</button>
+          <button class="auth-tab" id="register-tab" type="button" role="tab" aria-selected="false" aria-controls="register-view" data-auth-tab="register">Sign up</button>
+        </div>
+        <p class="auth-message" id="auth-message" role="status" aria-live="polite"></p>
+        <div class="auth-view is-active" id="login-view" role="tabpanel" aria-labelledby="login-tab">
+          <form id="login-form" class="auth-form" method="post" action="/api/auth/login">
+            <label class="auth-field"><span>Email address</span><span class="auth-input-wrap"><span class="field-icon" aria-hidden="true">✉</span><input id="login-email" name="email" type="email" autocomplete="email" placeholder="you@example.com" maxlength="254" required></span></label>
+            <label class="auth-field"><span>Password</span><span class="auth-input-wrap"><span class="field-icon" aria-hidden="true">♙</span><input id="login-password" name="password" type="password" autocomplete="current-password" placeholder="Your password" maxlength="128" required><button class="password-toggle" type="button" data-password-toggle="login-password" aria-label="Show password">◉</button></span></label>
+            <div class="auth-form-options"><label class="check-label"><input type="checkbox" name="remember" checked><span>Keep me signed in</span></label><button class="inline-link" type="button" data-forgot-password>Forgot password?</button></div>
+            <button class="button button-primary button-full auth-submit" type="submit">Log in <span aria-hidden="true">↗</span></button>
+          </form>
+        </div>
+        <div class="auth-view" id="register-view" role="tabpanel" aria-labelledby="register-tab" hidden>
+          <form id="register-form" class="auth-form auth-form-register" method="post" action="/api/auth/register">
+            <label class="auth-field"><span>Your name</span><span class="auth-input-wrap"><span class="field-icon" aria-hidden="true">♙</span><input id="register-name" name="name" type="text" autocomplete="name" placeholder="How should we call you?" minlength="2" maxlength="80" required></span></label>
+            <label class="auth-field"><span>Email address</span><span class="auth-input-wrap"><span class="field-icon" aria-hidden="true">✉</span><input id="register-email" name="email" type="email" autocomplete="email" placeholder="you@example.com" maxlength="254" required></span></label>
+            <label class="auth-field"><span>Create password</span><span class="auth-input-wrap"><span class="field-icon" aria-hidden="true">♙</span><input id="register-password" name="password" type="password" autocomplete="new-password" placeholder="At least 10 characters" minlength="10" maxlength="128" required><button class="password-toggle" type="button" data-password-toggle="register-password" aria-label="Show password">◉</button></span></label>
+            <div class="auth-field-row"><label class="auth-field"><span>Date of birth</span><span class="auth-input-wrap"><input id="register-birth-date" name="birthDate" type="date" autocomplete="bday" required></span></label><label class="auth-field"><span>Your city</span><span class="auth-input-wrap"><select id="register-city" name="city" required><option value="">Choose city</option><option>Delhi NCR</option><option>Mumbai</option><option>Bengaluru</option><option>Hyderabad</option><option>Pune</option><option>Jaipur</option><option>Kolkata</option><option>Chennai</option><option>Other Indian city</option></select></span></label></div>
+            <label class="check-label auth-consent"><input id="register-adult" name="confirmAdult" type="checkbox" required><span>I confirm that I am 18 or older.</span></label>
+            <label class="check-label auth-consent"><input id="register-terms" name="acceptTerms" type="checkbox" required><span>I agree to the <a href="/terms.html" target="_blank" rel="noopener">Terms</a> and <a href="/privacy.html" target="_blank" rel="noopener">Privacy Policy</a>.</span></label>
+            <button class="button button-primary button-full auth-submit" type="submit">Create account <span aria-hidden="true">↗</span></button>
+          </form>
+        </div>
+        <div class="auth-provider-block" aria-label="Alternative sign-in methods">
+          <div class="auth-provider-divider"><span>OR CONTINUE WITH</span></div>
+          <div class="auth-provider-row">
+            <button class="auth-provider-button" type="button" data-auth-provider="Google"><span class="provider-mark provider-google" aria-hidden="true">G</span><span>Google</span></button>
+            <button class="auth-provider-button" type="button" data-auth-provider="Apple"><svg class="provider-mark provider-apple" viewBox="0 0 24 24" aria-hidden="true"><path d="M16.7 12.9c0-2.2 1.8-3.3 1.9-3.4a4.1 4.1 0 0 0-3.2-1.7c-1.4-.1-2.7.8-3.4.8-.7 0-1.8-.8-3-.7A4.5 4.5 0 0 0 5.2 10c-1.6 2.8-.4 6.9 1.1 9.1.8 1.1 1.6 2.3 2.8 2.3 1.1 0 1.6-.7 3-.7s1.8.7 3 .7c1.2 0 2-1.1 2.7-2.2a10 10 0 0 0 1.2-2.5 3.8 3.8 0 0 1-2.3-3.8ZM14.5 6.4a4 4 0 0 0 .9-2.8 4 4 0 0 0-2.6 1.3 3.7 3.7 0 0 0-.9 2.7 3.4 3.4 0 0 0 2.6-1.2Z"/></svg><span>Apple</span></button>
+            <button class="auth-provider-button" type="button" data-auth-provider="Phone"><svg class="provider-mark provider-phone" viewBox="0 0 24 24" aria-hidden="true"><rect x="6.5" y="2.5" width="11" height="19" rx="2"/><path d="M10 5h4M11 18.5h2"/></svg><span>Phone</span></button>
+          </div>
+        </div>
+        <p class="auth-provider-note">Email and password sign-in is available in this test build. Other methods need provider setup.</p>
+        <div class="auth-bottom-note"><span aria-hidden="true">♡</span> Good conversations lead to better connections.</div>
+      </section>
+    </div>
+  </dialog>
+  <div class="toast" id="site-toast" role="status" aria-live="polite"></div>
 </body>
 </html>

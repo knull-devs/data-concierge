@@ -1,81 +1,75 @@
-# Date Concierge — Auth UI Preview
+# Date Concierge — Landing Page + Auth Foundation (v0.2)
 
-A clean, standalone static website for the first Date Concierge login and registration UI milestone. This is its own project, with Date Concierge-owned HTML, CSS and JavaScript. No source repository from another dating platform is bundled or required.
+Independent Date Concierge project. The pH7Builder source is not included. This build contains a mobile-first marketing homepage, login/signup popup, a basic signed-in dashboard placeholder, and Vercel serverless email/password authentication backed by Neon PostgreSQL.
 
-## Current scope
+## Pages
 
-- `/` — login UI
-- `/register.html` (also `/register` on Vercel with clean URLs) — registration UI
-- Responsive styling and CSS animations, with a reduced-motion accessibility fallback
-- Browser-native form validation and an age-18 date-of-birth maximum
-- Preview notices explaining that no authentication backend is connected yet
+- `/` — homepage, nav sections, pricing and login/signup modal.
+- `/register` — opens the signup modal (redirect alias).
+- `/login` — opens the login modal (redirect alias).
+- `/dashboard.html` — basic signed-in landing placeholder, checks `/api/auth/me`.
+- `/terms.html` and `/privacy.html` — early policy overviews, not final legal advice.
+- `/api/health` — health check for the API/database configuration.
 
-## Important limitation
+## Deploy and configure the free-tier MVP
 
-This is a UI-only preview. Form submissions are intercepted in the browser and no values are sent to a server or stored. Do not enter real passwords or sensitive personal data. Authentication, database persistence, email/OTP verification, profiles, subscriptions, credits and refunds are not implemented in this preview.
+1. Push this standalone folder to a new GitHub repository.
+2. Create a Neon PostgreSQL project on the free plan: https://neon.com/ .
+3. Open the Neon SQL Editor and execute the full `db/schema.sql` file once.
+4. In Vercel, import the repository, use the repo root (`./`) and the `Other` framework preset. Leave Build/Install commands unset; API functions are detected from `/api` and the static HTML is served directly.
+5. In Vercel → Project Settings → Environment Variables, set `DATABASE_URL` to the Neon pooled connection string (use the server-side connection string and keep it secret). Enable it for Preview and Production. Do not put the connection string in browser JavaScript or commit a real `.env` file.
+6. Redeploy after setting the variable.
+7. Verify `https://YOUR-DEPLOYMENT/api/health`, then register a test account and sign out/sign back in.
+
+Neon documents a free tier; Vercel documents Node.js Functions deployed from files under `/api`. Free-tier quotas, availability and restrictions may change. Staying within free limits is not a promise of unlimited free production use.
+
+## Environment
+
+Only one environment variable is required for the current auth foundation:
+
+- `DATABASE_URL` — Neon Postgres connection string; secret, server-side only.
+
+`.env.example` is a placeholder. Replace nothing inside Git with a real secret. Locally, use `vercel dev` with a private `.env.local`, or set `DATABASE_URL` in your shell.
+
+## Auth security details
+
+- Passwords are hashed using Node.js `scrypt` with a random salt.
+- Sessions use random opaque tokens; only SHA-256 token hashes are stored in Postgres.
+- Session cookies are HttpOnly, SameSite=Lax, and Secure on Vercel/production.
+- Login and registration have database-backed per-IP attempt limits; invalid login responses are generic.
+- SQL is parameterized via `@neondatabase/serverless` tagged queries.
+- No access token/session is stored in localStorage.
+
+This is an MVP foundation, not a complete production security review. Email verification, password reset emails, OAuth, account deletion/export workflows, bot protection/CAPTCHA, comprehensive monitoring and final privacy/terms review are not implemented yet. Do not open public paid registration until these are completed and reviewed.
+
+## Test locally
+
+Requirements: Node.js 20+, Python 3 (only used by the local verification script), and a Neon test database with `db/schema.sql` installed.
+
+```bash
+npm install
+npm run check
+npx vercel dev
+```
+
+`npm run check` checks JavaScript syntax, project file references and key auth safeguards. `npm run test:auth` checks password hashing, origin checks, cookie parsing and validation paths without needing a live database. Neither replaces end-to-end testing against a configured database.
 
 ## Project structure
 
 ```text
 .
-├── index.html                 # Login page
-├── register.html              # Registration page
-├── assets/
-│   ├── css/auth.css           # Standalone Date Concierge styles and animations
-│   └── js/auth.js             # Preview-only validation and notices
-├── favicon.svg
-├── vercel.json                # Static deployment configuration
-├── tools/verify_project.py    # Dependency-free file/reference checks
-├── docs/NEXT_STEPS.md         # Planned next implementation milestones
-├── .gitignore
-└── README.md
+├── index.html
+├── register.html / login.html
+├── dashboard.html
+├── terms.html / privacy.html
+├── assets/css/site.css
+├── assets/js/site.js / dashboard.js
+├── assets/img/hero-couple.webp
+├── api/auth/{register,login,me,logout}.js
+├── api/health.js
+├── api/_lib/auth.js
+├── db/schema.sql
+├── package.json
+├── .env.example
+└── vercel.json
 ```
-
-## Zero-cost local preview
-
-From the project root, run:
-
-```powershell
-python -m http.server 8000
-```
-
-Open `http://localhost:8000/` and `http://localhost:8000/register.html`. Press `Ctrl+C` to stop the server.
-
-## Verify the project
-
-```powershell
-python tools/verify_project.py
-```
-
-This checks required files, local assets, form IDs and accidental references to upstream framework-specific classes. It does not test a live backend or complete browser rendering.
-
-## Push to a new GitHub repository
-
-1. Extract this ZIP into a new folder named `date-concierge`.
-2. Create an empty GitHub repository for Date Concierge.
-3. Open PowerShell in this folder and run:
-
-```powershell
-git init
-git add .
-git commit -m "Create Date Concierge auth UI preview"
-git branch -M main
-git remote add origin https://github.com/YOUR-USERNAME/date-concierge.git
-git push -u origin main
-```
-
-Replace the placeholder remote URL with your actual new repository URL. If the folder is already a Git repository, do not repeat `git init` or `git remote add`.
-
-## Deploy to Vercel
-
-1. Import the new Date Concierge repository in Vercel.
-2. Keep Root Directory as `./` (the repository root).
-3. Framework Preset: `Other`.
-4. Build Command: enable the override and leave the command empty to skip the build.
-5. Output Directory: `.` if Vercel asks for an explicit static output directory.
-6. Install Command: leave unset. There are no npm or Python dependencies for this plain HTML/CSS/JavaScript preview.
-7. Deploy. Open `/` for login and `/register` (or `/register.html`) for registration.
-
-## Dependencies
-
-No Python or npm packages are required for the current static preview. A `requirements.txt` would be misleading because the website is plain HTML, CSS and JavaScript, with no Python runtime. If a backend is added later, its dependencies will be declared in the appropriate manifest for that backend.
