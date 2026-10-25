@@ -1,0 +1,19 @@
+# Local/editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Vercel CLI cache
+.vercel/
+
+# Environment secrets (not needed by this static preview)
+.env
+.env.*
+!.env.example
+
+# Dependencies/build artifacts if added later
+node_modules/
+dist/
+build/
+coverage/
