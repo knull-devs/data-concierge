@@ -815,3 +815,124 @@ dialog.auth-modal[open] { animation: dcAuthFadeIn .24s ease-out both; }
   .approach-card strong { font-family:var(--sans); font-size:10px; font-weight:700; line-height:1.3; }
   .approach-card small { font-size:8px; line-height:1.3; }
 }
+
+
+/* Date Concierge UI v0.8 — fix overlapping process-card footers, restore headline spacing,
+   and show the complete landscape hero image on narrow mobile screens. */
+.step-card {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+.step-card .step-foot {
+  position: static !important;
+  left: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  margin-top: auto;
+  padding-top: 13px;
+  border-top: 1px solid rgba(150, 64, 92, .16);
+  line-height: 1.45;
+  white-space: normal;
+}
+.step-card .step-foot > span { flex: 0 0 auto; }
+
+@media (max-width: 760px) {
+  /* Show the entire 16:9 source image as a deliberate full-width cinematic panel.
+     The copy flows underneath it instead of forcing a landscape photo to fill a
+     tall phone viewport (which cropped most of the couple). */
+  .hero-section {
+    min-height: 0 !important;
+    display: block !important;
+    padding-top: 70px !important;
+    overflow: hidden;
+    background: #180e16;
+  }
+  .hero-image-layer {
+    inset: 70px 0 auto 0 !important;
+    width: 100% !important;
+    height: 56.28vw !important;
+    min-height: 0 !important;
+    background-size: 100% 100% !important;
+    background-repeat: no-repeat !important;
+    background-position: center center !important;
+    transform: none !important;
+    animation: none !important;
+  }
+  .hero-image-layer::after {
+    background: linear-gradient(180deg,
+      rgba(16, 7, 13, .04) 0%,
+      rgba(16, 7, 13, .06) 62%,
+      rgba(24, 14, 22, .84) 88%,
+      #180e16 100%) !important;
+  }
+  .hero-background-video {
+    object-fit: contain !important;
+    object-position: center center !important;
+    background: #180e16;
+  }
+  .hero-content {
+    width: calc(100% - 36px) !important;
+    min-height: 0 !important;
+    padding: calc(56.28vw + 27px) 0 34px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    justify-content: flex-start !important;
+    gap: 0 !important;
+  }
+  .hero-copy { max-width: none !important; }
+  .hero-copy h1 {
+    max-width: none !important;
+    margin: 18px 0 15px !important;
+    font-size: clamp(39px, 10.2vw, 57px) !important;
+    line-height: 1.01 !important;
+    letter-spacing: -.042em !important;
+    text-wrap: initial !important;
+    overflow-wrap: normal;
+    word-spacing: normal;
+  }
+  /* The first <br> separates “More than” and “just a match,”. It must not be hidden. */
+  .hero-copy h1 br:first-of-type { display: block !important; }
+  .hero-copy h1 .mobile-line-break { display: block !important; }
+  .hero-description { font-size: 14px !important; line-height: 1.65 !important; }
+  .hero-actions { gap: 9px !important; margin-top: 20px !important; }
+  .hero-actions .button { min-width: 0; }
+  .hero-proof-row { margin-top: 22px !important; }
+  .hero-slider-dots { margin-top: 16px !important; }
+  .hero-visual { display: none !important; }
+  .hero-handwritten, .hero-orbit-dot, .scroll-cue, .hero-bottom-curve { display: none !important; }
+
+  .step-card {
+    min-height: 0 !important;
+    padding: 20px !important;
+    display: flex !important;
+    flex-direction: column !important;
+  }
+  .step-card h3 { margin: 20px 0 10px !important; }
+  .step-card p { margin: 0 !important; line-height: 1.65 !important; }
+  .step-card .step-foot {
+    margin-top: 17px !important;
+    padding-top: 12px !important;
+    font-size: 10px !important;
+    line-height: 1.4 !important;
+  }
+}
+
+@media (max-width: 380px) {
+  .hero-content { width: calc(100% - 30px) !important; }
+  .hero-copy h1 { font-size: clamp(37px, 10.3vw, 41px) !important; letter-spacing: -.035em !important; }
+  .hero-actions { display: grid !important; grid-template-columns: 1fr 1fr !important; }
+  .hero-actions .button { width: 100% !important; padding-inline: 8px !important; font-size: 10px !important; }
+  .step-card { padding: 18px !important; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-image-layer { animation: none !important; transform: none !important; }
+  .step-card, .step-card .step-foot { transition: none !important; }
+}
