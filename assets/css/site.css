@@ -563,3 +563,255 @@ dialog.auth-modal[open] { animation: dcAuthFadeIn .24s ease-out both; }
   .primary-nav, .hero-background-video { transition: none !important; }
   .hero-image-layer { animation: none !important; }
 }
+
+/* Date Concierge UI v0.7 — deliberate responsive redesign based on the supplied mobile recording. */
+@media (max-width: 760px) {
+  html { scroll-padding-top: 76px; }
+  .site-header {
+    position: absolute;
+    height: 70px;
+    padding: 0 16px;
+    gap: 10px;
+    background: rgba(20, 8, 15, .82);
+    border-bottom-color: rgba(255, 225, 233, .14);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+  }
+  .brand { gap: 8px; }
+  .brand-symbol { width: 34px; height: 34px; font-size: 22px; }
+  .brand-wordmark { font-size: clamp(19px, 5.2vw, 23px); letter-spacing: -.8px; }
+  .mobile-nav-toggle { display: grid; place-content: center; gap: 5px; flex: 0 0 46px; width: 46px; height: 46px; border: 1px solid rgba(255,255,255,.18); border-radius: 15px; background: rgba(255,255,255,.055); color: white; }
+  .mobile-nav-toggle span { display: block; width: 20px; height: 2px; border-radius: 2px; background: currentColor; transition: transform .22s ease; }
+  .mobile-nav-toggle[aria-expanded="true"] span:first-child { transform: translateY(3.5px) rotate(45deg); }
+  .mobile-nav-toggle[aria-expanded="true"] span:last-child { transform: translateY(-3.5px) rotate(-45deg); }
+  .header-actions { gap: 0; }
+  .header-login, .header-dashboard { display: none !important; }
+  .header-signup { min-height: 43px; padding: 10px 14px; font-size: 11px; gap: 6px; }
+
+  /* Menu panel is positioned 2px below the header and reveals from behind its edge. */
+  .primary-nav {
+    top: calc(100% + 2px) !important;
+    left: 12px !important;
+    right: 12px !important;
+    z-index: 1;
+    padding: 12px !important;
+    border-radius: 18px !important;
+    transform: translateY(-18px) scale(.985) !important;
+    transform-origin: top center;
+    clip-path: inset(0 0 100% 0 round 18px);
+    opacity: 0;
+    visibility: hidden;
+    transition: transform .28s cubic-bezier(.2,.75,.25,1), opacity .2s ease, clip-path .28s cubic-bezier(.2,.75,.25,1), visibility 0s linear .28s !important;
+  }
+  .primary-nav.is-open {
+    transform: translateY(0) scale(1) !important;
+    clip-path: inset(0 0 0 0 round 18px);
+    opacity: 1;
+    visibility: visible;
+    transition: transform .28s cubic-bezier(.2,.75,.25,1), opacity .2s ease, clip-path .28s cubic-bezier(.2,.75,.25,1), visibility 0s !important;
+  }
+  .primary-nav a { min-height: 42px !important; }
+
+  /* Hero is intentionally redesigned for a phone viewport, not a shrunk desktop grid. */
+  .hero-section { min-height: 0; display: block; padding-top: 70px; }
+  .hero-image-layer { inset: 0; background-position: 62% center !important; background-size: cover; transform: scale(1.02) translate3d(0, var(--hero-parallax, 0px), 0); }
+  .hero-image-layer:after {
+    background: linear-gradient(90deg, rgba(15,7,13,.78) 0%, rgba(19,8,15,.55) 55%, rgba(19,8,15,.28) 100%), linear-gradient(0deg, rgba(15,7,13,.95) 0%, rgba(15,7,13,.18) 44%, rgba(15,7,13,.48) 100%) !important;
+  }
+  .hero-background-video { object-position: 62% center !important; }
+  .hero-content {
+    width: calc(100% - 36px);
+    min-height: min(810px, calc(100svh - 70px));
+    padding: 52px 0 36px;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: center;
+    gap: 0;
+  }
+  .hero-copy { max-width: 560px; }
+  .hero-copy .eyebrow { font-size: 9px; letter-spacing: .17em; }
+  .hero-copy h1 {
+    max-width: 540px;
+    margin: 20px 0 17px;
+    font-size: clamp(43px, 11.6vw, 59px) !important;
+    line-height: .98 !important;
+    letter-spacing: -.055em;
+    text-wrap: pretty;
+  }
+  .hero-copy h1 br:first-of-type { display: none; }
+  .hero-copy h1 .mobile-line-break { display: none; }
+  .hero-description { max-width: 36rem; font-size: 14px; line-height: 1.65; color: rgba(255,246,248,.88); }
+  .hero-actions { display: flex; flex-direction: row; flex-wrap: wrap; gap: 9px; margin-top: 23px; }
+  .hero-actions .button { min-height: 48px; width: auto; flex: 1 1 auto; padding: 11px 14px; font-size: 12px; }
+  .hero-actions .button-outline-light { flex: 1.1 1 auto; }
+  .play-icon { width: 20px; height: 20px; }
+  .hero-points { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 9px; margin-top: 28px; }
+  .hero-point { min-width: 0; align-items: flex-start; flex-direction: column; gap: 8px; }
+  .point-icon { width: 36px; height: 36px; border-radius: 12px; }
+  .hero-point b { font-size: 10px; line-height: 1.35; }
+  .hero-point small { font-size: 9px; line-height: 1.4; }
+  .hero-visual { display: block; min-height: 0; padding: 0; margin-top: 27px; }
+  .match-card { width: 100%; max-width: none; margin: 0; padding: 15px 16px; border-radius: 19px; transform: none; animation: none; background: rgba(35,13,25,.7); }
+  .glass-kicker { font-size: 8px; }
+  .match-card-row { margin-top: 11px; gap: 11px; }
+  .match-heart { width: 40px; height: 40px; border-radius: 13px; font-size: 24px; }
+  .match-card-row strong { font-size: 17px; line-height: 1.12; }
+  .match-card-row small { margin-top: 5px; font-size: 10px; }
+  .match-card-tags { margin-top: 11px; gap: 6px; }
+  .match-card-tags span { padding: 4px 8px; font-size: 9px; }
+  .hero-handwritten, .hero-orbit-dot, .scroll-cue, .hero-bottom-curve { display: none !important; }
+  .intro-strip-inner { min-height: 76px; flex-direction: column; align-items: flex-start; justify-content: center; gap: 2px; padding-block: 13px; }
+  .intro-strip p { font-size: 16px; line-height: 1.35; }
+  .intro-strip-divider { display: none; }
+  .section { padding: 70px 0; }
+  .section-heading { margin-bottom: 27px; }
+  .section-heading h2, .story-copy h2, .safety-copy h2, .terms-grid h2, .final-cta h2 { font-size: clamp(36px, 9vw, 48px); }
+  .steps-grid { grid-template-columns: 1fr; gap: 12px; }
+  .step-card { min-height: 0; padding: 20px; border-radius: 19px; }
+  .step-card h3 { margin-top: 18px; font-size: 23px; }
+  .story-grid { grid-template-columns: 1fr; gap: 30px; }
+  .story-visual img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; object-position: 62% center; border-radius: 22px; }
+  .pricing-grid { grid-template-columns: 1fr; gap: 14px; }
+  .terms-grid { grid-template-columns: 1fr; gap: 26px; }
+  .final-cta-inner { flex-direction: column; align-items: flex-start; gap: 22px; }
+
+  /* Centered compact dialog, never edge-to-edge. No photo/banner inside the popup. */
+  dialog.auth-modal[open] {
+    position: fixed !important;
+    inset: auto !important;
+    left: 50% !important;
+    top: var(--dc-visual-viewport-center-y, 50%) !important;
+    right: auto !important;
+    bottom: auto !important;
+    display: block !important;
+    width: min(440px, calc(100vw - 32px)) !important;
+    max-width: calc(100vw - 32px) !important;
+    height: auto !important;
+    max-height: min(86dvh, calc(var(--dc-visual-viewport-height, 100dvh) - 28px)) !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    border: 1px solid rgba(255,255,255,.88) !important;
+    border-radius: 25px !important;
+    background: linear-gradient(145deg, #fffaf7 0%, #f9e6e8 100%) !important;
+    box-shadow: 0 26px 90px rgba(0,0,0,.45) !important;
+    transform: translate(-50%, -50%) !important;
+    animation: dcCompactModalIn .24s cubic-bezier(.2,.75,.25,1) both !important;
+  }
+  dialog.auth-modal[open] .auth-modal-layout,
+  dialog.auth-modal[open] .auth-modal-content {
+    display: block !important;
+    width: 100% !important;
+    height: auto !important;
+    max-height: inherit !important;
+    min-height: 0 !important;
+    overflow: hidden !important;
+    padding: 0 !important;
+    background: transparent !important;
+  }
+  dialog.auth-modal[open] .auth-mobile-image,
+  dialog.auth-modal[open] .auth-modal-story { display: none !important; }
+  dialog.auth-modal[open] .auth-modal-scroll {
+    display: block !important;
+    width: 100%;
+    max-height: min(86dvh, calc(var(--dc-visual-viewport-height, 100dvh) - 28px)) !important;
+    height: auto !important;
+    min-height: 0 !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    padding: 22px 20px 18px !important;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+  }
+  dialog.auth-modal[open] .modal-close { top: 10px !important; right: 10px !important; width: 34px !important; height: 34px !important; min-width: 34px !important; min-height: 34px !important; background: rgba(246,220,228,.88) !important; border: 0 !important; box-shadow: none !important; }
+  dialog.auth-modal[open] .auth-form-heading { padding: 0 26px !important; margin: 0 0 12px !important; text-align: center; }
+  dialog.auth-modal[open] .auth-heading-heart { width: 32px !important; height: 32px !important; margin-bottom: 6px !important; font-size: 20px !important; }
+  dialog.auth-modal[open] .auth-form-heading h2 { font-size: clamp(27px, 7vw, 33px) !important; line-height: 1.08 !important; }
+  dialog.auth-modal[open] .auth-form-heading p { margin-top: 5px; font-size: 11px !important; }
+  dialog.auth-modal[open] .auth-tabs { margin-bottom: 12px !important; }
+  dialog.auth-modal[open] .auth-tab { min-height: 39px !important; font-size: 13px !important; }
+  dialog.auth-modal[open] .auth-message:not(.is-visible) { display: none !important; }
+  dialog.auth-modal[open] .auth-message { margin: 0 0 10px !important; font-size: 11px; }
+  dialog.auth-modal[open] .auth-form { gap: 9px !important; }
+  dialog.auth-modal[open] .auth-field { gap: 4px !important; }
+  dialog.auth-modal[open] .auth-field > span:first-child { font-size: 10px !important; }
+  dialog.auth-modal[open] .auth-input-wrap { min-height: 44px !important; border-radius: 12px !important; }
+  dialog.auth-modal[open] .auth-input-wrap input,
+  dialog.auth-modal[open] .auth-input-wrap select { height: 42px !important; font-size: 16px !important; }
+  dialog.auth-modal[open] .auth-form-options { margin-top: 1px; gap: 8px; }
+  dialog.auth-modal[open] .check-label { min-height: 22px; font-size: 10px !important; }
+  dialog.auth-modal[open] .auth-submit { min-height: 46px !important; border-radius: 13px !important; font-size: 13px !important; }
+  dialog.auth-modal[open] .auth-provider-block { margin-top: 12px !important; }
+  dialog.auth-modal[open] .auth-provider-divider { margin-bottom: 10px; }
+  dialog.auth-modal[open] .auth-provider-divider span { font-size: 8px; letter-spacing: .14em; }
+  dialog.auth-modal[open] .auth-provider-row { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 7px !important; }
+  dialog.auth-modal[open] .auth-provider-button { display: flex; flex-direction: row !important; justify-content: center; min-height: 43px !important; gap: 5px !important; padding: 6px 4px !important; border-radius: 12px !important; font-size: 10px !important; }
+  dialog.auth-modal[open] .provider-mark { width: 17px !important; height: 17px !important; }
+  dialog.auth-modal[open] .auth-provider-note { display: none !important; }
+  dialog.auth-modal[open] .auth-privacy-note { margin-top: 11px !important; padding: 9px 10px !important; gap: 8px !important; border-radius: 12px !important; }
+  dialog.auth-modal[open] .auth-privacy-icon { flex-basis: 26px !important; width: 26px !important; height: 26px !important; font-size: 17px !important; }
+  dialog.auth-modal[open] .auth-privacy-copy strong { font-size: 10px !important; }
+  dialog.auth-modal[open] .auth-privacy-copy small { font-size: 9px !important; }
+}
+@media (max-width: 380px) {
+  .site-header { padding-inline: 12px; }
+  .brand-wordmark { font-size: 18px; }
+  .header-signup { padding-inline: 11px; font-size: 10px; }
+  .hero-content { width: calc(100% - 30px); padding-top: 42px; padding-bottom: 28px; }
+  .hero-copy h1 { font-size: clamp(39px, 11.2vw, 44px) !important; }
+  .hero-description { font-size: 13px; }
+  .hero-actions { display: grid; grid-template-columns: 1fr 1fr; }
+  .hero-actions .button { width: 100%; padding-inline: 8px; font-size: 10px; }
+  .hero-point b { font-size: 9px; }
+  .hero-point small { font-size: 8px; }
+  dialog.auth-modal[open] { width: calc(100vw - 28px) !important; max-width: calc(100vw - 28px) !important; }
+  dialog.auth-modal[open] .auth-modal-scroll { padding: 19px 15px 14px !important; }
+  dialog.auth-modal[open] .auth-field-row { grid-template-columns: 1fr 1fr !important; gap: 7px !important; }
+  dialog.auth-modal[open] .auth-field-row .auth-field > span:first-child { font-size: 9px !important; }
+  dialog.auth-modal[open] .auth-provider-button { font-size: 9px !important; }
+}
+@keyframes dcCompactModalIn {
+  from { opacity: 0; transform: translate(-50%, calc(-50% + 12px)) scale(.975); }
+  to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .primary-nav, .hero-image-layer, .hero-background-video { transition: none !important; animation: none !important; }
+  dialog.auth-modal[open] { animation: none !important; }
+}
+
+/* Homepage composition: cinematic hero, proof line and a three-part approach strip. */
+.hero-proof-row { display:flex; align-items:center; gap:12px; margin-top:30px; color:#fff; }
+.proof-mark { display:grid; place-items:center; width:42px; height:42px; flex:0 0 42px; border:1px solid rgba(246,160,184,.38); border-radius:50%; color:#f4a1b7; background:rgba(255,255,255,.07); font-size:24px; }
+.hero-proof-row strong,.hero-proof-row small { display:block; }
+.hero-proof-row strong { font-size:12px; font-weight:700; }
+.hero-proof-row small { margin-top:2px; color:rgba(255,242,246,.7); font-size:10px; }
+.hero-slider-dots { display:flex; align-items:center; gap:7px; margin-top:23px; }
+.hero-slider-dots span { display:block; width:29px; height:3px; border-radius:4px; background:rgba(255,255,255,.34); }
+.hero-slider-dots span.is-active { width:48px; background:#f2a0b7; }
+.intro-strip-inner { min-height:138px; display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:0; padding-block:18px; }
+.approach-card { min-width:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:5px; text-align:center; padding:10px 16px; }
+.approach-card + .approach-card { border-left:1px solid rgba(122,74,91,.16); }
+.approach-icon { display:grid; place-items:center; width:42px; height:42px; margin-bottom:5px; border-radius:50%; background:#f3dfe5; color:#b8486c; font-size:24px; }
+.approach-card strong { font-family:var(--serif); font-size:17px; font-weight:500; color:#3d2330; }
+.approach-card small { font-size:11px; color:#876e79; }
+@media (min-width:761px) {
+  .hero-visual { min-height:300px; align-items:center; justify-content:flex-end; }
+  .hero-visual .match-card { display:none; }
+  .hero-handwritten { top:38%; right:4%; font-size:clamp(24px,2.2vw,34px); }
+}
+@media (max-width:760px) {
+  .hero-proof-row { margin-top:22px; gap:9px; }
+  .proof-mark { width:36px; height:36px; flex-basis:36px; font-size:21px; }
+  .hero-proof-row strong { font-size:11px; }
+  .hero-proof-row small { font-size:9px; }
+  .hero-slider-dots { margin-top:18px; }
+  .hero-visual { display:none !important; }
+  .intro-strip-inner { min-height:0; grid-template-columns:repeat(3,minmax(0,1fr)); gap:0; padding-block:18px; }
+  .approach-card { gap:4px; padding:8px 5px; }
+  .approach-card + .approach-card { border-left:1px solid rgba(122,74,91,.16); }
+  .approach-icon { width:34px; height:34px; font-size:20px; margin-bottom:3px; }
+  .approach-card strong { font-family:var(--sans); font-size:10px; font-weight:700; line-height:1.3; }
+  .approach-card small { font-size:8px; line-height:1.3; }
+}
