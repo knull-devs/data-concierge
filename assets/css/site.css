@@ -188,3 +188,35 @@
   .button:hover,
   .auth-provider-button:hover { transform: none; }
 }
+
+
+/* Date Concierge mobile auth fix v0.4: stronger modal containment and scroll behavior. */
+@media (max-width: 760px) {
+  dialog.auth-modal[open] {
+    overflow: hidden !important;
+    overscroll-behavior: none;
+    touch-action: auto;
+  }
+  dialog.auth-modal[open] .auth-modal-layout,
+  dialog.auth-modal[open] .auth-modal-content {
+    min-height: 0;
+    overflow: hidden;
+  }
+  dialog.auth-modal[open] .auth-modal-content {
+    height: 100%;
+  }
+  dialog.auth-modal[open] .auth-mobile-image {
+    flex-shrink: 0;
+  }
+  dialog.auth-modal[open] .auth-modal-scroll {
+    flex: 1 1 0%;
+    min-height: 0;
+    overflow-y: auto !important;
+    overscroll-behavior-y: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+  dialog.auth-modal[open] .modal-close {
+    position: absolute;
+    z-index: 20;
+  }
+}
