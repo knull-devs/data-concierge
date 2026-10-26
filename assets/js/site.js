@@ -12,15 +12,54 @@
   let bodyScrollLocked = false;
   let previousBodyStyles = null;
 
+  const isMobileAuthLayout = () => window.matchMedia('(max-width: 760px), (pointer: coarse)').matches;
+  const isIOSLikeBrowser = () => /iPad|iPhone|iPod/i.test(navigator.userAgent)
+    || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+
+  // Track the *visible* mobile viewport. Android Chrome shrinks visualViewport
+  // when the keyboard opens, while fixed elements can remain anchored to the
+  // larger layout viewport unless we explicitly move the dialog with it.
   const syncVisualViewport = () => {
     const viewport = window.visualViewport;
-    if (viewport) {
-      document.documentElement.style.setProperty('--dc-visual-viewport-height', `${Math.round(viewport.height)}px`);
-    }
+    const visibleHeight = viewport ? viewport.height : window.innerHeight;
+    const visibleTop = viewport ? viewport.offsetTop : 0;
+    document.documentElement.style.setProperty('--dc-visual-viewport-height', `${Math.round(visibleHeight)}px`);
+    document.documentElement.style.setProperty('--dc-visual-viewport-top', `${Math.round(visibleTop)}px`);
   };
+
+  let focusedFieldScrollTimers = [];
+  const keepFocusedFieldVisible = (field) => {
+    if (!field || !modal?.open) return;
+    const scroller = $('#auth-modal-scroll');
+    if (!scroller || !scroller.contains(field)) return;
+    focusedFieldScrollTimers.forEach((timer) => clearTimeout(timer));
+    focusedFieldScrollTimers = [];
+    const adjust = () => {
+      if (!modal.open || !scroller.contains(field) || document.activeElement !== field) return;
+      const scrollRect = scroller.getBoundingClientRect();
+      const fieldRect = field.getBoundingClientRect();
+      const topLimit = scrollRect.top + 14;
+      const bottomLimit = scrollRect.bottom - 18;
+      if (fieldRect.bottom > bottomLimit) scroller.scrollTop += fieldRect.bottom - bottomLimit;
+      else if (fieldRect.top < topLimit) scroller.scrollTop -= topLimit - fieldRect.top;
+    };
+    requestAnimationFrame(adjust);
+    // Mobile keyboards animate the visual viewport over several frames.
+    focusedFieldScrollTimers.push(
+      setTimeout(() => requestAnimationFrame(adjust), 140),
+      setTimeout(() => requestAnimationFrame(adjust), 320)
+    );
+  };
+
   syncVisualViewport();
-  window.visualViewport?.addEventListener('resize', syncVisualViewport, { passive: true });
-  window.addEventListener('resize', syncVisualViewport, { passive: true });
+  const onVisibleViewportChange = () => {
+    syncVisualViewport();
+    const active = document.activeElement;
+    if (active instanceof HTMLElement && active.matches('input, select, textarea')) keepFocusedFieldVisible(active);
+  };
+  window.visualViewport?.addEventListener('resize', onVisibleViewportChange, { passive: true });
+  window.visualViewport?.addEventListener('scroll', onVisibleViewportChange, { passive: true });
+  window.addEventListener('resize', onVisibleViewportChange, { passive: true });
 
   const lockBodyScroll = () => {
     if (bodyScrollLocked) return;
@@ -28,7 +67,10 @@
     bodyScrollLocked = true;
     document.body.classList.add('modal-open');
     // Fixed-body locking avoids background-page scroll leakage on iOS/Android browsers.
-    if (window.matchMedia('(max-width: 760px)').matches) {
+    // Fixed-body scroll locking is needed for iOS Safari, but can interfere
+    // with Android Chrome's visual-viewport resize when its keyboard opens.
+    // On Android, body.modal-open { overflow:hidden } is sufficient.
+    if (window.matchMedia('(max-width: 760px)').matches && isIOSLikeBrowser()) {
       previousBodyStyles = {
         position: document.body.style.position,
         top: document.body.style.top,
@@ -98,7 +140,12 @@
     $('#login-password').autocomplete = 'current-password';
     clearMessage();
     const firstField = isRegister ? $('#register-name') : $('#login-email');
-    setTimeout(() => firstField?.focus({ preventScroll: true }), 80);
+    // Don't auto-open the Android/iOS keyboard just because the modal opened.
+    // On mobile, users tap the field they want; this avoids an immediate
+    // visualViewport resize while the bottom-sheet animation is running.
+    if (!isMobileAuthLayout()) {
+      setTimeout(() => firstField?.focus({ preventScroll: true }), 80);
+    }
   };
   const openAuth = (tabName = 'login') => {
     if (!modal) return;
@@ -106,12 +153,15 @@
     if (!modal.open) modal.showModal();
     lockBodyScroll();
     syncVisualViewport();
+    if (isMobileAuthLayout()) modal.focus({ preventScroll: true });
     nav?.classList.remove('is-open');
     navToggle?.setAttribute('aria-expanded', 'false');
     navToggle?.setAttribute('aria-label', 'Open navigation');
   };
   const closeAuth = () => {
     if (modal?.open) modal.close();
+    focusedFieldScrollTimers.forEach((timer) => clearTimeout(timer));
+    focusedFieldScrollTimers = [];
     unlockBodyScroll();
     clearMessage();
   };
@@ -120,6 +170,12 @@
   $$('[data-auth-close]').forEach((button) => button.addEventListener('click', closeAuth));
   $$('.auth-tab').forEach((tab) => tab.addEventListener('click', () => switchAuthTab(tab.dataset.authTab)));
   modal?.addEventListener('close', unlockBodyScroll);
+  modal?.addEventListener('focusin', (event) => {
+    const field = event.target;
+    if (field instanceof HTMLElement && field.matches('input, select, textarea')) {
+      keepFocusedFieldVisible(field);
+    }
+  });
   modal?.addEventListener('click', (event) => { if (event.target === modal) closeAuth(); });
 
   navToggle?.addEventListener('click', () => {
