@@ -1,10 +1,11 @@
-# Date Concierge — Landing Page + Auth Foundation (v0.2)
+# Date Concierge — Landing Page + Auth Foundation (v0.6)
 
-Independent Date Concierge project. The pH7Builder source is not included. This build contains a mobile-first marketing homepage, login/signup popup, a basic signed-in dashboard placeholder, and Vercel serverless email/password authentication backed by Neon PostgreSQL.
+Independent Date Concierge project. The pH7Builder source is not included. This build contains a cinematic, mobile-first marketing homepage, a centered no-image login/signup modal, an animated mobile navigation panel, a video-ready hero with a still-image fallback, a basic signed-in dashboard placeholder, and Vercel serverless email/password authentication backed by Neon PostgreSQL.
 
 ## Pages
 
-- `/` — homepage, nav sections, pricing and login/signup modal.
+- `/` — homepage with responsive hero media, animated nav sections, pricing and centered login/signup modal.
+- Hero video: by default the page uses `assets/img/hero-couple.webp` as a fallback. When a licensed, compressed video is selected, place it at `assets/video/hero.mp4` and set `data-video-src="/assets/video/hero.mp4"` on `#hero-background-video` in `index.html`. The video is muted/looped/inline and is not loaded when the attribute is empty or reduced-motion/data-saver settings apply.
 - `/register` — opens the signup modal (redirect alias).
 - `/login` — opens the login modal (redirect alias).
 - `/dashboard.html` — basic signed-in landing placeholder, checks `/api/auth/me`.
@@ -65,6 +66,7 @@ npx vercel dev
 ├── assets/css/site.css
 ├── assets/js/site.js / dashboard.js
 ├── assets/img/hero-couple.webp
+├── assets/video/README.md (optional hero video instructions)
 ├── api/auth/{register,login,me,logout}.js
 ├── api/health.js
 ├── api/_lib/auth.js

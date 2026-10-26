@@ -25,6 +25,7 @@
     const visibleTop = viewport ? viewport.offsetTop : 0;
     document.documentElement.style.setProperty('--dc-visual-viewport-height', `${Math.round(visibleHeight)}px`);
     document.documentElement.style.setProperty('--dc-visual-viewport-top', `${Math.round(visibleTop)}px`);
+    document.documentElement.style.setProperty('--dc-visual-viewport-center-y', `${Math.round(visibleTop + visibleHeight / 2)}px`);
   };
 
   let focusedFieldScrollTimers = [];
@@ -60,6 +61,44 @@
   window.visualViewport?.addEventListener('resize', onVisibleViewportChange, { passive: true });
   window.visualViewport?.addEventListener('scroll', onVisibleViewportChange, { passive: true });
   window.addEventListener('resize', onVisibleViewportChange, { passive: true });
+
+  // The home hero is video-ready but remains on the supplied still image until
+  // a licensed video file is chosen. Configure data-video-src in index.html
+  // (for example /assets/video/hero.mp4) to activate the cinematic background.
+  const heroVideo = $('#hero-background-video');
+  if (heroVideo?.dataset.videoSrc) {
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const saveData = navigator.connection?.saveData === true;
+    if (!reduceMotion && !saveData) {
+      const heroLayer = $('#hero-media-layer');
+      heroVideo.addEventListener('loadeddata', () => {
+        heroLayer?.classList.add('hero-video-ready');
+        heroVideo.play().catch(() => {});
+      }, { once: true });
+      heroVideo.addEventListener('error', () => heroLayer?.classList.remove('hero-video-ready'), { once: true });
+      heroVideo.src = heroVideo.dataset.videoSrc;
+      heroVideo.load();
+    }
+  }
+  const heroSection = $('.hero-section');
+  const heroMediaLayer = $('#hero-media-layer');
+  let heroScrollFrame = 0;
+  const updateHeroParallax = () => {
+    heroScrollFrame = 0;
+    if (!heroSection || !heroMediaLayer) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      heroMediaLayer.style.setProperty('--hero-parallax', '0px');
+      return;
+    }
+    const rect = heroSection.getBoundingClientRect();
+    const progress = Math.max(0, Math.min(1, (0 - rect.top) / Math.max(1, rect.height)));
+    heroMediaLayer.style.setProperty('--hero-parallax', `${Math.round(progress * -18)}px`);
+  };
+  window.addEventListener('scroll', () => {
+    if (!heroScrollFrame) heroScrollFrame = requestAnimationFrame(updateHeroParallax);
+  }, { passive: true });
+  window.addEventListener('resize', updateHeroParallax, { passive: true });
+  updateHeroParallax();
 
   const lockBodyScroll = () => {
     if (bodyScrollLocked) return;
@@ -189,6 +228,19 @@
     navToggle?.setAttribute('aria-expanded', 'false');
     navToggle?.setAttribute('aria-label', 'Open navigation');
   }));
+  const closeNav = () => {
+    nav?.classList.remove('is-open');
+    navToggle?.setAttribute('aria-expanded', 'false');
+    navToggle?.setAttribute('aria-label', 'Open navigation');
+  };
+  document.addEventListener('click', (event) => {
+    if (!nav?.classList.contains('is-open')) return;
+    const target = event.target;
+    if (target instanceof Node && !nav.contains(target) && !navToggle?.contains(target)) closeNav();
+  });
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && nav?.classList.contains('is-open')) closeNav();
+  });
   $$('[data-password-toggle]').forEach((button) => button.addEventListener('click', () => {
     const input = document.getElementById(button.dataset.passwordToggle);
     if (!input) return;

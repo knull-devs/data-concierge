@@ -5,7 +5,7 @@ import json, re, sys
 ROOT = Path(__file__).resolve().parents[1]
 required = [
     'index.html','register.html','login.html','dashboard.html','terms.html','privacy.html',
-    'assets/css/site.css','assets/js/site.js','assets/js/dashboard.js','assets/js/register-redirect.js','assets/js/login-redirect.js','assets/img/hero-couple.webp',
+    'assets/css/site.css','assets/js/site.js','assets/video/README.md','assets/js/dashboard.js','assets/js/register-redirect.js','assets/js/login-redirect.js','assets/img/hero-couple.webp',
     'api/_lib/auth.js','api/auth/register.js','api/auth/login.js','api/auth/me.js','api/auth/logout.js',
     'api/health.js','db/schema.sql','package.json','vercel.json','README.md','tools/smoke-auth.mjs'
 ]
@@ -14,13 +14,26 @@ errors=[]
 if missing: errors.append('Missing required files: '+', '.join(missing))
 if not errors:
     index=(ROOT/'index.html').read_text(encoding='utf-8')
-    for phrase in ['How it works','About','Pricing','T&amp;C','auth-modal','login-form','register-form','data-auth-open','mobile-nav-toggle','auth-provider-row','data-auth-provider']:
+    for phrase in ['How it works','About','Pricing','T&amp;C','auth-modal','login-form','register-form','data-auth-open','mobile-nav-toggle','auth-provider-row','data-auth-provider','data-video-src','v=0.6.0','auth-privacy-note']:
         if phrase not in index: errors.append(f'index.html missing expected UI marker: {phrase}')
     for asset in re.findall(r'(?:src|href)="(/[^"#?]+)', index):
         if asset.startswith('/api/') or asset in ['/','/dashboard.html','/terms.html','/privacy.html','/register.html','/login.html']:
             continue
         clean=asset.lstrip('/')
         if not (ROOT/clean).exists(): errors.append(f'Broken local asset reference: {asset}')
+    if '<section class="auth-modal-story"' in index or 'class="auth-mobile-image"' in index:
+        errors.append('Auth modal still contains a hero image/story panel; the modal should be image-free.')
+    if 'id="hero-background-video"' not in index or 'id="hero-media-layer"' not in index:
+        errors.append('Missing optional hero background video slot/fallback wrapper.')
+    css=(ROOT/'assets/css/site.css').read_text(encoding='utf-8')
+    for token in ['top: calc(100% + 3px)', '.primary-nav.is-open', 'auth-modal-privacy', 'dc-visual-viewport-center-y', 'hero-video-ready']:
+        if token not in css:
+            # The class name of the privacy panel is auth-privacy-note; use its actual marker below.
+            if token == 'auth-modal-privacy': continue
+            errors.append(f'CSS missing responsive UI marker: {token}')
+    js=(ROOT/'assets/js/site.js').read_text(encoding='utf-8')
+    for token in ['dc-visual-viewport-center-y', 'data-video-src', 'closeNav']:
+        if token not in js: errors.append(f'JavaScript missing responsive behavior marker: {token}')
     pkg=json.loads((ROOT/'package.json').read_text())
     if '@neondatabase/serverless' not in pkg.get('dependencies',{}): errors.append('Missing Neon serverless driver dependency')
     schema=(ROOT/'db/schema.sql').read_text()

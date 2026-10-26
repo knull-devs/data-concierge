@@ -1,9 +1,9 @@
 {
   "name": "date-concierge",
-  "version": "0.2.0",
+  "version": "0.6.0",
   "private": true,
   "type": "module",
-  "description": "Date Concierge mobile-first landing page and Vercel authentication foundation",
+  "description": "Date Concierge cinematic responsive homepage, image-free auth modal and Vercel authentication foundation",
   "engines": {
     "node": "22.x"
   },
