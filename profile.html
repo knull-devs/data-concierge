@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#fbf3ef">
+  <meta name="description" content="Shape your Date Concierge profile and relationship preferences.">
+  <title>Your profile — Date Concierge</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/css/site.css?v=0.9.0">
+  <link rel="stylesheet" href="/assets/css/profile.css?v=0.1.0">
+  <script src="/assets/js/profile.js?v=0.1.0" defer></script>
+</head>
+<body class="profile-page dashboard-body">
+  <header class="dashboard-header profile-header">
+    <div class="page-shell dashboard-header-inner">
+      <a class="brand" href="/dashboard.html" aria-label="Date Concierge account space">
+        <span class="brand-symbol" aria-hidden="true">♡</span>
+        <span class="brand-wordmark">date concierge<span class="brand-period">.</span></span>
+      </a>
+      <a class="button button-quiet profile-back-link" href="/dashboard.html">← My space</a>
+    </div>
+  </header>
+
+  <main class="page-shell profile-main">
+    <div class="profile-loading" id="profile-loading" role="status">Opening your profile…</div>
+    <section id="profile-app" hidden>
+      <div class="profile-page-intro">
+        <div>
+          <div class="eyebrow"><span aria-hidden="true">♡</span> YOUR STORY, YOUR WAY</div>
+          <h1>Let's make this<br><em>feel like you.</em></h1>
+          <p>Thoughtful introductions start with the details that matter to you. Share only what you're comfortable sharing; you can update this anytime.</p>
+        </div>
+        <aside class="profile-progress-card" aria-live="polite">
+          <div class="profile-progress-top"><span>Profile progress</span><strong id="profile-progress-number">0%</strong></div>
+          <progress id="profile-progress" max="100" value="0">0%</progress>
+          <p id="profile-progress-copy">A few details help us understand what you're looking for.</p>
+        </aside>
+      </div>
+
+      <div class="profile-notice" id="profile-notice" role="status" aria-live="polite" hidden></div>
+      <div class="profile-layout">
+        <form id="profile-form" class="profile-form" novalidate>
+          <section class="profile-form-section" aria-labelledby="about-heading">
+            <div class="profile-section-heading"><span class="profile-step">01</span><div><h2 id="about-heading">A little about you</h2><p>Give someone a thoughtful first glimpse.</p></div></div>
+            <div class="profile-form-grid">
+              <div class="profile-field profile-field-full">
+                <label for="profile-city">Your city</label>
+                <input id="profile-city" name="city" type="text" maxlength="80" autocomplete="address-level2" placeholder="e.g. Delhi NCR" required>
+                <small class="profile-field-help">Used to help plan relevant introductions. Keep it broad; don't enter your address.</small>
+                <p class="profile-field-error" data-error-for="city" hidden></p>
+              </div>
+              <div class="profile-field profile-field-full">
+                <label for="profile-headline">Profile headline <span>Optional</span></label>
+                <input id="profile-headline" name="headline" type="text" maxlength="100" placeholder="A small line that sounds like you">
+                <div class="profile-field-meta"><small>Keep it natural and specific.</small><small><span id="headline-count">0</span>/100</small></div>
+                <p class="profile-field-error" data-error-for="headline" hidden></p>
+              </div>
+              <div class="profile-field profile-field-full">
+                <label for="profile-about">A little about you <span>Optional</span></label>
+                <textarea id="profile-about" name="aboutMe" rows="5" maxlength="600" placeholder="What do you enjoy, value, or hope to share with someone? Aim for at least 20 characters when you write something."></textarea>
+                <div class="profile-field-meta"><small>Honest beats perfect.</small><small><span id="about-count">0</span>/600</small></div>
+                <p class="profile-field-error" data-error-for="aboutMe" hidden></p>
+              </div>
+            </div>
+          </section>
+
+          <section class="profile-form-section" aria-labelledby="preferences-heading">
+            <div class="profile-section-heading"><span class="profile-step">02</span><div><h2 id="preferences-heading">What feels right to you?</h2><p>These preferences are private to your account.</p></div></div>
+            <div class="profile-form-grid">
+              <div class="profile-field">
+                <label for="gender-identity">How do you describe yourself? <span>Optional</span></label>
+                <select id="gender-identity" name="genderIdentity">
+                  <option value="">Choose an option</option>
+                  <option value="woman">Woman</option>
+                  <option value="man">Man</option>
+                  <option value="non_binary">Non-binary</option>
+                  <option value="prefer_not_to_say">Prefer not to say</option>
+                </select>
+                <p class="profile-field-error" data-error-for="genderIdentity" hidden></p>
+              </div>
+              <div class="profile-field">
+                <label for="relationship-goal">What are you looking for? <span>Optional</span></label>
+                <select id="relationship-goal" name="relationshipGoal">
+                  <option value="">Choose your intention</option>
+                  <option value="serious_relationship">A serious relationship</option>
+                  <option value="long_term_relationship">A long-term connection</option>
+                  <option value="marriage_minded">Dating with marriage in mind</option>
+                  <option value="open_to_see_where_it_goes">Open to seeing where it goes</option>
+                </select>
+                <p class="profile-field-error" data-error-for="relationshipGoal" hidden></p>
+              </div>
+              <fieldset class="profile-field profile-field-full profile-choice-field">
+                <legend>Who would you like to meet? <span>Optional · private</span></legend>
+                <div class="profile-choice-grid">
+                  <label class="profile-choice"><input type="checkbox" name="interestedIn" value="women"><span>Women</span></label>
+                  <label class="profile-choice"><input type="checkbox" name="interestedIn" value="men"><span>Men</span></label>
+                  <label class="profile-choice"><input type="checkbox" name="interestedIn" value="non_binary_people"><span>Non-binary people</span></label>
+                  <label class="profile-choice"><input type="checkbox" name="interestedIn" value="everyone"><span>Everyone</span></label>
+                </div>
+                <small class="profile-field-help">Your preference will not be shown on your public profile.</small>
+                <p class="profile-field-error" data-error-for="interestedIn" hidden></p>
+              </fieldset>
+              <fieldset class="profile-field profile-field-full profile-age-field">
+                <legend>Preferred age range <span>Optional</span></legend>
+                <div class="profile-age-row">
+                  <div><label class="profile-sub-label" for="age-min">From</label><input id="age-min" name="preferredAgeMin" type="number" min="18" max="99" inputmode="numeric" placeholder="18"></div>
+                  <span class="profile-age-dash" aria-hidden="true">—</span>
+                  <div><label class="profile-sub-label" for="age-max">To</label><input id="age-max" name="preferredAgeMax" type="number" min="18" max="99" inputmode="numeric" placeholder="40"></div>
+                </div>
+                <small class="profile-field-help">Date Concierge is for adults aged 18 and over.</small>
+                <p class="profile-field-error" data-error-for="ageRange" hidden></p>
+              </fieldset>
+            </div>
+          </section>
+
+          <section class="profile-form-section" aria-labelledby="interests-heading">
+            <div class="profile-section-heading"><span class="profile-step">03</span><div><h2 id="interests-heading">Things you enjoy</h2><p>Choose up to 8 interests that could spark a conversation.</p></div></div>
+            <fieldset class="profile-field profile-choice-field profile-field-full">
+              <legend>Your interests <span>Choose up to 8</span></legend>
+              <div class="profile-interest-grid" id="profile-interest-grid">
+                <label class="profile-interest"><input type="checkbox" name="interests" value="coffee_and_cafes"><span>Cafés & coffee</span></label>
+                <label class="profile-interest"><input type="checkbox" name="interests" value="travel"><span>Travel</span></label>
+                <label class="profile-interest"><input type="checkbox" name="interests" value="reading"><span>Books & reading</span></label>
+                <label class="profile-interest"><input type="checkbox" name="interests" value="live_music"><span>Live music</span></label>
+                <label class="profile-interest"><input type="checkbox" name="interests" value="cooking"><span>Cooking</span></label>
+                <label class="profile-interest"><input type="checkbox" name="interests" value="food_culture"><span>Food culture</span></label>
+                <label class="profile-interest"><input type="checkbox" name="interests" value="art_and_design"><span>Art & design</span></label>
+                <label class="profile-interest"><input type="checkbox" name="interests" value="fitness"><span>Fitness</span></label>
+                <label class="profile-interest"><input type="checkbox" name="interests" value="hiking_outdoors"><span>Hiking & outdoors</span></label>
+                <label class="profile-interest"><input type="checkbox" name="interests" value="movies_and_series"><span>Movies & series</span></label>
+                <label class="profile-interest"><input type="checkbox" name="interests" value="pets"><span>Pets</span></label>
+                <label class="profile-interest"><input type="checkbox" name="interests" value="volunteering"><span>Volunteering</span></label>
+                <label class="profile-interest"><input type="checkbox" name="interests" value="photography"><span>Photography</span></label>
+                <label class="profile-interest"><input type="checkbox" name="interests" value="cricket_and_sports"><span>Cricket & sports</span></label>
+                <label class="profile-interest"><input type="checkbox" name="interests" value="board_games"><span>Board games</span></label>
+                <label class="profile-interest"><input type="checkbox" name="interests" value="gardening"><span>Gardening</span></label>
+              </div>
+              <div class="profile-field-meta"><small id="interests-limit-message">Choose what you'd enjoy talking about.</small><small><span id="interests-count">0</span>/8</small></div>
+              <p class="profile-field-error" data-error-for="interests" hidden></p>
+            </fieldset>
+          </section>
+
+          <div class="profile-form-actions">
+            <a class="button button-outline profile-cancel" href="/dashboard.html">Back to my space</a>
+            <button class="button button-primary button-large" id="profile-save" type="submit">Save profile <span aria-hidden="true">↗</span></button>
+          </div>
+        </form>
+
+        <aside class="profile-sidebar">
+          <section class="profile-preview-card" aria-labelledby="profile-preview-heading">
+            <div class="profile-preview-top"><span class="profile-preview-heart" aria-hidden="true">♡</span><span class="profile-preview-label">YOUR PRIVATE PREVIEW</span></div>
+            <h2 id="profile-preview-heading">A first impression, shaped by you.</h2>
+            <p class="profile-preview-name" id="preview-name">Your name</p>
+            <p class="profile-preview-headline" id="preview-headline">Your headline will appear here.</p>
+            <p class="profile-preview-about" id="preview-about">A few honest details can help someone understand what matters to you.</p>
+            <div class="profile-preview-city"><span aria-hidden="true">⌖</span><span id="preview-city">Your city</span></div>
+            <div class="profile-preview-interests" id="preview-interests"><span class="profile-preview-empty">Your selected interests appear here.</span></div>
+          </section>
+          <section class="profile-privacy-card">
+            <span class="profile-privacy-icon" aria-hidden="true">◇</span>
+            <div><h3>Your preferences stay private</h3><p>Your gender identity, who you'd like to meet and age preferences are available only to you in this editor. We are not publishing member profiles or enabling discovery in this early build.</p></div>
+          </section>
+          <section class="profile-help-card"><span>NEED A MOMENT?</span><p>You can save what you've written and come back to it later.</p><a href="/privacy.html">Read our privacy overview ↗</a></section>
+        </aside>
+      </div>
+    </section>
+    <p class="profile-page-error" id="profile-page-error" role="alert" hidden></p>
+  </main>
+</body>
+</html>

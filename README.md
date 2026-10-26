@@ -1,14 +1,15 @@
-# Date Concierge — Landing Page + Auth Foundation (v0.6)
+# Date Concierge — Landing Page + Auth Foundation (v0.2)
 
-Independent Date Concierge project. The pH7Builder source is not included. This build contains a cinematic, mobile-first marketing homepage, a centered no-image login/signup modal, an animated mobile navigation panel, a video-ready hero with a still-image fallback, a basic signed-in dashboard placeholder, and Vercel serverless email/password authentication backed by Neon PostgreSQL.
+Independent Date Concierge project. The pH7Builder source is not included. This build contains a mobile-first marketing homepage, login/signup popup, a basic signed-in dashboard placeholder, and Vercel serverless email/password authentication backed by Neon PostgreSQL.
 
 ## Pages
 
-- `/` — homepage with responsive hero media, animated nav sections, pricing and centered login/signup modal.
-- Hero video: by default the page uses `assets/img/hero-couple.webp` as a fallback. When a licensed, compressed video is selected, place it at `assets/video/hero.mp4` and set `data-video-src="/assets/video/hero.mp4"` on `#hero-background-video` in `index.html`. The video is muted/looped/inline and is not loaded when the attribute is empty or reduced-motion/data-saver settings apply.
+- `/` — homepage, nav sections, pricing and login/signup modal.
 - `/register` — opens the signup modal (redirect alias).
 - `/login` — opens the login modal (redirect alias).
-- `/dashboard.html` — basic signed-in landing placeholder, checks `/api/auth/me`.
+- `/dashboard.html` — signed-in account home, profile progress and logout.
+- `/profile.html` — self-service profile editor and relationship preferences, available only to the signed-in member.
+- `/api/profile/me` — authenticated GET/PUT endpoint for the current member profile.
 - `/terms.html` and `/privacy.html` — early policy overviews, not final legal advice.
 - `/api/health` — health check for the API/database configuration.
 
@@ -16,7 +17,7 @@ Independent Date Concierge project. The pH7Builder source is not included. This 
 
 1. Push this standalone folder to a new GitHub repository.
 2. Create a Neon PostgreSQL project on the free plan: https://neon.com/ .
-3. Open the Neon SQL Editor and execute the full `db/schema.sql` file once.
+3. Open the Neon SQL Editor and execute the full `db/schema.sql` file for a fresh database. For an existing Date Concierge database, run `db/migrations/001_member_profiles.sql` once; it adds only the new profile table and does not alter existing accounts or sessions.
 4. In Vercel, import the repository, use the repo root (`./`) and the `Other` framework preset. Leave Build/Install commands unset; API functions are detected from `/api` and the static HTML is served directly.
 5. In Vercel → Project Settings → Environment Variables, set `DATABASE_URL` to the Neon pooled connection string (use the server-side connection string and keep it secret). Enable it for Preview and Production. Do not put the connection string in browser JavaScript or commit a real `.env` file.
 6. Redeploy after setting the variable.
@@ -31,6 +32,12 @@ Only one environment variable is required for the current auth foundation:
 - `DATABASE_URL` — Neon Postgres connection string; secret, server-side only.
 
 `.env.example` is a placeholder. Replace nothing inside Git with a real secret. Locally, use `vercel dev` with a private `.env.local`, or set `DATABASE_URL` in your shell.
+
+## Profile foundation (v0.3)
+
+The profile editor stores a member-owned headline, about text, city, optional gender identity, private introduction preferences, relationship goal, age range and selected interests. `/api/profile/me` only reads or updates the authenticated user’s own row. Profile visibility and public discovery are deliberately not enabled by this first module; the editor clearly states this. Profile data is not exposed through the public homepage or `/api/auth/me`.
+
+The profile validation helpers have dependency-free smoke tests: `npm run test:profile`. The profile SQL migration must be run in Neon before the profile API can load/save data.
 
 ## Auth security details
 
@@ -61,17 +68,18 @@ npx vercel dev
 .
 ├── index.html
 ├── register.html / login.html
-├── dashboard.html
+├── dashboard.html / profile.html
 ├── terms.html / privacy.html
-├── assets/css/site.css
-├── assets/js/site.js / dashboard.js
+├── assets/css/site.css / profile.css
+├── assets/js/site.js / dashboard.js / profile.js
 ├── assets/img/hero-couple.webp
-├── assets/video/README.md (optional hero video instructions)
 ├── api/auth/{register,login,me,logout}.js
+├── api/profile/me.js
 ├── api/health.js
-├── api/_lib/auth.js
-├── db/schema.sql
+├── api/_lib/auth.js / profile.js
+├── db/schema.sql / migrations/001_member_profiles.sql
 ├── package.json
 ├── .env.example
+├── docs/PH7-REUSE-MAP.md
 └── vercel.json
 ```
