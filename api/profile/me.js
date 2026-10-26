@@ -6,7 +6,7 @@ import { normalizeProfileInput, mapProfileRow, getProfileCompletion } from '../_
 
 function profileSetupError(error) {
   if (error?.code === '42P01' || error?.code === '42703') {
-    return 'Profile setup is not installed yet. Run db/migrations/001_member_profiles.sql in your Neon SQL Editor, then retry.';
+    return 'Profile/discovery setup is not installed yet. Run db/migrations/001_member_profiles.sql and then db/migrations/002_discovery_matching.sql in your Neon SQL Editor, then retry.';
   }
   return safeDatabaseError(error);
 }
@@ -39,7 +39,7 @@ export default async function handler(req, res) {
     if (req.method === 'GET') {
       const rows = await sql`
         SELECT city, headline, about_me, gender_identity, interested_in,
-               relationship_goal, preferred_age_min, preferred_age_max, interests, updated_at
+               relationship_goal, preferred_age_min, preferred_age_max, interests, discoverable, updated_at
         FROM dc_member_profiles
         WHERE user_id = ${user.id}
         LIMIT 1
@@ -65,12 +65,12 @@ export default async function handler(req, res) {
     const rows = await sql`
       INSERT INTO dc_member_profiles (
         user_id, city, headline, about_me, gender_identity, interested_in,
-        relationship_goal, preferred_age_min, preferred_age_max, interests, updated_at
+        relationship_goal, preferred_age_min, preferred_age_max, interests, discoverable, updated_at
       ) VALUES (
         ${user.id}, ${p.city}, ${p.headline}, ${p.aboutMe}, ${p.genderIdentity},
         ARRAY(SELECT jsonb_array_elements_text(${JSON.stringify(p.interestedIn)}::jsonb)),
         ${p.relationshipGoal}, ${p.preferredAgeMin}, ${p.preferredAgeMax},
-        ARRAY(SELECT jsonb_array_elements_text(${JSON.stringify(p.interests)}::jsonb)), NOW()
+        ARRAY(SELECT jsonb_array_elements_text(${JSON.stringify(p.interests)}::jsonb)), ${p.discoverable}, NOW()
       )
       ON CONFLICT (user_id) DO UPDATE SET
         city = EXCLUDED.city,
@@ -82,9 +82,10 @@ export default async function handler(req, res) {
         preferred_age_min = EXCLUDED.preferred_age_min,
         preferred_age_max = EXCLUDED.preferred_age_max,
         interests = EXCLUDED.interests,
+        discoverable = EXCLUDED.discoverable,
         updated_at = NOW()
       RETURNING city, headline, about_me, gender_identity, interested_in,
-                relationship_goal, preferred_age_min, preferred_age_max, interests, updated_at
+                relationship_goal, preferred_age_min, preferred_age_max, interests, discoverable, updated_at
     `;
     const profile = mapProfileRow(rows[0], user.city);
     return sendJson(res, 200, { ok: true, saved: true, profile, completion: getProfileCompletion(profile) });

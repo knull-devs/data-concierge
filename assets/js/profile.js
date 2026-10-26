@@ -15,7 +15,7 @@
     hiking_outdoors: 'Hiking & outdoors', movies_and_series: 'Movies & series', pets: 'Pets', volunteering: 'Volunteering',
     photography: 'Photography', cricket_and_sports: 'Cricket & sports', board_games: 'Board games', gardening: 'Gardening'
   };
-  const fieldNames = ['city', 'headline', 'aboutMe', 'genderIdentity', 'relationshipGoal', 'interestedIn', 'ageRange', 'interests'];
+  const fieldNames = ['city', 'headline', 'aboutMe', 'genderIdentity', 'relationshipGoal', 'interestedIn', 'ageRange', 'interests', 'discoverable'];
   let account = null;
 
   const showPageError = message => {
@@ -73,7 +73,8 @@
       relationshipGoal: form.elements.relationshipGoal.value,
       preferredAgeMin: form.elements.preferredAgeMin.value || null,
       preferredAgeMax: form.elements.preferredAgeMax.value || null,
-      interests: interestChecks.filter(input => input.checked).map(input => input.value)
+      interests: interestChecks.filter(input => input.checked).map(input => input.value),
+      discoverable: Boolean(form.elements.discoverable?.checked)
     };
   }
 
@@ -129,6 +130,7 @@
     form.elements.relationshipGoal.value = profile.relationshipGoal || '';
     form.elements.preferredAgeMin.value = profile.preferredAgeMin ?? '';
     form.elements.preferredAgeMax.value = profile.preferredAgeMax ?? '';
+    if (form.elements.discoverable) form.elements.discoverable.checked = profile.discoverable === true;
     setCheckboxGroup('interestedIn', profile.interestedIn);
     setCheckboxGroup('interests', profile.interests);
     updateCounts();

@@ -8,6 +8,9 @@ export default async function handler(req, res) {
     const sql = getDb();
     const row = await getSessionUser(sql, req);
     if (!row) return sendJson(res, 200, { authenticated: false, user: null });
+    // Update the activity signal used by the adapted pH7 related-profile ranking.
+    try { await sql`UPDATE dc_auth_users SET last_activity_at = NOW() WHERE id = ${row.id}`; }
+    catch (activityError) { if (activityError?.code !== '42703') throw activityError; }
     return sendJson(res, 200, { authenticated: true, user: publicUser(row) });
   } catch (error) {
     console.error('Auth session check error:', error?.code || error?.name || 'unknown');

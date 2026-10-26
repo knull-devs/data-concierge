@@ -8,8 +8,8 @@
   <title>Your profile — Date Concierge</title>
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="/assets/css/site.css?v=0.9.0">
-  <link rel="stylesheet" href="/assets/css/profile.css?v=0.1.0">
-  <script src="/assets/js/profile.js?v=0.1.0" defer></script>
+  <link rel="stylesheet" href="/assets/css/profile.css?v=0.3.0">
+  <script src="/assets/js/profile.js?v=0.3.0" defer></script>
 </head>
 <body class="profile-page dashboard-body">
   <header class="dashboard-header profile-header">
@@ -141,6 +141,17 @@
             </fieldset>
           </section>
 
+          <section class="profile-form-section discoverable-setting" aria-labelledby="discoverable-heading">
+            <div class="profile-section-heading"><span class="profile-step">04</span><div><h2 id="discoverable-heading">Ready to be discovered?</h2><p>You stay in control of whether eligible members can see your profile.</p></div></div>
+            <label class="discoverable-toggle" for="profile-discoverable">
+              <input id="profile-discoverable" name="discoverable" type="checkbox">
+              <span class="discoverable-switch" aria-hidden="true"></span>
+              <span class="discoverable-toggle-copy"><strong>Make my profile discoverable</strong><small>Your profile can appear to adults whose preferences fit yours. Your email, gender preference and preferred age range stay private.</small></span>
+            </label>
+            <p class="profile-field-error" data-error-for="discoverable" hidden></p>
+            <p class="profile-field-help">Discovery stays off until you turn it on and complete the required profile details. You can switch it off any time.</p>
+          </section>
+
           <div class="profile-form-actions">
             <a class="button button-outline profile-cancel" href="/dashboard.html">Back to my space</a>
             <button class="button button-primary button-large" id="profile-save" type="submit">Save profile <span aria-hidden="true">↗</span></button>
@@ -159,7 +170,7 @@
           </section>
           <section class="profile-privacy-card">
             <span class="profile-privacy-icon" aria-hidden="true">◇</span>
-            <div><h3>Your preferences stay private</h3><p>Your gender identity, who you'd like to meet and age preferences are available only to you in this editor. We are not publishing member profiles or enabling discovery in this early build.</p></div>
+            <div><h3>Your preferences stay private</h3><p>Your gender identity, who you'd like to meet and age preferences stay private. Only the profile details intended for discovery are shared, and only while discovery is switched on.</p></div>
           </section>
           <section class="profile-help-card"><span>NEED A MOMENT?</span><p>You can save what you've written and come back to it later.</p><a href="/privacy.html">Read our privacy overview ↗</a></section>
         </aside>

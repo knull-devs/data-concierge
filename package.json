@@ -1,16 +1,17 @@
 {
   "name": "date-concierge",
-  "version": "0.3.0",
+  "version": "0.5.0",
   "private": true,
   "type": "module",
-  "description": "Date Concierge standalone website with authentication and member profile foundation",
+  "description": "Date Concierge standalone website with auth, member profiles, pH7-derived discovery ranking and mutual-consent introductions",
   "engines": {
     "node": "22.x"
   },
   "scripts": {
-    "check": "node --check assets/js/site.js && node --check assets/js/dashboard.js && node --check assets/js/profile.js && node --check api/_lib/auth.js && node --check api/_lib/profile.js && node --check api/auth/register.js && node --check api/auth/login.js && node --check api/auth/me.js && node --check api/auth/logout.js && node --check api/profile/me.js && node --check api/health.js && node tools/smoke-profile.mjs && python tools/verify_project.py",
+    "check": "node --check assets/js/site.js && node --check assets/js/dashboard.js && node --check assets/js/profile.js && node --check assets/js/discover.js && node --check assets/js/introductions.js && node --check api/_lib/auth.js && node --check api/_lib/profile.js && node --check api/_lib/matchmaking.js && node --check api/auth/register.js && node --check api/auth/login.js && node --check api/auth/me.js && node --check api/auth/logout.js && node --check api/profile/me.js && node --check api/matches/recommendations.js && node --check api/introductions.js && node --check api/health.js && node tools/smoke-profile.mjs && node tools/smoke-matches.mjs && python tools/verify_project.py",
     "test:auth": "node tools/smoke-auth.mjs",
-    "test:profile": "node tools/smoke-profile.mjs"
+    "test:profile": "node tools/smoke-profile.mjs",
+    "test:matches": "node tools/smoke-matches.mjs"
   },
   "dependencies": {
     "@neondatabase/serverless": "1.2.0"

@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#fbf3ef">
+  <meta name="description" content="Review your Date Concierge introduction requests.">
+  <title>Your introductions — Date Concierge</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/css/site.css?v=0.9.0">
+  <link rel="stylesheet" href="/assets/css/discovery.css?v=0.1.0">
+  <script src="/assets/js/introductions.js?v=0.1.0" defer></script>
+</head>
+<body class="dashboard-body discovery-page">
+  <header class="dashboard-header discovery-header">
+    <div class="page-shell dashboard-header-inner">
+      <a class="brand" href="/dashboard.html" aria-label="Date Concierge account space"><span class="brand-symbol" aria-hidden="true">♡</span><span class="brand-wordmark">date concierge<span class="brand-period">.</span></span></a>
+      <div class="discovery-header-actions"><a class="button button-quiet" href="/discover.html">Discover ↗</a><a class="button button-primary" href="/dashboard.html">My space ↗</a></div>
+    </div>
+  </header>
+  <main class="page-shell discovery-main">
+    <section class="discovery-intro intro-compact">
+      <div class="eyebrow"><span aria-hidden="true">♡</span> MUTUAL CONSENT, ALWAYS</div>
+      <h1>Your <em>introductions.</em></h1>
+      <p>Review requests you have sent and decide whether to accept introductions from other members.</p>
+    </section>
+    <section class="discovery-results" aria-labelledby="intro-title">
+      <div class="discovery-results-heading"><div><span class="discovery-kicker">YOUR CONNECTIONS</span><h2 id="intro-title">Requests and responses</h2></div></div>
+      <div class="discovery-state" id="intro-loading" role="status">Opening your introductions…</div>
+      <div class="discovery-state discovery-state-error" id="intro-error" role="alert" hidden></div>
+      <div class="discovery-state discovery-state-empty" id="intro-empty" hidden>
+        <span class="discovery-empty-icon" aria-hidden="true">♡</span>
+        <h3>Your introduction space is ready.</h3>
+        <p>When you send a request—or someone sends one to you—it will appear here. The other person always gets to choose.</p>
+        <a class="button button-primary" href="/discover.html">Discover members ↗</a>
+      </div>
+      <div class="intro-request-list" id="intro-request-list" hidden></div>
+    </section>
+    <p class="discovery-disclaimer">Accepting an introduction does not share private contact details automatically. Messaging and date coordination will be added in later milestones.</p>
+  </main>
+</body>
+</html>

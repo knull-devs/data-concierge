@@ -11,7 +11,8 @@ CREATE TABLE IF NOT EXISTS dc_auth_users (
   accepted_terms_at TIMESTAMPTZ NOT NULL,
   is_active BOOLEAN NOT NULL DEFAULT TRUE,
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  last_activity_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
 CREATE TABLE IF NOT EXISTS dc_auth_sessions (
@@ -47,6 +48,9 @@ CREATE TABLE IF NOT EXISTS dc_member_profiles (
   preferred_age_min SMALLINT,
   preferred_age_max SMALLINT,
   interests TEXT[] NOT NULL DEFAULT ARRAY[]::TEXT[],
+  discoverable BOOLEAN NOT NULL DEFAULT FALSE,
+  avatar_url TEXT,
+  avatar_approved BOOLEAN NOT NULL DEFAULT FALSE,
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   CONSTRAINT dc_member_profiles_gender_check CHECK (gender_identity IN ('', 'man', 'woman', 'non_binary', 'prefer_not_to_say')),
@@ -59,3 +63,20 @@ CREATE TABLE IF NOT EXISTS dc_member_profiles (
   )
 );
 CREATE INDEX IF NOT EXISTS dc_member_profiles_city_idx ON dc_member_profiles(city);
+
+
+-- One request per member pair; status mirrors the upstream pH7 friend-request lifecycle.
+CREATE TABLE IF NOT EXISTS dc_introduction_requests (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  requester_id UUID NOT NULL REFERENCES dc_auth_users(id) ON DELETE CASCADE,
+  recipient_id UUID NOT NULL REFERENCES dc_auth_users(id) ON DELETE CASCADE,
+  status VARCHAR(16) NOT NULL DEFAULT 'pending',
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  responded_at TIMESTAMPTZ,
+  CONSTRAINT dc_intro_not_self CHECK (requester_id <> recipient_id),
+  CONSTRAINT dc_intro_status_check CHECK (status IN ('pending', 'accepted', 'declined'))
+);
+CREATE UNIQUE INDEX IF NOT EXISTS dc_intro_pair_unique_idx ON dc_introduction_requests (LEAST(requester_id, recipient_id), GREATEST(requester_id, recipient_id));
+CREATE INDEX IF NOT EXISTS dc_intro_recipient_status_idx ON dc_introduction_requests (recipient_id, status, created_at DESC);
+CREATE INDEX IF NOT EXISTS dc_intro_requester_status_idx ON dc_introduction_requests (requester_id, status, created_at DESC);

@@ -18,6 +18,10 @@ export default async function handler(req, res) {
     const passwordValid = await verifyPassword(password, user?.password_hash || dummyHash);
     if (!user || !user.is_active || !passwordValid) return sendJson(res, 401, { error: 'Email or password is incorrect.' });
     const publicRow = { id: user.id, display_name: user.display_name, email: user.email, city: user.city, created_at: user.created_at };
+    // Match ranking uses the upstream pH7 recent-activity signal. Keep login working
+    // against older schemas while migration 002 is pending; only ignore missing column.
+    try { await sql`UPDATE dc_auth_users SET last_activity_at = NOW() WHERE id = ${user.id}`; }
+    catch (activityError) { if (activityError?.code !== '42703') throw activityError; }
     await createSession(sql, user.id, res, body.remember !== false);
     return sendJson(res, 200, { ok: true, authenticated: true, user: publicUser(publicRow) });
   } catch (error) {

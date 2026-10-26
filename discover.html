@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#fbf3ef">
+  <meta name="description" content="Discover adults whose dating preferences may fit yours.">
+  <title>Discover members — Date Concierge</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/css/site.css?v=0.9.0">
+  <link rel="stylesheet" href="/assets/css/discovery.css?v=0.1.0">
+  <script src="/assets/js/discover.js?v=0.1.0" defer></script>
+</head>
+<body class="dashboard-body discovery-page">
+  <header class="dashboard-header discovery-header">
+    <div class="page-shell dashboard-header-inner">
+      <a class="brand" href="/dashboard.html" aria-label="Date Concierge account space"><span class="brand-symbol" aria-hidden="true">♡</span><span class="brand-wordmark">date concierge<span class="brand-period">.</span></span></a>
+      <div class="discovery-header-actions"><a class="button button-quiet" href="/introductions.html">Introductions</a><a class="button button-primary" href="/dashboard.html">My space ↗</a></div>
+    </div>
+  </header>
+
+  <main class="page-shell discovery-main">
+    <section class="discovery-intro">
+      <div class="eyebrow"><span aria-hidden="true">♡</span> THOUGHTFUL DISCOVERY</div>
+      <h1>Less noise.<br><em>More intention.</em></h1>
+      <p>See a small set of adults whose age preferences and dating intentions may fit yours. You stay in control: an introduction only proceeds with mutual consent.</p>
+      <div class="discovery-private-note"><span aria-hidden="true">◇</span><span><strong>Your preferences stay private.</strong><small>We never show who you want to meet or your preferred age range on your public card.</small></span></div>
+    </section>
+
+    <section class="discovery-results" aria-labelledby="discovery-results-title">
+      <div class="discovery-results-heading"><div><span class="discovery-kicker">YOUR FIRST LOOK</span><h2 id="discovery-results-title">Thoughtful introductions</h2></div><a href="/profile.html" class="discovery-edit-link">Edit preferences ↗</a></div>
+      <div class="discovery-state" id="discovery-loading" role="status">Finding profiles that fit your preferences…</div>
+      <div class="discovery-state discovery-state-error" id="discovery-error" role="alert" hidden></div>
+      <div class="discovery-state discovery-state-empty" id="discovery-empty" hidden>
+        <span class="discovery-empty-icon" aria-hidden="true">♡</span>
+        <h3>No suitable profiles just yet.</h3>
+        <p>We only show real members who have opted into discovery and whose preferences fit yours. No invented profiles or placeholder matches.</p>
+        <a class="button button-primary" href="/profile.html">Review my profile ↗</a>
+      </div>
+      <div class="discovery-grid" id="discovery-grid" hidden></div>
+      <p class="discovery-score-note" id="discovery-score-note" hidden>Suggested fit is a ranking aid based on age proximity, location, recent activity and approved-photo availability. It does not predict chemistry or guarantee a date.</p>
+    </section>
+  </main>
+</body>
+</html>

@@ -30,6 +30,8 @@ export function normalizeProfileInput(body, fallbackCity = '') {
   const aboutMe = cleanParagraph(input.aboutMe, 600);
   const genderIdentity = typeof input.genderIdentity === 'string' ? input.genderIdentity : '';
   const relationshipGoal = typeof input.relationshipGoal === 'string' ? input.relationshipGoal : '';
+  const discoverable = input.discoverable === true;
+  if (input.discoverable !== undefined && typeof input.discoverable !== 'boolean') errors.discoverable = 'Choose whether you want compatible members to discover your profile.';
 
   if (city.length < 2) errors.city = 'Enter your city (at least 2 characters).';
   if (typeof input.city === 'string' && input.city.trim().length > 80) errors.city = 'City must be 80 characters or fewer.';
@@ -77,15 +79,19 @@ export function normalizeProfileInput(body, fallbackCity = '') {
     relationshipGoal,
     preferredAgeMin,
     preferredAgeMax,
-    interests
+    interests,
+    discoverable
   };
+  if (discoverable && !isDiscoveryReady(profile)) {
+    errors.discoverable = 'To enable discovery, add a headline, a short introduction, your identity and relationship goal, who you want to meet, an age range, and at least 3 interests.';
+  }
   return { ok: Object.keys(errors).length === 0, errors, profile };
 }
 
 export function mapProfileRow(row, fallbackCity = '') {
   if (!row) return {
     city: fallbackCity || '', headline: '', aboutMe: '', genderIdentity: '', interestedIn: [],
-    relationshipGoal: '', preferredAgeMin: null, preferredAgeMax: null, interests: [], updatedAt: null
+    relationshipGoal: '', preferredAgeMin: null, preferredAgeMax: null, interests: [], discoverable: false, updatedAt: null
   };
   return {
     city: row.city || fallbackCity || '',
@@ -97,8 +103,25 @@ export function mapProfileRow(row, fallbackCity = '') {
     preferredAgeMin: row.preferred_age_min === null || row.preferred_age_min === undefined ? null : Number(row.preferred_age_min),
     preferredAgeMax: row.preferred_age_max === null || row.preferred_age_max === undefined ? null : Number(row.preferred_age_max),
     interests: asStringArray(row.interests),
+    discoverable: row.discoverable === true,
     updatedAt: row.updated_at || null
   };
+}
+
+export function isDiscoveryReady(profile) {
+  const ageMin = profile?.preferredAgeMin ?? profile?.preferred_age_min;
+  const ageMax = profile?.preferredAgeMax ?? profile?.preferred_age_max;
+  const interestedIn = Array.isArray(profile?.interestedIn) ? profile.interestedIn : asStringArray(profile?.interested_in);
+  const interests = Array.isArray(profile?.interests) ? profile.interests : asStringArray(profile?.interests);
+  return String(profile?.city || '').trim().length >= 2
+    && String(profile?.headline || '').trim().length >= 3
+    && String(profile?.aboutMe ?? profile?.about_me ?? '').trim().length >= 20
+    && Boolean(profile?.genderIdentity ?? profile?.gender_identity)
+    && Boolean(profile?.relationshipGoal ?? profile?.relationship_goal)
+    && interestedIn.length > 0
+    && Number.isInteger(Number(ageMin)) && Number.isInteger(Number(ageMax))
+    && Number(ageMin) >= 18 && Number(ageMax) <= 99 && Number(ageMin) <= Number(ageMax)
+    && interests.length >= 3;
 }
 
 export function getProfileCompletion(profile) {
