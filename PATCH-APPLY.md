@@ -1,12 +1,25 @@
-# Date Concierge v0.2 — changed/new files only
+# Date Concierge mobile responsiveness patch (v0.3)
 
-This patch is for an existing standalone Date Concierge v0.1 project. It does not include the original pH7Builder repository.
+This patch updates only three existing project files:
+
+- `index.html` — wraps authentication form content in an independent scroll region.
+- `assets/css/site.css` — improves the mobile auth sheet, close-button access, safe-area padding, input sizing, narrow-screen date/city layout, and short/landscape viewport behavior.
+- `assets/js/site.js` — locks the background page while auth is open, restores previous scroll/body styles on close, updates a CSS viewport-height variable for mobile keyboard changes, and resets the auth form scroll when switching tabs.
 
 ## Apply
-1. Back up your current project folder or create a Git commit first.
-2. Extract this ZIP into the ROOT of your existing `date-concierge` project and allow matching files to be overwritten. Do not extract into a new nested folder.
-3. Follow `DELETE_OLD_FILES.txt` to remove the two obsolete v0.1 assets after confirming the new homepage loads the new site CSS/JS.
-4. Review `README.md`; configure a Neon PostgreSQL test database and Vercel `DATABASE_URL` before testing live auth.
-5. Run `npm run check`, then `npm install` and `npm run test:auth` after dependencies are installed.
 
-This is a patch, not a complete project ZIP. If the target folder is not the previous Date Concierge standalone v0.1 project, use the complete v0.2 archive instead.
+1. Back up the current project or create a Git commit first.
+2. Extract this ZIP into the existing `date-concierge` project root and allow these three files to be overwritten.
+3. Run `npm run check` from the project root.
+4. Commit and push the changes; let Vercel deploy the updated commit.
+
+No backend/authentication API, database schema, or subscription logic is changed by this patch.
+
+## Manual mobile checks
+
+- At a narrow width (320–380 CSS px), open Sign up: the date-of-birth and city fields should stack vertically.
+- Scroll the form: the hero strip and close button should remain visible while form content scrolls independently.
+- Focus an input so the mobile keyboard opens: the fields and submit button should remain reachable.
+- Switch Login/Sign up: the inner form scroll should reset to the top.
+- Close the popup: the underlying page should return to its previous scroll position and should scroll normally again.
+- Repeat on 390–430 CSS px and desktop widths.

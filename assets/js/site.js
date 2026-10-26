@@ -8,6 +8,56 @@
   const navToggle = $('#mobile-nav-toggle');
   const toast = $('#site-toast');
   let toastTimer;
+  let lockedScrollY = 0;
+  let bodyScrollLocked = false;
+  let previousBodyStyles = null;
+
+  const syncVisualViewport = () => {
+    const viewport = window.visualViewport;
+    if (viewport) {
+      document.documentElement.style.setProperty('--dc-visual-viewport-height', `${Math.round(viewport.height)}px`);
+    }
+  };
+  syncVisualViewport();
+  window.visualViewport?.addEventListener('resize', syncVisualViewport, { passive: true });
+  window.addEventListener('resize', syncVisualViewport, { passive: true });
+
+  const lockBodyScroll = () => {
+    if (bodyScrollLocked) return;
+    lockedScrollY = window.scrollY || window.pageYOffset || 0;
+    bodyScrollLocked = true;
+    document.body.classList.add('modal-open');
+    // Fixed-body locking avoids background-page scroll leakage on iOS/Android browsers.
+    if (window.matchMedia('(max-width: 760px)').matches) {
+      previousBodyStyles = {
+        position: document.body.style.position,
+        top: document.body.style.top,
+        left: document.body.style.left,
+        right: document.body.style.right,
+        width: document.body.style.width
+      };
+      document.body.style.position = 'fixed';
+      document.body.style.top = `-${lockedScrollY}px`;
+      document.body.style.left = '0';
+      document.body.style.right = '0';
+      document.body.style.width = '100%';
+    }
+  };
+  const unlockBodyScroll = () => {
+    document.body.classList.remove('modal-open');
+    if (!bodyScrollLocked) return;
+    const shouldRestoreScroll = document.body.style.position === 'fixed' && previousBodyStyles !== null;
+    if (previousBodyStyles) {
+      document.body.style.position = previousBodyStyles.position;
+      document.body.style.top = previousBodyStyles.top;
+      document.body.style.left = previousBodyStyles.left;
+      document.body.style.right = previousBodyStyles.right;
+      document.body.style.width = previousBodyStyles.width;
+      previousBodyStyles = null;
+    }
+    bodyScrollLocked = false;
+    if (shouldRestoreScroll) window.scrollTo(0, lockedScrollY);
+  };
 
   const announce = (text, kind = 'info') => {
     if (!message) return;
@@ -41,6 +91,8 @@
       view.classList.toggle('is-active', active);
       view.hidden = !active;
     });
+    const authScroll = $('#auth-modal-scroll');
+    if (authScroll) authScroll.scrollTop = 0;
     $('#auth-title').innerHTML = isRegister ? 'Create your account<span>.</span>' : 'Welcome back<span>.</span>';
     $('#auth-subtitle').textContent = isRegister ? 'A thoughtful introduction starts with you.' : 'Sign in to continue your journey.';
     $('#login-password').autocomplete = 'current-password';
@@ -52,21 +104,22 @@
     if (!modal) return;
     switchAuthTab(tabName);
     if (!modal.open) modal.showModal();
-    document.body.classList.add('modal-open');
+    lockBodyScroll();
+    syncVisualViewport();
     nav?.classList.remove('is-open');
     navToggle?.setAttribute('aria-expanded', 'false');
     navToggle?.setAttribute('aria-label', 'Open navigation');
   };
   const closeAuth = () => {
     if (modal?.open) modal.close();
-    document.body.classList.remove('modal-open');
+    unlockBodyScroll();
     clearMessage();
   };
 
   $$('[data-auth-open]').forEach((button) => button.addEventListener('click', () => openAuth(button.dataset.authOpen)));
   $$('[data-auth-close]').forEach((button) => button.addEventListener('click', closeAuth));
   $$('.auth-tab').forEach((tab) => tab.addEventListener('click', () => switchAuthTab(tab.dataset.authTab)));
-  modal?.addEventListener('close', () => document.body.classList.remove('modal-open'));
+  modal?.addEventListener('close', unlockBodyScroll);
   modal?.addEventListener('click', (event) => { if (event.target === modal) closeAuth(); });
 
   navToggle?.addEventListener('click', () => {
