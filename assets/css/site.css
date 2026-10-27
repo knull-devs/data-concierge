@@ -1252,7 +1252,7 @@ dialog.auth-modal[open] { animation: dcAuthFadeIn .24s ease-out both; }
   .hero-image-layer, .hero-background-video, .approach-card, .how-section .step-card { animation: none !important; transition: none !important; transform: none !important; }
 }
 
-/* Date Concierge v1.1 — vertically scrolling, overlapping photo-card stack. */
+/* Date Concierge v1.2 — layered cards that enter, overlap, shrink, then exit on scroll. */
 .story-stack-section{position:relative;isolation:isolate;background:radial-gradient(ellipse at 78% 42%,rgba(103,31,59,.27),transparent 48%),linear-gradient(135deg,#1b0d16 0%,#24111d 56%,#150b12 100%);color:#fff;overflow:clip}
 .story-stack-track{position:relative;height:auto;overflow:visible}
 .story-stack-track.is-scroll-enhanced{height:var(--story-stack-track-height,1800px)}
@@ -1271,9 +1271,9 @@ dialog.auth-modal[open] { animation: dcAuthFadeIn .24s ease-out both; }
 .story-stack-note strong{font-family:var(--serif);font-weight:500;font-size:21px}
 .story-stack-note small{margin-top:2px;color:rgba(255,239,244,.62);font-size:12px}
 .story-stack-gallery{width:100%;max-width:760px;min-width:0;justify-self:end;align-self:center}
-.story-stack-deck{position:relative;width:100%;height:min(65svh,620px);min-height:390px;overflow:hidden;isolation:isolate;mask-image:linear-gradient(180deg,transparent 0,#000 3%,#000 97%,transparent 100%)}
-.story-stack-cards{position:absolute;top:0;left:0;right:0;will-change:transform;transform:translate3d(0,0,0)}
-.story-stack-card{position:absolute;top:0;left:0;right:0;display:grid;grid-template-columns:minmax(0,.88fr) minmax(0,1.12fr);height:clamp(220px,31svh,286px);overflow:hidden;border:1px solid rgba(255,255,255,.15);border-radius:19px;background:#fff8f5;color:#2a1720;box-shadow:0 24px 54px rgba(0,0,0,.3);backface-visibility:hidden;will-change:top}
+.story-stack-deck{position:relative;width:100%;height:min(65svh,620px);min-height:390px;overflow:hidden;isolation:isolate;mask-image:none}
+.story-stack-cards{position:absolute;top:0;left:0;right:0;will-change:auto;transform:none;backface-visibility:hidden}
+.story-stack-card{position:absolute;top:0;left:0;right:0;display:grid;grid-template-columns:minmax(0,.88fr) minmax(0,1.12fr);height:clamp(220px,31svh,286px);overflow:hidden;border:1px solid rgba(255,255,255,.15);border-radius:19px;background:#fff8f5;color:#2a1720;box-shadow:0 24px 54px rgba(0,0,0,.3);backface-visibility:hidden;will-change:top,transform;transform-origin:center top;transition:box-shadow .28s ease,filter .28s ease}
 .story-stack-card-copy{position:relative;z-index:1;min-width:0;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;padding:clamp(16px,2.1vw,29px);background:linear-gradient(145deg,#fffaf7 0%,#f8e9e6 100%)}
 .story-stack-card-number{display:inline-flex;align-items:center;gap:6px;margin:0 0 clamp(13px,2vh,21px);color:#a64d69;font-size:10px;font-weight:800;letter-spacing:.18em;line-height:1}
 .story-stack-card-number b{font:inherit}
@@ -1379,4 +1379,26 @@ dialog.auth-modal[open] { animation: dcAuthFadeIn .24s ease-out both; }
 @media(prefers-reduced-motion:reduce) and (max-width:700px){
   .story-stack-track.is-scroll-enhanced .story-stack-stage-inner{grid-template-columns:1fr!important;padding-block:34px!important}
   .story-stack-track.is-scroll-enhanced .story-stack-cards{grid-template-columns:1fr!important}
+}
+
+
+
+
+/* v1.2: true stacked-card choreography. A new card rises from below, the previous
+   cards move up and shrink slightly; after card five, the complete stack exits. */
+.story-stack-track.is-scroll-enhanced .story-stack-deck{mask-image:none!important;-webkit-mask-image:none!important}
+.story-stack-track.is-scroll-enhanced .story-stack-cards{transform:none!important;will-change:auto}
+.story-stack-track.is-scroll-enhanced .story-stack-card{will-change:top,transform;transform-origin:center top;transition:box-shadow .22s ease,filter .22s ease}
+.story-stack-track.is-scroll-enhanced .story-stack-card.is-stack-active{box-shadow:0 25px 58px rgba(0,0,0,.36);filter:saturate(1.02)}
+.story-stack-track.is-scroll-enhanced .story-stack-card.is-stack-covered{box-shadow:0 15px 36px rgba(0,0,0,.22)}
+@media(max-width:700px){
+  .story-stack-track.is-scroll-enhanced .story-stack-deck{overflow:hidden;height:clamp(265px,43svh,365px)}
+  .story-stack-track.is-scroll-enhanced .story-stack-card{height:clamp(174px,24svh,205px)}
+}
+@media(max-height:690px) and (max-width:700px){
+  .story-stack-track.is-scroll-enhanced .story-stack-deck{height:clamp(235px,40svh,280px)}
+  .story-stack-track.is-scroll-enhanced .story-stack-card{height:clamp(158px,24svh,178px)}
+}
+@media(prefers-reduced-motion:reduce){
+  .story-stack-track.is-scroll-enhanced .story-stack-card{transition:none;transform:none!important}
 }

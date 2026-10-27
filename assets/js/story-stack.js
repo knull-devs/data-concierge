@@ -17,76 +17,110 @@
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   const mobileQuery = window.matchMedia('(max-width: 700px)');
   const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
+  const pad = (value) => String(value).padStart(2, '0');
   let rafId = 0;
   let geometry = null;
   let lastActive = -1;
+  let resizeObserver = null;
 
-  function resetCardStyles() {
+  function setCounter(active) {
+    if (active === lastActive) return;
+    lastActive = active;
+    if (counter) counter.innerHTML = `${pad(active + 1)} <i>/ ${pad(cards.length)}</i>`;
+    if (progress) progress.setAttribute('aria-valuenow', String(active + 1));
+  }
+
+  function resetEnhancement() {
     cards.forEach((card) => {
       card.style.removeProperty('top');
       card.style.removeProperty('z-index');
-      card.classList.remove('is-stack-active');
+      card.style.removeProperty('transform');
+      card.style.removeProperty('transform-origin');
+      card.classList.remove('is-stack-active', 'is-stack-covered');
     });
     cardsLayer.style.removeProperty('height');
     cardsLayer.style.removeProperty('transform');
     track.style.removeProperty('height');
     track.style.removeProperty('--story-stack-track-height');
     track.classList.remove('is-scroll-enhanced');
-    if (counter) counter.innerHTML = `01 <i>/ ${String(cards.length).padStart(2, '0')}</i>`;
-    if (progress) progress.setAttribute('aria-valuenow', '1');
     if (progressFill) progressFill.style.transform = 'scaleX(0)';
-    lastActive = -1;
+    setCounter(0);
+    geometry = null;
   }
 
   function measureAndEnable() {
     if (reducedMotion.matches) {
-      resetCardStyles();
-      geometry = null;
+      resetEnhancement();
       return;
     }
 
+    // Enable the pinned layout BEFORE measuring: otherwise the page's normal-flow
+    // fallback height is measured and the pinned story lasts far too long.
     track.classList.add('is-scroll-enhanced');
-    // Card height is determined by CSS breakpoints; the same stack behaviour works on desktop and mobile.
+    const stageHeight = Math.max(1, Math.round(stage.getBoundingClientRect().height));
+    const deckHeight = Math.max(1, Math.round(deck.getBoundingClientRect().height));
     const cardHeight = Math.max(1, Math.round(cards[0].getBoundingClientRect().height));
-    const overlapRatio = mobileQuery.matches ? 0.24 : 0.22;
-    const step = Math.max(mobileQuery.matches ? 118 : 150, Math.round(cardHeight * (1 - overlapRatio)));
     const steps = cards.length - 1;
-    const viewportHeight = Math.max(1, Math.round(stage.getBoundingClientRect().height));
-    // Give each card more than one card-step of scroll so the overlap reads as a deliberate sequence.
-    const scrollTravel = Math.round(step * steps * 1.42);
+    // The reference effect keeps a substantial overlap between cards, not a carousel.
+    const stepRatio = mobileQuery.matches ? 0.72 : 0.72;
+    const step = Math.max(mobileQuery.matches ? 92 : 120, Math.round(cardHeight * stepRatio));
+    const startOffset = Math.max(0, deckHeight - cardHeight);
+    const buildTravel = steps * step;
+    // After card five reaches the bottom slot, scroll the finished stack out of the deck.
+    const exitTravel = deckHeight;
+    const scrollTravel = buildTravel + exitTravel;
 
+    cardsLayer.style.height = `${deckHeight + cardHeight * cards.length}px`;
     cards.forEach((card, index) => {
-      card.style.top = `${step * index}px`;
-      card.style.zIndex = String(10 + index);
-      card.classList.toggle('is-stack-active', index === 0);
+      card.style.zIndex = String(20 + index);
+      card.style.transformOrigin = 'center top';
     });
-    cardsLayer.style.height = `${cardHeight + step * steps}px`;
-    track.style.height = `${viewportHeight + scrollTravel}px`;
-    track.style.setProperty('--story-stack-track-height', `${viewportHeight + scrollTravel}px`);
-    geometry = { step, steps, scrollTravel };
+    track.style.height = `${stageHeight + scrollTravel}px`;
+    track.style.setProperty('--story-stack-track-height', `${stageHeight + scrollTravel}px`);
+    geometry = { step, steps, startOffset, deckHeight, cardHeight, buildTravel, exitTravel, scrollTravel };
+    lastActive = -1;
     render();
   }
 
   function render() {
     rafId = 0;
     if (!geometry || reducedMotion.matches || !track.classList.contains('is-scroll-enhanced')) return;
-    const trackRect = track.getBoundingClientRect();
-    const travelled = clamp(-trackRect.top, 0, geometry.scrollTravel);
-    const sequenceProgress = geometry.scrollTravel ? travelled / geometry.scrollTravel : 0;
-    const cardProgress = sequenceProgress * geometry.steps;
-    const stackOffset = cardProgress * geometry.step;
-    const active = clamp(Math.round(cardProgress), 0, cards.length - 1);
 
-    cardsLayer.style.transform = `translate3d(0, ${(-stackOffset).toFixed(2)}px, 0)`;
-    cards.forEach((card, index) => card.classList.toggle('is-stack-active', index === active));
-    if (active !== lastActive) {
-      lastActive = active;
-      const current = String(active + 1).padStart(2, '0');
-      const total = String(cards.length).padStart(2, '0');
-      if (counter) counter.innerHTML = `${current} <i>/ ${total}</i>`;
-      if (progress) progress.setAttribute('aria-valuenow', String(active + 1));
-    }
-    if (progressFill) progressFill.style.transform = `scaleX(${sequenceProgress.toFixed(4)})`;
+    const travelled = clamp(-track.getBoundingClientRect().top, 0, geometry.scrollTravel);
+    const buildPosition = Math.min(travelled, geometry.buildTravel);
+    const stepPosition = buildPosition / Math.max(1, geometry.step);
+    const currentCard = clamp(Math.floor(stepPosition), 0, geometry.steps);
+    const localProgress = currentCard >= geometry.steps ? 0 : clamp(stepPosition - currentCard, 0, 1);
+    const exitProgress = clamp((travelled - geometry.buildTravel) / Math.max(1, geometry.exitTravel), 0, 1);
+    const exitOffset = exitProgress * geometry.deckHeight;
+    const scaleDropPerLevel = 0.045;
+
+    const active = clamp(Math.floor(stepPosition + 0.5), 0, cards.length - 1);
+    cards.forEach((card, index) => {
+      let top;
+      let scale;
+      if (index <= currentCard) {
+        // Cards already introduced shift toward the top and scale down as the next
+        // card rises from below. At the end of each step the stack remains continuous.
+        const depth = currentCard - index;
+        top = geometry.startOffset - (depth * geometry.step) - (localProgress * geometry.step);
+        scale = 1 - (scaleDropPerLevel * (depth + localProgress));
+      } else {
+        // The next card enters from just below the deck; later cards queue beneath it.
+        top = geometry.deckHeight + (index - currentCard - 1 - localProgress) * geometry.cardHeight;
+        scale = 1;
+      }
+
+      top -= exitOffset;
+      card.style.top = `${top.toFixed(2)}px`;
+      card.style.transform = `scale(${clamp(scale, 0.78, 1).toFixed(4)})`;
+      card.classList.toggle('is-stack-active', index === active);
+      card.classList.toggle('is-stack-covered', index < active);
+    });
+
+    setCounter(active);
+    const buildProgress = clamp(travelled / Math.max(1, geometry.buildTravel), 0, 1);
+    if (progressFill) progressFill.style.transform = `scaleX(${buildProgress.toFixed(4)})`;
   }
 
   function scheduleRender() {
@@ -94,19 +128,25 @@
   }
 
   function refresh() {
-    // Wait one layout frame so mobile browser chrome/orientation changes have settled.
     window.requestAnimationFrame(() => {
       measureAndEnable();
       scheduleRender();
     });
   }
 
-  if (reducedMotion.matches) resetCardStyles();
+  if (reducedMotion.matches) resetEnhancement();
   else measureAndEnable();
 
   window.addEventListener('scroll', scheduleRender, { passive: true });
   window.addEventListener('resize', refresh, { passive: true });
-  window.addEventListener('orientationchange', () => window.setTimeout(refresh, 140), { passive: true });
+  window.addEventListener('orientationchange', () => window.setTimeout(refresh, 180), { passive: true });
+  window.addEventListener('load', refresh, { once: true });
+  document.fonts?.ready?.then(refresh).catch(() => {});
+  if ('ResizeObserver' in window) {
+    resizeObserver = new ResizeObserver(() => refresh());
+    resizeObserver.observe(stage);
+    resizeObserver.observe(deck);
+  }
   if (reducedMotion.addEventListener) reducedMotion.addEventListener('change', refresh);
   else reducedMotion.addListener?.(refresh);
 })();

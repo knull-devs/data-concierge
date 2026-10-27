@@ -52,7 +52,7 @@ if not missing:
     stack_card_count = len(re.findall(r'data-stack-card(?:\s|>)', index))
     if stack_card_count != 5:
         errors.append(f'Homepage should contain exactly five story-stack cards, found {stack_card_count}')
-    if 'story-stack.js?v=1.1.0' not in index or 'site.css?v=1.1.0' not in index:
+    if 'story-stack.js?v=1.2.0' not in index or 'site.css?v=1.2.0' not in index:
         errors.append('Homepage story-stack cache-busting versions are missing')
     for token in ['data-stack-cards','story-stack-card-copy','story-stack-card-media','Scroll to reveal']:
         if token not in index:
