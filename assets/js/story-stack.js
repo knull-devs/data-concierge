@@ -6,113 +6,107 @@
 
   const track = section.querySelector('[data-story-stack-track]');
   const stage = section.querySelector('[data-story-stack-stage]');
+  const deck = section.querySelector('[data-story-stack-deck]');
+  const cardsLayer = section.querySelector('[data-stack-cards]');
   const cards = [...section.querySelectorAll('[data-stack-card]')];
   const counter = section.querySelector('[data-stack-counter]');
   const progress = section.querySelector('[data-stack-progress]');
   const progressFill = section.querySelector('[data-stack-progress-fill]');
-  if (!track || !stage || cards.length < 2) return;
+  if (!track || !stage || !deck || !cardsLayer || cards.length < 2) return;
 
-  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-  const isStatic = () => reduceMotion.matches;
-  let frame = 0;
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const mobileQuery = window.matchMedia('(max-width: 700px)');
+  const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
+  let rafId = 0;
+  let geometry = null;
   let lastActive = -1;
 
-  const setAccessibleStaticState = () => {
-    track.classList.remove('is-scroll-enhanced');
+  function resetCardStyles() {
     cards.forEach((card) => {
-      card.removeAttribute('aria-hidden');
-      card.style.removeProperty('transform');
-      card.style.removeProperty('opacity');
-      card.style.removeProperty('filter');
+      card.style.removeProperty('top');
       card.style.removeProperty('z-index');
+      card.classList.remove('is-stack-active');
     });
-    if (counter) counter.innerHTML = `01 <i>/ 0${cards.length}</i>`;
+    cardsLayer.style.removeProperty('height');
+    cardsLayer.style.removeProperty('transform');
+    track.style.removeProperty('height');
+    track.style.removeProperty('--story-stack-track-height');
+    track.classList.remove('is-scroll-enhanced');
+    if (counter) counter.innerHTML = `01 <i>/ ${String(cards.length).padStart(2, '0')}</i>`;
     if (progress) progress.setAttribute('aria-valuenow', '1');
     if (progressFill) progressFill.style.transform = 'scaleX(0)';
-  };
-
-  if (isStatic()) {
-    setAccessibleStaticState();
-  } else {
-    track.classList.add('is-scroll-enhanced');
+    lastActive = -1;
   }
 
-  const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
+  function measureAndEnable() {
+    if (reducedMotion.matches) {
+      resetCardStyles();
+      geometry = null;
+      return;
+    }
 
-  const render = () => {
-    frame = 0;
-    if (isStatic() || !track.classList.contains('is-scroll-enhanced')) return;
-
-    const trackRect = track.getBoundingClientRect();
-    const travel = Math.max(1, track.offsetHeight - stage.offsetHeight);
-    const travelled = clamp(-trackRect.top, 0, travel);
-    const scrollProgress = clamp(travelled / travel, 0, 1);
-    const cardProgress = scrollProgress * (cards.length - 1);
-    const active = clamp(Math.round(cardProgress), 0, cards.length - 1);
-    const viewportWidth = Math.max(320, stage.clientWidth);
-    const exitDistance = Math.min(viewportWidth * 0.72, 520);
+    track.classList.add('is-scroll-enhanced');
+    // Card height is determined by CSS breakpoints; the same stack behaviour works on desktop and mobile.
+    const cardHeight = Math.max(1, Math.round(cards[0].getBoundingClientRect().height));
+    const overlapRatio = mobileQuery.matches ? 0.24 : 0.22;
+    const step = Math.max(mobileQuery.matches ? 118 : 150, Math.round(cardHeight * (1 - overlapRatio)));
+    const steps = cards.length - 1;
+    const viewportHeight = Math.max(1, Math.round(stage.getBoundingClientRect().height));
+    // Give each card more than one card-step of scroll so the overlap reads as a deliberate sequence.
+    const scrollTravel = Math.round(step * steps * 1.42);
 
     cards.forEach((card, index) => {
-      const relative = index - cardProgress;
-      const ahead = Math.max(0, relative);
-      let x;
-      let y;
-      let scale;
-      let opacity;
-      let rotation;
-      let blur;
-
-      if (relative < 0) {
-        const exit = clamp(-relative, 0, 1.35);
-        x = -exitDistance * exit;
-        y = -76 * exit;
-        scale = 1 + Math.min(exit, 1) * 0.035;
-        opacity = clamp(1 - exit * 1.42, 0, 1);
-        rotation = (index % 2 === 0 ? -1 : 1) * 5.5 * exit;
-        blur = Math.min(exit * 1.5, 2);
-      } else {
-        const depth = Math.min(ahead, cards.length - 1);
-        x = depth * 2.5;
-        y = depth * 13;
-        scale = 1 - depth * 0.048;
-        opacity = clamp(1 - depth * 0.17, 0.28, 1);
-        rotation = (index % 2 === 0 ? -1 : 1) * depth * 1.15;
-        blur = Math.min(depth * 0.32, 1.2);
-      }
-
-      card.style.transform = `translate3d(${x.toFixed(2)}px, ${y.toFixed(2)}px, 0) scale(${scale.toFixed(4)}) rotate(${rotation.toFixed(3)}deg)`;
-      card.style.opacity = opacity.toFixed(3);
-      card.style.filter = blur > 0.2 ? `blur(${blur.toFixed(2)}px)` : 'none';
-      card.style.zIndex = String(100 - Math.round(Math.abs(relative) * 12));
-      card.setAttribute('aria-hidden', String(index !== active));
-      card.classList.toggle('is-current', index === active);
+      card.style.top = `${step * index}px`;
+      card.style.zIndex = String(10 + index);
+      card.classList.toggle('is-stack-active', index === 0);
     });
+    cardsLayer.style.height = `${cardHeight + step * steps}px`;
+    track.style.height = `${viewportHeight + scrollTravel}px`;
+    track.style.setProperty('--story-stack-track-height', `${viewportHeight + scrollTravel}px`);
+    geometry = { step, steps, scrollTravel };
+    render();
+  }
 
+  function render() {
+    rafId = 0;
+    if (!geometry || reducedMotion.matches || !track.classList.contains('is-scroll-enhanced')) return;
+    const trackRect = track.getBoundingClientRect();
+    const travelled = clamp(-trackRect.top, 0, geometry.scrollTravel);
+    const sequenceProgress = geometry.scrollTravel ? travelled / geometry.scrollTravel : 0;
+    const cardProgress = sequenceProgress * geometry.steps;
+    const stackOffset = cardProgress * geometry.step;
+    const active = clamp(Math.round(cardProgress), 0, cards.length - 1);
+
+    cardsLayer.style.transform = `translate3d(0, ${(-stackOffset).toFixed(2)}px, 0)`;
+    cards.forEach((card, index) => card.classList.toggle('is-stack-active', index === active));
     if (active !== lastActive) {
       lastActive = active;
-      const number = String(active + 1).padStart(2, '0');
+      const current = String(active + 1).padStart(2, '0');
       const total = String(cards.length).padStart(2, '0');
-      if (counter) counter.innerHTML = `${number} <i>/ ${total}</i>`;
+      if (counter) counter.innerHTML = `${current} <i>/ ${total}</i>`;
       if (progress) progress.setAttribute('aria-valuenow', String(active + 1));
     }
-    if (progressFill) progressFill.style.transform = `scaleX(${cardProgress / (cards.length - 1)})`;
-  };
+    if (progressFill) progressFill.style.transform = `scaleX(${sequenceProgress.toFixed(4)})`;
+  }
 
-  const requestRender = () => {
-    if (!frame) frame = window.requestAnimationFrame(render);
-  };
+  function scheduleRender() {
+    if (!rafId) rafId = window.requestAnimationFrame(render);
+  }
 
-  window.addEventListener('scroll', requestRender, { passive: true });
-  window.addEventListener('resize', requestRender, { passive: true });
-  window.addEventListener('orientationchange', () => window.setTimeout(requestRender, 120), { passive: true });
-  reduceMotion.addEventListener?.('change', (event) => {
-    if (event.matches) {
-      setAccessibleStaticState();
-      lastActive = -1;
-    } else {
-      track.classList.add('is-scroll-enhanced');
-      requestRender();
-    }
-  });
-  requestRender();
+  function refresh() {
+    // Wait one layout frame so mobile browser chrome/orientation changes have settled.
+    window.requestAnimationFrame(() => {
+      measureAndEnable();
+      scheduleRender();
+    });
+  }
+
+  if (reducedMotion.matches) resetCardStyles();
+  else measureAndEnable();
+
+  window.addEventListener('scroll', scheduleRender, { passive: true });
+  window.addEventListener('resize', refresh, { passive: true });
+  window.addEventListener('orientationchange', () => window.setTimeout(refresh, 140), { passive: true });
+  if (reducedMotion.addEventListener) reducedMotion.addEventListener('change', refresh);
+  else reducedMotion.addListener?.(refresh);
 })();
