@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="dc-ui-version" content="0.9.0">
+  <meta name="dc-ui-version" content="0.9.1">
   <meta name="theme-color" content="#160d14">
   <meta name="description" content="Thoughtful introductions, compatible people and help turning a promising connection into a real date.">
   <title>Date Concierge — More than just a match</title>
@@ -40,8 +40,8 @@
   <main id="main-content">
     <section class="hero-section" aria-labelledby="hero-title">
       <div class="hero-image-layer" id="hero-media-layer" aria-hidden="true">
-        <!-- Add a licensed, optimized MP4 under assets/video/hero.mp4 and set data-video-src to that path when selected. The existing image remains the fallback until a video loads. -->
-        <video class="hero-background-video" id="hero-background-video" data-video-src="" poster="/assets/img/hero-couple.webp" muted loop playsinline preload="none" tabindex="-1"></video>
+        <!-- 16:9 hero video. Keep muted + playsinline for mobile autoplay compatibility; the poster remains the fallback if video playback is unavailable. -->
+        <video class="hero-background-video" id="hero-background-video" data-video-src="/assets/video/hero.mp4" poster="/assets/img/hero-couple.webp" muted loop playsinline preload="metadata" tabindex="-1" aria-hidden="true"></video>
       </div>
       <div class="hero-grain" aria-hidden="true"></div>
       <div class="hero-content page-shell">
