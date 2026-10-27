@@ -3,14 +3,15 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="dc-ui-version" content="0.9.1">
+  <meta name="dc-ui-version" content="1.0.0">
   <meta name="theme-color" content="#160d14">
   <meta name="description" content="Thoughtful introductions, compatible people and help turning a promising connection into a real date.">
   <title>Date Concierge — More than just a match</title>
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <link rel="preload" as="image" href="/assets/img/hero-couple.webp" fetchpriority="high">
-  <link rel="stylesheet" href="/assets/css/site.css?v=0.9.0">
+  <link rel="stylesheet" href="/assets/css/site.css?v=1.0.0">
   <script src="/assets/js/site.js?v=0.8.0" defer></script>
+  <script src="/assets/js/story-stack.js?v=1.0.0" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#main-content">Skip to content</a>
@@ -40,8 +41,8 @@
   <main id="main-content">
     <section class="hero-section" aria-labelledby="hero-title">
       <div class="hero-image-layer" id="hero-media-layer" aria-hidden="true">
-        <!-- 16:9 hero video. Keep muted + playsinline for mobile autoplay compatibility; the poster remains the fallback if video playback is unavailable. -->
-        <video class="hero-background-video" id="hero-background-video" data-video-src="/assets/video/hero.mp4" poster="/assets/img/hero-couple.webp" muted loop playsinline preload="metadata" tabindex="-1" aria-hidden="true"></video>
+        <!-- Add a licensed, optimized MP4 under assets/video/hero.mp4 and set data-video-src to that path when selected. The existing image remains the fallback until a video loads. -->
+        <video class="hero-background-video" id="hero-background-video" data-video-src="/assets/video/hero.mp4" poster="/assets/img/hero-couple.webp" muted loop playsinline preload="none" tabindex="-1"></video>
       </div>
       <div class="hero-grain" aria-hidden="true"></div>
       <div class="hero-content page-shell">
@@ -96,23 +97,68 @@
       </div>
     </section>
 
-    <section class="section story-section" id="about" aria-labelledby="about-title">
-      <div class="page-shell story-grid">
-        <div class="story-visual reveal">
-          <img src="/assets/img/hero-couple.webp" alt="A couple enjoying a warm, candlelit conversation over dinner" loading="lazy" width="1672" height="941">
-          <div class="story-caption"><span class="story-caption-mark">♡</span><span><b>Less pressure.</b><small>More room for a real connection.</small></span></div>
-          <div class="story-frame-line" aria-hidden="true"></div>
+    <section class="story-section story-stack-section" id="about" aria-labelledby="about-title" data-story-stack-section>
+      <div class="story-stack-track" data-story-stack-track>
+        <div class="story-stack-stage" data-story-stack-stage>
+          <div class="page-shell story-stack-stage-inner">
+            <div class="story-stack-heading">
+              <div class="eyebrow eyebrow-light"><span aria-hidden="true">✧</span> A DIFFERENT KIND OF DATING</div>
+              <h2 id="about-title">The little things<br>make <em>the difference.</em></h2>
+              <p>Dating should feel like a series of thoughtful moments—not another feed to keep up with.</p>
+              <div class="story-stack-note"><span class="story-stack-note-mark" aria-hidden="true">♡</span><span><strong>Less pressure.</strong><small>More room for a real connection.</small></span></div>
+            </div>
+            <div class="story-stack-gallery" aria-label="Five moments of meaningful connection">
+              <div class="story-stack-deck" data-story-stack-deck>
+                <article class="story-stack-card" data-stack-card aria-label="Moment 1 of 5: A warm first conversation">
+                  <img src="/assets/img/story-stack/01-rooftop.webp" alt="A couple sharing a relaxed candlelit rooftop dinner" width="1672" height="941" loading="lazy" decoding="async">
+                  <div class="story-stack-card-shade" aria-hidden="true"></div>
+                  <div class="story-stack-card-caption"><span class="story-stack-card-number">01 <i>/ 05</i></span><div><h3>A little curiosity.</h3><p>Every connection starts somewhere.</p></div></div>
+                </article>
+                <article class="story-stack-card" data-stack-card aria-label="Moment 2 of 5: A conversation over coffee">
+                  <img src="/assets/img/story-stack/02-cafe.webp" alt="A couple smiling together over coffee in a cozy cafe" width="722" height="541" loading="lazy" decoding="async">
+                  <div class="story-stack-card-shade" aria-hidden="true"></div>
+                  <div class="story-stack-card-caption"><span class="story-stack-card-number">02 <i>/ 05</i></span><div><h3>Conversations that flow.</h3><p>No scripts. Just being yourself.</p></div></div>
+                </article>
+                <article class="story-stack-card" data-stack-card aria-label="Moment 3 of 5: An easy afternoon outdoors">
+                  <img src="/assets/img/story-stack/03-garden.webp" alt="A couple walking arm in arm through a sunlit garden" width="722" height="541" loading="lazy" decoding="async">
+                  <div class="story-stack-card-shade" aria-hidden="true"></div>
+                  <div class="story-stack-card-caption"><span class="story-stack-card-number">03 <i>/ 05</i></span><div><h3>Comfort, at your pace.</h3><p>Small moments can say a lot.</p></div></div>
+                </article>
+                <article class="story-stack-card" data-stack-card aria-label="Moment 4 of 5: Discovering something together">
+                  <img src="/assets/img/story-stack/04-gallery.webp" alt="A couple enjoying a quiet conversation at an art gallery" width="722" height="541" loading="lazy" decoding="async">
+                  <div class="story-stack-card-shade" aria-hidden="true"></div>
+                  <div class="story-stack-card-caption"><span class="story-stack-card-number">04 <i>/ 05</i></span><div><h3>Something in common.</h3><p>Shared interests open doors.</p></div></div>
+                </article>
+                <article class="story-stack-card" data-stack-card aria-label="Moment 5 of 5: A quiet shared moment">
+                  <img src="/assets/img/story-stack/05-bookshop.webp" alt="A couple reading together by a bright bookstore window" width="722" height="541" loading="lazy" decoding="async">
+                  <div class="story-stack-card-shade" aria-hidden="true"></div>
+                  <div class="story-stack-card-caption"><span class="story-stack-card-number">05 <i>/ 05</i></span><div><h3>Room for something real.</h3><p>Let the connection unfold naturally.</p></div></div>
+                </article>
+              </div>
+              <div class="story-stack-controls">
+                <span class="story-stack-counter" data-stack-counter aria-live="polite">01 <i>/ 05</i></span>
+                <div class="story-stack-progress" role="progressbar" aria-label="Photo story progress" aria-valuemin="1" aria-valuemax="5" aria-valuenow="1" data-stack-progress>
+                  <span class="story-stack-progress-fill" data-stack-progress-fill></span>
+                </div>
+                <span class="story-stack-scroll-hint"><span class="story-stack-scroll-dot" aria-hidden="true">↓</span> Keep scrolling</span>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="story-copy reveal">
-          <div class="eyebrow eyebrow-light"><span aria-hidden="true">✧</span> A DIFFERENT KIND OF DATING</div>
-          <h2 id="about-title">The little things<br>make <em>the difference.</em></h2>
-          <p>Dating shouldn't feel like another feed to keep up with. Date Concierge is designed around intentions, respectful introductions and thoughtful support when you're ready to meet in real life.</p>
-          <div class="story-benefits">
+      </div>
+      <div class="story-stack-details">
+        <div class="page-shell story-stack-details-grid">
+          <div class="story-stack-details-intro">
+            <div class="eyebrow"><span aria-hidden="true">♡</span> CONNECTION, WITHOUT THE NOISE</div>
+            <h3>Thoughtful introductions.<br><em>Real-world possibilities.</em></h3>
+            <p>Dating shouldn't feel like another feed to keep up with. Date Concierge is designed around clear intentions, respectful introductions and thoughtful support when you're ready to meet in real life.</p>
+            <button class="button button-primary" type="button" data-auth-open="register">Begin your story <span aria-hidden="true">↗</span></button>
+          </div>
+          <div class="story-stack-benefits">
             <div><span class="benefit-icon" aria-hidden="true">◇</span><span><b>Introductions with context</b><small>Understand what you may have in common before you say hello.</small></span></div>
             <div><span class="benefit-icon" aria-hidden="true">♡</span><span><b>Your privacy, respected</b><small>Personal details stay protected and connections are mutual.</small></span></div>
             <div><span class="benefit-icon" aria-hidden="true">✦</span><span><b>A human touch when you need it</b><small>Optional assistance with profile feedback and date planning.</small></span></div>
           </div>
-          <button class="button button-light-outline" type="button" data-auth-open="register">Begin your story <span aria-hidden="true">↗</span></button>
         </div>
       </div>
     </section>

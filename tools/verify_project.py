@@ -7,6 +7,10 @@ required = [
     'index.html','register.html','login.html','dashboard.html','terms.html','privacy.html',
     'discover.html','introductions.html','profile.html',
     'assets/css/site.css','assets/css/profile.css','assets/css/discovery.css',
+    'assets/js/story-stack.js',
+    'assets/img/story-stack/01-rooftop.webp','assets/img/story-stack/02-cafe.webp',
+    'assets/img/story-stack/03-garden.webp','assets/img/story-stack/04-gallery.webp',
+    'assets/img/story-stack/05-bookshop.webp',
     'assets/js/site.js','assets/js/dashboard.js','assets/js/register-redirect.js','assets/js/login-redirect.js',
     'assets/js/profile.js','assets/js/discover.js','assets/js/introductions.js','assets/img/hero-couple.webp',
     'api/_lib/auth.js','api/_lib/profile.js','api/_lib/matchmaking.js',
@@ -40,11 +44,16 @@ def check_assets(page_name):
 if not missing:
     index = (ROOT/'index.html').read_text(encoding='utf-8')
     for phrase in ['How it works','About','Pricing','T&amp;C','auth-modal','login-form','register-form',
-                   'data-auth-open','mobile-nav-toggle','auth-provider-row','data-auth-provider']:
+                   'data-auth-open','mobile-nav-toggle','auth-provider-row','data-auth-provider','data-story-stack-section','data-story-stack-track','data-stack-card']:
         if phrase not in index:
             errors.append(f'index.html missing expected UI marker: {phrase}')
     for page in ['index.html','profile.html','discover.html','introductions.html','dashboard.html']:
         check_assets(page)
+    stack_card_count = len(re.findall(r'data-stack-card(?:\s|>)', index))
+    if stack_card_count != 5:
+        errors.append(f'Homepage should contain exactly five story-stack cards, found {stack_card_count}')
+    if 'story-stack.js?v=1.0.0' not in index or 'site.css?v=1.0.0' not in index:
+        errors.append('Homepage story-stack cache-busting versions are missing')
 
     pkg = json.loads((ROOT/'package.json').read_text())
     if '@neondatabase/serverless' not in pkg.get('dependencies', {}):
