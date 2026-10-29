@@ -3,6 +3,7 @@ import {
   getSessionUser, safeDatabaseError
 } from './_lib/auth.js';
 import { isValidIntroductionId, normalizeMessage } from './_lib/messages.js';
+import { createNotificationBestEffort } from './_lib/notifications.js';
 
 const SETUP_MESSAGE = 'Messaging setup is not installed yet. Run db/migrations/001_member_profiles.sql, then 002_discovery_matching.sql, then 003_messages.sql in Neon SQL Editor.';
 function bodyObject(req) {
@@ -152,6 +153,11 @@ export default async function handler(req, res) {
     `;
     await sql`UPDATE dc_introduction_requests SET updated_at = NOW() WHERE id = ${introductionId} AND status = 'accepted'`;
     const row = rows[0];
+    const recipientId = otherMemberId(intro, user.id);
+    await createNotificationBestEffort(sql, recipientId, {
+      category: 'message', title: `New message from ${user.display_name}`,
+      body: row.body.slice(0, 240), href: `/messages.html?introductionId=${encodeURIComponent(introductionId)}`, relatedId: row.id
+    });
     return sendJson(res, 201, { ok: true, message: {
       id: row.id, introductionId: row.introduction_id, senderId: row.sender_id,
       senderName: user.display_name, body: row.body, createdAt: row.created_at, readAt: row.read_at

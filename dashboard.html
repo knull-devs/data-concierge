@@ -8,8 +8,8 @@
   <title>Your space — Date Concierge</title>
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="/assets/css/site.css?v=1.2.0">
-  <link rel="stylesheet" href="/assets/css/dashboard.css?v=1.0.0">
-  <script src="/assets/js/dashboard.js?v=1.0.0" defer></script>
+  <link rel="stylesheet" href="/assets/css/dashboard.css?v=1.1.0">
+  <script src="/assets/js/dashboard.js?v=1.1.0" defer></script>
 </head>
 <body class="dashboard-body dc-dashboard">
   <a class="dc-skip-link" href="#dashboard-main">Skip to dashboard</a>
@@ -30,9 +30,9 @@
       <a class="dc-top-icon" href="/messages.html" aria-label="Open messages">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3h11A2.5 2.5 0 0 1 20 5.5v8a2.5 2.5 0 0 1-2.5 2.5H10l-5 4v-4.4A2.5 2.5 0 0 1 4 13.5z"></path><path d="M8 8h8M8 11h5"></path></svg>
       </a>
-      <a class="dc-top-icon" href="/introductions.html" aria-label="Introduction requests">
+      <a class="dc-top-icon" href="/notifications.html" aria-label="Notifications">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path><path d="M10 21h4"></path></svg>
-        <span class="dc-notification-dot" aria-hidden="true"></span>
+        <span class="dc-notification-dot" id="dashboard-notification-dot" aria-hidden="true" hidden></span>
       </a>
       <div class="dc-account-menu">
         <a class="dc-account-link" href="/account.html" aria-label="Manage account settings">
@@ -57,6 +57,9 @@
         <a class="dc-nav-item" href="/profile.html"><span class="dc-nav-icon" aria-hidden="true">♙</span><span>My Profile</span></a>
         <a class="dc-nav-item" href="/#pricing"><span class="dc-nav-icon" aria-hidden="true">♛</span><span>My Plan</span></a>
         <a class="dc-nav-item" href="/profile.html#preferences"><span class="dc-nav-icon" aria-hidden="true">⚙</span><span>Preferences</span></a>
+        <a class="dc-nav-item" href="/date-plans.html"><span class="dc-nav-icon" aria-hidden="true">♡</span><span>Date plans</span></a>
+        <a class="dc-nav-item" href="/notifications.html"><span class="dc-nav-icon" aria-hidden="true">♧</span><span>Notifications</span></a>
+        <a class="dc-nav-item" href="/settings.html"><span class="dc-nav-icon" aria-hidden="true">⚙</span><span>Privacy & settings</span></a>
         <a class="dc-nav-item" href="/account.html"><span class="dc-nav-icon" aria-hidden="true">♢</span><span>Account settings</span></a>
       </nav>
 
@@ -199,7 +202,8 @@
     <a class="is-active" href="/dashboard.html" aria-current="page"><span aria-hidden="true">⌂</span><small>Home</small></a>
     <a href="/discover.html"><span aria-hidden="true">⌕</span><small>Discover</small></a>
     <a href="#recommended"><span aria-hidden="true">♡</span><small>Matches</small></a>
-    <a href="/introductions.html"><span aria-hidden="true">♧</span><small>Introductions</small></a>
+    <a href="/introductions.html"><span aria-hidden="true">♧</span><small>Intros</small></a>
+    <a href="/date-plans.html"><span aria-hidden="true">♡</span><small>Date plans</small></a>
     <a href="/profile.html"><span aria-hidden="true">♙</span><small>Profile</small></a>
   </nav>
 </body>

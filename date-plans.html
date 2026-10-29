@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#100a10">
+  <meta name="description" content="Suggest a date and coordinate plans through mutual consent.">
+  <title>Date plans — Date Concierge</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/css/site.css?v=1.2.0">
+  <link rel="stylesheet" href="/assets/css/member-tools.css?v=0.1.0">
+  <script src="/assets/js/date-plans.js?v=0.1.0" defer></script>
+</head>
+<body class="mt-body">
+  <a class="dc-skip-link" href="#date-plans-main">Skip to date plans</a>
+  <header class="mt-topbar">
+    <a class="mt-brand" href="/dashboard.html"><span class="mt-brand-icon" aria-hidden="true">♡</span><span>date concierge<span>.</span></span></a>
+    <nav class="mt-head-links" aria-label="Member navigation">
+      <a href="/dashboard.html">My space</a><a href="/introductions.html" data-optional="desktop">Introductions</a><a href="/messages.html" data-optional="desktop">Messages</a><a class="mt-head-primary" href="/discover.html">Discover</a>
+    </nav>
+  </header>
+  <main id="date-plans-main" class="mt-main">
+    <div class="mt-page-head"><div><span class="mt-eyebrow">FROM INTRODUCTION TO REAL LIFE</span><h1>Make a date <em>happen.</em></h1><p>Suggest a time and place only after you both accept an introduction. Either person can decline or cancel; a date is never assumed.</p></div></div>
+    <div class="mt-error" id="date-plans-error" role="alert" hidden></div>
+    <div class="mt-status" id="date-plans-status" role="status" aria-live="polite" hidden></div>
+    <div class="mt-date-grid">
+      <section class="mt-card" aria-labelledby="date-proposal-title">
+        <h2 id="date-proposal-title">Suggest a date</h2><p class="mt-card-intro">Choose one of your mutually accepted introductions.</p>
+        <div class="mt-empty" id="date-no-intros" hidden><strong>No accepted introductions yet.</strong><p>Once you both accept an introduction, you can suggest a thoughtful first date here.</p><a class="mt-button mt-button-primary" href="/introductions.html">View introductions ↗</a></div>
+        <form class="mt-form" id="date-proposal-form" novalidate>
+          <label for="date-introduction">Introduction</label><select id="date-introduction" name="introductionId" required><option value="">Loading accepted introductions…</option></select>
+          <label for="date-time">Date and time</label><input id="date-time" name="scheduledFor" type="datetime-local" required>
+          <p class="mt-form-help">Choose at least 30 minutes from now, up to 90 days ahead. Your browser's local time zone is applied.</p>
+          <label for="date-city">City</label><input id="date-city" name="city" type="text" minlength="2" maxlength="80" placeholder="e.g. Delhi NCR" required>
+          <label for="date-venue">Venue (optional)</label><input id="date-venue" name="venue" type="text" maxlength="160" placeholder="A café, gallery or public meeting place">
+          <label for="date-note">A note (optional)</label><textarea id="date-note" name="note" maxlength="500" placeholder="Anything your introduction should know? Keep it thoughtful and respectful."></textarea>
+          <button class="mt-button mt-button-primary" id="date-submit" type="submit">Send date proposal ↗</button>
+          <p class="mt-form-help">For safety, choose a public place for a first meeting and arrange your own transport.</p>
+        </form>
+      </section>
+      <section class="mt-card" aria-labelledby="date-existing-title">
+        <div class="mt-inline-heading"><h2 id="date-existing-title">Your date plans</h2><button class="mt-button" id="date-plans-refresh" type="button">Refresh</button></div>
+        <p class="mt-card-intro">Proposals, accepted dates and recent outcomes.</p>
+        <div class="mt-loading" id="date-plans-loading" role="status">Loading date plans…</div>
+        <div class="mt-empty" id="date-plans-empty" hidden><strong>No date proposals yet.</strong><p>When you are both ready, suggest a time and place. Your date plan will appear here.</p></div>
+        <div class="mt-plan-list" id="date-plans-list" hidden></div>
+      </section>
+    </div>
+  </main>
+  <nav class="mt-bottom-nav" aria-label="Member navigation">
+    <a href="/dashboard.html"><span aria-hidden="true">⌂</span><small>Home</small></a><a href="/discover.html"><span aria-hidden="true">⌕</span><small>Discover</small></a><a class="is-active" href="/date-plans.html" aria-current="page"><span aria-hidden="true">♡</span><small>Date plans</small></a><a href="/introductions.html"><span aria-hidden="true">♧</span><small>Intros</small></a><a href="/messages.html"><span aria-hidden="true">▱</span><small>Messages</small></a>
+  </nav>
+</body>
+</html>

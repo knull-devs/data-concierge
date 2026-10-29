@@ -97,3 +97,29 @@ npx vercel dev
 The Account + Messages v0.1 module adds `/account.html` and `/messages.html`, plus authenticated endpoints for account edits, password rotation, and conversations attached to mutually accepted introductions. See `docs/ACCOUNT-MESSAGES-v0.1.md` and `PATCH-APPLY-ACCOUNT-MESSAGES-v0.1.md` for endpoints, migration order, limitations and setup instructions.
 
 Run Neon migrations `001_member_profiles.sql`, `002_discovery_matching.sql`, then `003_messages.sql` on the branch used by `DATABASE_URL`. Do not reset the database. Messaging remains disabled until an introduction is accepted by both members; it does not create fake conversations.
+
+## Notifications, privacy settings and date planning (v0.1)
+
+This milestone adds three member pages and database-backed routes:
+
+- `/notifications.html` — per-member in-app updates, unread count, filters and mark-read actions.
+- `/settings.html` — in-app notification preferences and discovery visibility. Discovery can only be switched on after profile readiness validation.
+- `/date-plans.html` — propose a date only from a mutually accepted introduction; the other person can accept or decline, and either participant can cancel. A completed status is allowed only after the scheduled time.
+- `/api/notifications` — authenticated GET/PATCH for notifications.
+- `/api/settings` — authenticated GET/PUT for preferences and discovery visibility.
+- `/api/date-plans` — authenticated GET/POST/PATCH for date proposals.
+
+Notifications are stored in `dc_notifications` and respect `dc_member_settings`. They are in-app only; email, SMS and push delivery are not configured. Notification insertions are best-effort, so a notification failure does not invalidate a successful introduction or message action. The `/api/health` response now distinguishes database connectivity from schema readiness and lists any missing setup migrations.
+
+### Database migration order
+
+For the existing Date Concierge database where migrations 001–003 have already been run, run these two new migrations in Neon SQL Editor in order:
+
+1. `db/migrations/004_notifications_settings.sql`
+2. `db/migrations/005_date_plans.sql`
+
+Use the same Neon `production` branch/database referenced by Vercel's server-side `DATABASE_URL`. These migrations are additive and idempotent; do not drop/reset the database. The 004 migration seeds default notification settings for existing users; 005 adds date proposals constrained to accepted introductions.
+
+For a new database, run `db/schema.sql` first, then migrations 003, 004 and 005 in order. Confirm `/api/health` reports `schemaReady: true` after deployment and migrations.
+
+Automated checks: `npm run check` and `npm run test:notifications-dateplans`. Live Neon CRUD, two-account consent flows and deployed Vercel behavior still require end-to-end testing against your configured deployment.

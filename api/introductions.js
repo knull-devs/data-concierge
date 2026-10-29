@@ -4,6 +4,7 @@ import {
 } from './_lib/auth.js';
 import { isDiscoveryReady } from './_lib/profile.js';
 import { isMutuallyCompatible } from './_lib/matchmaking.js';
+import { createNotificationBestEffort } from './_lib/notifications.js';
 
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 const SETUP_MESSAGE = 'Introduction setup is not installed yet. Run db/migrations/001_member_profiles.sql first, then db/migrations/002_discovery_matching.sql in Neon SQL Editor.';
@@ -140,7 +141,11 @@ export default async function handler(req, res) {
             UPDATE dc_introduction_requests SET status = 'accepted', updated_at = NOW(), responded_at = NOW()
             WHERE id = ${existing.id} AND status = 'pending' RETURNING id, status
           `;
-          if (accepted.length) return sendJson(res, 200, { ok: true, mutual: true, id: accepted[0].id, status: accepted[0].status, message: 'It is mutual — your private conversation is now available in Messages.' });
+          if (accepted.length) {
+            await createNotificationBestEffort(sql, existing.requester_id, { category: 'introduction', title: 'Your introduction is mutual', body: `${user.display_name} accepted your introduction request. You can now message each other.`, href: '/messages.html', relatedId: accepted[0].id });
+            await createNotificationBestEffort(sql, user.id, { category: 'introduction', title: 'Introduction accepted', body: 'You both chose to connect. Your private conversation is now available.', href: '/messages.html', relatedId: accepted[0].id });
+            return sendJson(res, 200, { ok: true, mutual: true, id: accepted[0].id, status: accepted[0].status, message: 'It is mutual — your private conversation is now available in Messages.' });
+          }
         }
         if (existing.requester_id === user.id && existing.status === 'pending') {
           return sendJson(res, 200, { ok: true, existing: true, id: existing.id, status: existing.status, message: 'You have already requested this introduction.' });
@@ -155,6 +160,7 @@ export default async function handler(req, res) {
           VALUES (${user.id}, ${candidateId}, 'pending')
           RETURNING id, status, created_at
         `;
+        await createNotificationBestEffort(sql, candidateId, { category: 'introduction', title: 'A new introduction request', body: `${user.display_name} would like to connect. Review the request when you are ready.`, href: '/introductions.html', relatedId: inserted[0].id });
         return sendJson(res, 201, { ok: true, id: inserted[0].id, status: inserted[0].status, createdAt: inserted[0].created_at, message: 'Introduction request sent. The other person decides whether to accept.' });
       } catch (error) {
         if (error?.code !== '23505') throw error;
@@ -166,7 +172,11 @@ export default async function handler(req, res) {
         const row = duplicate[0];
         if (row?.requester_id === candidateId && row?.recipient_id === user.id && row?.status === 'pending') {
           const accepted = await sql`UPDATE dc_introduction_requests SET status = 'accepted', updated_at = NOW(), responded_at = NOW() WHERE id = ${row.id} AND status = 'pending' RETURNING id, status`;
-          if (accepted.length) return sendJson(res, 200, { ok: true, mutual: true, id: row.id, status: 'accepted', message: 'It is mutual — your private conversation is now available in Messages.' });
+          if (accepted.length) {
+            await createNotificationBestEffort(sql, row.requester_id, { category: 'introduction', title: 'Your introduction is mutual', body: `${user.display_name} accepted your introduction request. You can now message each other.`, href: '/messages.html', relatedId: row.id });
+            await createNotificationBestEffort(sql, user.id, { category: 'introduction', title: 'Introduction accepted', body: 'You both chose to connect. Your private conversation is now available.', href: '/messages.html', relatedId: row.id });
+            return sendJson(res, 200, { ok: true, mutual: true, id: row.id, status: 'accepted', message: 'It is mutual — your private conversation is now available in Messages.' });
+          }
         }
         return sendJson(res, 409, { error: 'An introduction request for this member already exists.', status: row?.status || 'pending' });
       }
@@ -196,6 +206,13 @@ export default async function handler(req, res) {
       RETURNING id, status, updated_at, responded_at
     `;
     if (!updated.length) return sendJson(res, 409, { error: 'This request has already been handled.' });
+    await createNotificationBestEffort(sql, request.requester_id, {
+      category: 'introduction',
+      title: nextStatus === 'accepted' ? 'Your introduction was accepted' : 'Your introduction request was declined',
+      body: nextStatus === 'accepted' ? `${user.display_name} accepted your introduction request. You can now message each other.` : `${user.display_name} declined the introduction request. Your preferences remain private.`,
+      href: nextStatus === 'accepted' ? '/messages.html' : '/introductions.html', relatedId: requestId
+    });
+    if (nextStatus === 'accepted') await createNotificationBestEffort(sql, user.id, { category: 'introduction', title: 'Introduction accepted', body: 'Your private conversation is now available in Messages.', href: '/messages.html', relatedId: requestId });
     return sendJson(res, 200, { ok: true, ...updated[0], message: nextStatus === 'accepted' ? 'Introduction accepted. Your private conversation is now available in Messages.' : 'Introduction declined.' });
   } catch (error) {
     console.error('Introductions API error:', error?.code || error?.name || 'unknown');

@@ -1,16 +1,21 @@
 {
   "name": "date-concierge",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "private": true,
   "type": "module",
-  "description": "Date Concierge standalone dating platform with profile, discovery, introductions, account settings and mutual-consent messaging",
-  "engines": { "node": "22.x" },
+  "description": "Date Concierge standalone dating platform with profiles, discovery, introductions, messaging, notifications, date planning and account settings",
+  "engines": {
+    "node": "22.x"
+  },
   "scripts": {
-    "check": "node --check assets/js/site.js && node --check assets/js/story-stack.js && node --check assets/js/dashboard.js && node --check assets/js/profile.js && node --check assets/js/discover.js && node --check assets/js/introductions.js && node --check assets/js/account.js && node --check assets/js/messages.js && node --check api/_lib/auth.js && node --check api/_lib/profile.js && node --check api/_lib/matchmaking.js && node --check api/_lib/account.js && node --check api/_lib/messages.js && node --check api/auth/register.js && node --check api/auth/login.js && node --check api/auth/me.js && node --check api/auth/logout.js && node --check api/profile/me.js && node --check api/matches/recommendations.js && node --check api/introductions.js && node --check api/account/me.js && node --check api/account/password.js && node --check api/messages.js && node --check api/health.js && node tools/smoke-profile.mjs && node tools/smoke-matches.mjs && node tools/smoke-account-messages.mjs && python tools/verify_project.py",
+    "check": "node --check assets/js/site.js && node --check assets/js/story-stack.js && node --check assets/js/dashboard.js && node --check assets/js/profile.js && node --check assets/js/discover.js && node --check assets/js/introductions.js && node --check assets/js/account.js && node --check assets/js/messages.js && node --check assets/js/notifications.js && node --check assets/js/settings.js && node --check assets/js/date-plans.js && node --check api/_lib/auth.js && node --check api/_lib/profile.js && node --check api/_lib/matchmaking.js && node --check api/_lib/account.js && node --check api/_lib/messages.js && node --check api/_lib/notifications.js && node --check api/_lib/date-plans.js && node --check api/auth/register.js && node --check api/auth/login.js && node --check api/auth/me.js && node --check api/auth/logout.js && node --check api/profile/me.js && node --check api/matches/recommendations.js && node --check api/introductions.js && node --check api/account/me.js && node --check api/account/password.js && node --check api/messages.js && node --check api/notifications.js && node --check api/settings.js && node --check api/date-plans.js && node --check api/health.js && node tools/smoke-profile.mjs && node tools/smoke-matches.mjs && node tools/smoke-account-messages.mjs && node tools/smoke-notifications-dateplans.mjs && python tools/verify_project.py",
     "test:auth": "node tools/smoke-auth.mjs",
     "test:profile": "node tools/smoke-profile.mjs",
     "test:matches": "node tools/smoke-matches.mjs",
-    "test:account-messages": "node tools/smoke-account-messages.mjs"
+    "test:account-messages": "node tools/smoke-account-messages.mjs",
+    "test:notifications-dateplans": "node tools/smoke-notifications-dateplans.mjs"
   },
-  "dependencies": { "@neondatabase/serverless": "1.2.0" }
+  "dependencies": {
+    "@neondatabase/serverless": "1.2.0"
+  }
 }

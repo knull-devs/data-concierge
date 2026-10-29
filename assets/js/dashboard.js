@@ -282,6 +282,19 @@
     }
   }
 
+
+  async function loadNotificationCount() {
+    const dot = byId('dashboard-notification-dot');
+    if (!dot) return;
+    try {
+      const { response, data } = await requestJson('/api/notifications', { headers: { Accept: 'application/json' } });
+      if (!response.ok) { dot.hidden = true; return; }
+      const unread = Math.max(0, Number(data.unreadCount) || 0);
+      dot.hidden = unread === 0;
+      dot.setAttribute('aria-label', unread ? `${unread} unread notifications` : 'No unread notifications');
+    } catch { dot.hidden = true; }
+  }
+
   async function loadProfile() {
     try {
       const { response, data } = await requestJson('/api/profile/me', { headers: { Accept: 'application/json' } });
@@ -306,7 +319,7 @@
       updateMember(data.user || {});
       if (loading) loading.hidden = true;
       if (content) content.hidden = false;
-      await Promise.allSettled([loadProfile(), loadRecommendations(), loadIntroductions(), loadRecentMessages()]);
+      await Promise.allSettled([loadProfile(), loadRecommendations(), loadIntroductions(), loadRecentMessages(), loadNotificationCount()]);
     } catch (error) {
       if (error.message === 'Your session has expired. Please sign in again.') return;
       renderGlobalError(error.message || 'Could not load your account. Please refresh and try again.');

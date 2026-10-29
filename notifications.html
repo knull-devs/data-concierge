@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#100a10">
+  <meta name="description" content="Your private Date Concierge notifications.">
+  <title>Notifications — Date Concierge</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/css/site.css?v=1.2.0">
+  <link rel="stylesheet" href="/assets/css/member-tools.css?v=0.1.0">
+  <script src="/assets/js/notifications.js?v=0.1.0" defer></script>
+</head>
+<body class="mt-body">
+  <a class="dc-skip-link" href="#notifications-main">Skip to notifications</a>
+  <header class="mt-topbar">
+    <a class="mt-brand" href="/dashboard.html"><span class="mt-brand-icon" aria-hidden="true">♡</span><span>date concierge<span>.</span></span></a>
+    <nav class="mt-head-links" aria-label="Member navigation">
+      <a href="/dashboard.html">My space</a><a href="/messages.html" data-optional="desktop">Messages</a><a href="/date-plans.html" data-optional="desktop">Date plans</a><a class="mt-head-primary" href="/settings.html">Settings</a>
+    </nav>
+  </header>
+  <main id="notifications-main" class="mt-main">
+    <div class="mt-page-head">
+      <div><span class="mt-eyebrow">THE IMPORTANT LITTLE UPDATES</span><h1>Your <em>notifications.</em></h1><p>Keep up with introductions, messages and date proposals. You are in control of which in-app updates you receive.</p></div>
+      <button class="mt-button" id="notifications-mark-all" type="button">Mark all as read</button>
+    </div>
+    <div class="mt-error" id="notifications-error" role="alert" hidden></div>
+    <div class="mt-status" id="notifications-status" role="status" aria-live="polite" hidden></div>
+    <section class="mt-card" aria-label="Your notifications">
+      <div class="mt-notification-tools">
+        <div class="mt-filter-row" role="group" aria-label="Filter notifications">
+          <button class="mt-filter" data-filter="all" aria-pressed="true" type="button">All updates</button>
+          <button class="mt-filter" data-filter="unread" aria-pressed="false" type="button">Unread only</button>
+        </div>
+        <span class="mt-count-chip" id="notifications-unread-count">Loading…</span>
+      </div>
+      <div class="mt-loading" id="notifications-loading" role="status">Loading your updates…</div>
+      <div class="mt-empty" id="notifications-empty" hidden><strong>All caught up.</strong><p>When someone requests an introduction, sends a message or responds to a date proposal, the update will appear here.</p><a class="mt-button mt-button-primary" href="/discover.html">Discover members ↗</a></div>
+      <div class="mt-notification-list" id="notifications-list" hidden></div>
+    </section>
+  </main>
+  <nav class="mt-bottom-nav" aria-label="Member navigation">
+    <a href="/dashboard.html"><span aria-hidden="true">⌂</span><small>Home</small></a><a href="/discover.html"><span aria-hidden="true">⌕</span><small>Discover</small></a><a href="/introductions.html"><span aria-hidden="true">♡</span><small>Intros</small></a><a href="/messages.html"><span aria-hidden="true">▱</span><small>Messages</small></a><a class="is-active" href="/notifications.html" aria-current="page"><span aria-hidden="true">♧</span><small>Updates</small></a>
+  </nav>
+</body>
+</html>

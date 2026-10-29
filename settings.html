@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#100a10">
+  <meta name="description" content="Control your Date Concierge privacy and notification settings.">
+  <title>Settings — Date Concierge</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/css/site.css?v=1.2.0">
+  <link rel="stylesheet" href="/assets/css/member-tools.css?v=0.1.0">
+  <script src="/assets/js/settings.js?v=0.1.0" defer></script>
+</head>
+<body class="mt-body">
+  <a class="dc-skip-link" href="#settings-main">Skip to settings</a>
+  <header class="mt-topbar">
+    <a class="mt-brand" href="/dashboard.html"><span class="mt-brand-icon" aria-hidden="true">♡</span><span>date concierge<span>.</span></span></a>
+    <nav class="mt-head-links" aria-label="Member navigation">
+      <a href="/dashboard.html">My space</a><a href="/notifications.html" data-optional="desktop">Notifications</a><a href="/account.html" data-optional="desktop">Account</a><a class="mt-head-primary" href="/profile.html">My profile</a>
+    </nav>
+  </header>
+  <main id="settings-main" class="mt-main">
+    <div class="mt-page-head"><div><span class="mt-eyebrow">YOUR SPACE, YOUR CHOICES</span><h1>Privacy & <em>settings.</em></h1><p>Choose which updates you receive and whether you are currently open to being discovered. You can change these choices any time.</p></div></div>
+    <div class="mt-error" id="settings-error" role="alert" hidden></div>
+    <div class="mt-status" id="settings-status" role="status" aria-live="polite" hidden></div>
+    <div class="mt-loading" id="settings-loading" role="status">Loading your preferences…</div>
+    <form id="settings-form" hidden>
+      <div class="mt-settings-grid">
+        <section class="mt-card mt-settings-panel" aria-labelledby="notification-settings-title">
+          <h2 id="notification-settings-title">In-app notifications</h2><p class="mt-card-intro">A quiet, helpful nudge when something needs your attention.</p>
+          <div class="mt-setting-row"><div class="mt-setting-copy"><strong>All in-app notifications</strong><small>Turn off all non-essential in-app updates at once.</small></div><label class="mt-switch"><input type="checkbox" id="setting-in-app" name="inAppNotifications"><span class="mt-switch-track"></span><span class="dc-sr-only">All in-app notifications</span></label></div>
+          <div class="mt-setting-row"><div class="mt-setting-copy"><strong>Introduction updates</strong><small>Requests, acceptances and declines.</small></div><label class="mt-switch"><input type="checkbox" id="setting-intros" name="introductionUpdates"><span class="mt-switch-track"></span><span class="dc-sr-only">Introduction updates</span></label></div>
+          <div class="mt-setting-row"><div class="mt-setting-copy"><strong>Message updates</strong><small>Let me know when a new message arrives.</small></div><label class="mt-switch"><input type="checkbox" id="setting-messages" name="messageUpdates"><span class="mt-switch-track"></span><span class="dc-sr-only">Message updates</span></label></div>
+          <div class="mt-setting-row"><div class="mt-setting-copy"><strong>Date planning updates</strong><small>New proposals, replies and cancellations.</small></div><label class="mt-switch"><input type="checkbox" id="setting-dates" name="dateUpdates"><span class="mt-switch-track"></span><span class="dc-sr-only">Date planning updates</span></label></div>
+        </section>
+        <section class="mt-card mt-settings-panel" aria-labelledby="privacy-settings-title">
+          <h2 id="privacy-settings-title">Discovery privacy</h2><p class="mt-card-intro">You decide whether compatible members can see you in recommendations.</p>
+          <div class="mt-setting-row"><div class="mt-setting-copy"><strong>Make my profile discoverable</strong><small>When disabled, your profile is hidden from new recommendations. Existing introductions and messages remain available.</small></div><label class="mt-switch"><input type="checkbox" id="setting-discoverable" name="discoverable"><span class="mt-switch-track"></span><span class="dc-sr-only">Make my profile discoverable</span></label></div>
+          <div class="mt-privacy-note">Discovery can only be enabled when your profile meets the minimum requirements. If the switch cannot be enabled, complete your profile first.</div>
+          <div class="mt-link-list mt-link-list-spaced"><a href="/profile.html">Dating profile & preferences <span>↗</span></a><a href="/account.html">Account & password security <span>↗</span></a><a href="/privacy.html">Privacy policy <span>↗</span></a><a href="/terms.html">Terms & conditions <span>↗</span></a></div>
+        </section>
+      </div>
+      <div class="mt-settings-footer"><p class="mt-privacy-note">These are in-app and discovery preferences. Email, push and SMS delivery are not enabled in this build. You will not receive external notifications until a delivery provider is configured.</p><button id="settings-save" class="mt-button mt-button-primary" type="submit">Save settings ↗</button></div>
+    </form>
+  </main>
+  <nav class="mt-bottom-nav" aria-label="Member navigation">
+    <a href="/dashboard.html"><span aria-hidden="true">⌂</span><small>Home</small></a><a href="/discover.html"><span aria-hidden="true">⌕</span><small>Discover</small></a><a href="/introductions.html"><span aria-hidden="true">♡</span><small>Intros</small></a><a href="/notifications.html"><span aria-hidden="true">♧</span><small>Updates</small></a><a class="is-active" href="/settings.html" aria-current="page"><span aria-hidden="true">⚙</span><small>Settings</small></a>
+  </nav>
+</body>
+</html>

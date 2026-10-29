@@ -5,16 +5,16 @@ import json, re, sys
 ROOT = Path(__file__).resolve().parents[1]
 required = [
     'index.html','register.html','login.html','dashboard.html','terms.html','privacy.html',
-    'discover.html','introductions.html','profile.html','account.html','messages.html',
-    'assets/css/site.css','assets/css/profile.css','assets/css/discovery.css','assets/css/account.css','assets/css/messages.css','assets/css/dashboard.css',
+    'discover.html','introductions.html','profile.html','account.html','messages.html','notifications.html','settings.html','date-plans.html',
+    'assets/css/site.css','assets/css/profile.css','assets/css/discovery.css','assets/css/account.css','assets/css/messages.css','assets/css/dashboard.css','assets/css/member-tools.css',
     'assets/js/site.js','assets/js/dashboard.js','assets/js/register-redirect.js','assets/js/login-redirect.js',
-    'assets/js/profile.js','assets/js/discover.js','assets/js/introductions.js','assets/js/account.js','assets/js/messages.js','assets/js/dashboard.js','assets/img/hero-couple.webp',
-    'api/_lib/auth.js','api/_lib/profile.js','api/_lib/matchmaking.js','api/_lib/account.js','api/_lib/messages.js','api/account/me.js','api/account/password.js','api/messages.js',
+    'assets/js/profile.js','assets/js/discover.js','assets/js/introductions.js','assets/js/account.js','assets/js/messages.js','assets/js/notifications.js','assets/js/settings.js','assets/js/date-plans.js','assets/js/dashboard.js','assets/img/hero-couple.webp',
+    'api/_lib/auth.js','api/_lib/profile.js','api/_lib/matchmaking.js','api/_lib/account.js','api/_lib/messages.js','api/_lib/notifications.js','api/_lib/date-plans.js','api/account/me.js','api/account/password.js','api/messages.js','api/notifications.js','api/settings.js','api/date-plans.js',
     'api/auth/register.js','api/auth/login.js','api/auth/me.js','api/auth/logout.js',
     'api/health.js','api/profile/me.js','api/matches/recommendations.js','api/introductions.js',
-    'db/schema.sql','db/migrations/001_member_profiles.sql','db/migrations/002_discovery_matching.sql','db/migrations/003_messages.sql',
+    'db/schema.sql','db/migrations/001_member_profiles.sql','db/migrations/002_discovery_matching.sql','db/migrations/003_messages.sql','db/migrations/004_notifications_settings.sql','db/migrations/005_date_plans.sql',
     'package.json','vercel.json','README.md','THIRD_PARTY_NOTICES.md',
-    'tools/smoke-auth.mjs','tools/smoke-profile.mjs','tools/smoke-matches.mjs','tools/smoke-account-messages.mjs',
+    'tools/smoke-auth.mjs','tools/smoke-profile.mjs','tools/smoke-matches.mjs','tools/smoke-account-messages.mjs','tools/smoke-notifications-dateplans.mjs',
     'docs/PH7-REUSE-MAP.md'
 ]
 missing = [item for item in required if not (ROOT/item).exists()]
@@ -23,7 +23,8 @@ if missing:
     errors.append('Missing required files: '+', '.join(missing))
 
 root_routes = {'/', '/dashboard.html', '/terms.html', '/privacy.html', '/register.html', '/login.html',
-               '/profile.html', '/discover.html', '/introductions.html', '/account.html', '/messages.html'}
+               '/profile.html', '/discover.html', '/introductions.html', '/account.html', '/messages.html',
+               '/notifications.html', '/settings.html', '/date-plans.html'}
 
 def check_assets(page_name):
     page_path = ROOT / page_name
@@ -47,7 +48,7 @@ if not missing:
                    'data-auth-open','mobile-nav-toggle','auth-provider-row','data-auth-provider']:
         if phrase not in index:
             errors.append(f'index.html missing expected UI marker: {phrase}')
-    for page in ['index.html','profile.html','discover.html','introductions.html','dashboard.html','account.html','messages.html']:
+    for page in ['index.html','profile.html','discover.html','introductions.html','dashboard.html','account.html','messages.html','notifications.html','settings.html','date-plans.html']:
         check_assets(page)
 
     pkg = json.loads((ROOT/'package.json').read_text())
@@ -77,8 +78,8 @@ if not missing:
         errors.append('Login API does not respect the remember-me selection')
     if 'pH7' in index or 'pH7Builder' in index:
         errors.append('UI accidentally references upstream framework')
-    if 'style=' in (ROOT/'terms.html').read_text() or 'style=' in (ROOT/'privacy.html').read_text():
-        errors.append('Inline styles found on legal pages while strict CSP is enabled')
+    if any('style=' in (ROOT/page).read_text(encoding='utf-8') for page in ['terms.html','privacy.html','notifications.html','settings.html','date-plans.html']):
+        errors.append('Inline styles found on member/legal pages while strict CSP is enabled')
 
     matchmaking = (ROOT/'api/_lib/matchmaking.js').read_text(encoding='utf-8')
     for token in ['WEIGHT', 'AGE_TOLERANCE_YEARS', 'ACTIVITY_HALF_LIFE_DAYS', 'isMutuallyCompatible', 'rankMatches']:
@@ -114,7 +115,7 @@ if not missing:
         if token not in messages_migration:
             errors.append(f'Messages migration missing expected schema item: {token}')
     dashboard = (ROOT/'dashboard.html').read_text(encoding='utf-8')
-    for token in ['href="/messages.html"','href="/account.html"','dashboard-recent-messages-list']:
+    for token in ['href="/messages.html"','href="/account.html"','href="/notifications.html"','href="/date-plans.html"','dashboard-recent-messages-list']:
         if token not in dashboard:
             errors.append(f'Dashboard is missing new route/data marker: {token}')
     intro_message = 'Your private conversation is now available in Messages.'
@@ -128,6 +129,36 @@ if not missing:
     for token in ['conversation-list','message-form','message-list','messages-workspace']:
         if token not in messages_page:
             errors.append(f'Messages page missing UI marker: {token}')
+
+    notification_api = (ROOT/'api/notifications.js').read_text(encoding='utf-8')
+    for token in ['getSessionUser','requestHasValidOrigin','markAllRead','dc_notifications','WHERE user_id = ${user.id}']:
+        if token not in notification_api:
+            errors.append(f'Notifications API missing expected safeguard/behavior: {token}')
+    settings_api = (ROOT/'api/settings.js').read_text(encoding='utf-8')
+    for token in ['getSessionUser','requestHasValidOrigin','dc_member_settings','isDiscoveryReady','body.discoverable']:
+        if token not in settings_api:
+            errors.append(f'Settings API missing expected safeguard/behavior: {token}')
+    date_api = (ROOT/'api/date-plans.js').read_text(encoding='utf-8')
+    for token in ['getSessionUser','requestHasValidOrigin','normalizeDateProposal',"status = 'accepted'",'createNotificationBestEffort']:
+        if token not in date_api:
+            errors.append(f'Date plans API missing expected safeguard/behavior: {token}')
+    notifications_migration = (ROOT/'db/migrations/004_notifications_settings.sql').read_text(encoding='utf-8')
+    for token in ['dc_member_settings','dc_notifications','introduction_updates','date_updates']:
+        if token not in notifications_migration:
+            errors.append(f'Notifications migration missing expected schema item: {token}')
+    date_migration = (ROOT/'db/migrations/005_date_plans.sql').read_text(encoding='utf-8')
+    for token in ['dc_date_plans','dc_introduction_requests','dc_date_plans_one_active_per_intro_idx']:
+        if token not in date_migration:
+            errors.append(f'Date-plans migration missing expected schema item: {token}')
+    for page, markers in {
+        'notifications.html': ['notifications-list','notifications-mark-all','/api/notifications'],
+        'settings.html': ['settings-form','setting-discoverable','/api/settings'],
+        'date-plans.html': ['date-proposal-form','date-plans-list','/api/date-plans']
+    }.items():
+        page_text = (ROOT/page).read_text(encoding='utf-8')
+        for marker in markers:
+            if marker not in page_text and marker not in (ROOT/'assets/js'/page.replace('.html','.js')).read_text(encoding='utf-8'):
+                errors.append(f'{page} missing expected feature marker: {marker}')
 
 if errors:
     print('FAIL')
