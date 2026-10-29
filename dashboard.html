@@ -1,3 +1,200 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><meta name="theme-color" content="#fbf3ef"><title>Your space — Date Concierge</title><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="/assets/css/site.css?v=0.9.0"><link rel="stylesheet" href="/assets/css/profile.css?v=0.1.0"><script src="/assets/js/dashboard.js?v=profile-0.1.0" defer></script></head>
-<body class="dashboard-body"><header class="dashboard-header"><div class="page-shell dashboard-header-inner"><a class="brand" href="/"><span class="brand-symbol">♡</span><span class="brand-wordmark">date concierge<span class="brand-period">.</span></span></a><button class="button button-primary" id="logout-button" type="button">Log out ↗</button></div></header><main class="page-shell dashboard-main"><div class="dashboard-loading" id="dashboard-loading">Opening your space…</div><section id="dashboard-content" hidden><div class="dashboard-welcome"><div class="eyebrow"><span>♡</span> YOUR NEXT CHAPTER</div><h1>Welcome, <em id="member-name">there</em>.</h1><p>Your Date Concierge space is taking shape. Next, we'll help you complete your preferences, discover compatible members and request thoughtful introductions.</p></div><div class="dashboard-cards"><article class="dashboard-card dashboard-card-profile"><span class="card-icon">♙</span><h2>Complete your profile</h2><p id="profile-summary">Add the details that help us understand your relationship goals and what matters most to you.</p><div class="dashboard-progress-row"><span>Profile progress</span><strong id="dashboard-profile-percent">—</strong></div><progress id="dashboard-profile-progress" max="100" value="0">0%</progress><a class="dashboard-card-action" href="/profile.html">Edit your profile <span aria-hidden="true">↗</span></a></article><article class="dashboard-card"><span class="card-icon">♡</span><h2>Discover members</h2><p>See eligible members who have opted in and whose preferences fit yours. No invented or placeholder profiles.</p><a class="dashboard-card-action" href="/discover.html">Discover compatible members <span aria-hidden="true">↗</span></a><a class="dashboard-card-action" href="/introductions.html">View introduction requests <span aria-hidden="true">↗</span></a></article><article class="dashboard-card"><span class="card-icon">✦</span><h2>Membership</h2><p>Explorer · Free<br>Date Plus · ₹799/month<br>Private Concierge · ₹1,499/month</p><p class="dashboard-profile-note">Prices are planned; checkout is not activated yet.</p><a class="dashboard-card-action" href="/#pricing">Review plans <span aria-hidden="true">↗</span></a></article></div><div class="dashboard-status">Discovery and mutual-consent introduction requests are available after you complete your profile, opt into discovery, and the database migrations are installed. Messaging, concierge scheduling and wallet features will follow in later milestones.</div></section><p class="dashboard-status" id="dashboard-error" hidden></p></main></body></html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#100a10">
+  <meta name="description" content="Your private Date Concierge space for thoughtful introductions.">
+  <title>Your space — Date Concierge</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/css/site.css?v=1.2.0">
+  <link rel="stylesheet" href="/assets/css/dashboard.css?v=1.0.0">
+  <script src="/assets/js/dashboard.js?v=1.0.0" defer></script>
+</head>
+<body class="dashboard-body dc-dashboard">
+  <a class="dc-skip-link" href="#dashboard-main">Skip to dashboard</a>
+
+  <header class="dc-topbar">
+    <a class="dc-brand" href="/" aria-label="Date Concierge home">
+      <span class="dc-brand-symbol" aria-hidden="true">♡</span>
+      <span class="dc-brand-wordmark">date concierge<span>.</span></span>
+    </a>
+
+    <a class="dc-search-link" href="/discover.html" aria-label="Search members and interests">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"></circle><path d="m16 16 5 5"></path></svg>
+      <span>Search members, interests or locations…</span>
+    </a>
+
+    <div class="dc-top-actions">
+      <a class="dc-upgrade-top" href="/#pricing"><span aria-hidden="true">♛</span> Upgrade</a>
+      <a class="dc-top-icon" href="#recent-messages" aria-label="Messages">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3h11A2.5 2.5 0 0 1 20 5.5v8a2.5 2.5 0 0 1-2.5 2.5H10l-5 4v-4.4A2.5 2.5 0 0 1 4 13.5z"></path><path d="M8 8h8M8 11h5"></path></svg>
+      </a>
+      <a class="dc-top-icon" href="/introductions.html" aria-label="Introduction requests">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path><path d="M10 21h4"></path></svg>
+        <span class="dc-notification-dot" aria-hidden="true"></span>
+      </a>
+      <div class="dc-account-menu">
+        <span class="dc-avatar dc-avatar-top" id="member-avatar" aria-hidden="true">♡</span>
+        <span class="dc-account-copy"><strong id="member-full-name">Member</strong><small id="member-plan-label">Explorer · Free</small></span>
+        <button id="logout-button" class="dc-logout-button" type="button" aria-label="Log out" title="Log out">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 4H5v16h5"></path><path d="M13 8l4 4-4 4M7 12h10"></path></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="dc-app-layout">
+    <aside class="dc-sidebar" aria-label="Member navigation">
+      <nav class="dc-side-nav">
+        <a class="dc-nav-item is-active" href="/dashboard.html" aria-current="page"><span class="dc-nav-icon" aria-hidden="true">⌂</span><span>Home</span></a>
+        <a class="dc-nav-item" href="/discover.html"><span class="dc-nav-icon" aria-hidden="true">⌕</span><span>Discover</span></a>
+        <a class="dc-nav-item" href="#recommended"><span class="dc-nav-icon" aria-hidden="true">♡</span><span>Matches</span><span class="dc-nav-count" id="side-match-count" hidden>0</span></a>
+        <a class="dc-nav-item" href="#recent-messages"><span class="dc-nav-icon" aria-hidden="true">▱</span><span>Messages</span></a>
+        <a class="dc-nav-item" href="/introductions.html"><span class="dc-nav-icon" aria-hidden="true">♧</span><span>Introductions</span><span class="dc-nav-count" id="side-intro-count" hidden>0</span></a>
+        <a class="dc-nav-item" href="/profile.html"><span class="dc-nav-icon" aria-hidden="true">♙</span><span>My Profile</span></a>
+        <a class="dc-nav-item" href="/#pricing"><span class="dc-nav-icon" aria-hidden="true">♛</span><span>My Plan</span></a>
+        <a class="dc-nav-item" href="/profile.html#preferences"><span class="dc-nav-icon" aria-hidden="true">⚙</span><span>Preferences</span></a>
+      </nav>
+
+      <section class="dc-sidebar-plan" aria-labelledby="sidebar-plan-title">
+        <div class="dc-plan-crown" aria-hidden="true">♛</div>
+        <h2 id="sidebar-plan-title">More meaningful introductions.</h2>
+        <p>Explore plans designed for a more considered dating experience.</p>
+        <ul>
+          <li>Personalised discovery</li>
+          <li>Thoughtful introductions</li>
+          <li>Support at your pace</li>
+        </ul>
+        <a href="/#pricing" class="dc-outline-cta">Explore plans <span aria-hidden="true">↗</span></a>
+        <small>Checkout is not active in this build.</small>
+      </section>
+    </aside>
+
+    <main id="dashboard-main" class="dc-dashboard-main">
+      <div class="dc-dashboard-loading" id="dashboard-loading" role="status">
+        <span class="dc-loading-orb" aria-hidden="true"></span>
+        <span>Opening your space…</span>
+      </div>
+      <div class="dc-global-error" id="dashboard-error" role="alert" hidden></div>
+
+      <section id="dashboard-content" class="dc-dashboard-content" hidden>
+        <div class="dc-content-grid">
+          <div class="dc-primary-column">
+            <section class="dc-welcome-hero" aria-labelledby="dashboard-welcome-title">
+              <div class="dc-welcome-copy">
+                <span class="dc-eyebrow"><span aria-hidden="true">✧</span> YOUR NEXT CHAPTER</span>
+                <h1 id="dashboard-welcome-title">Welcome back,<br><em id="member-name">there</em><span class="dc-wave" aria-hidden="true">👋</span></h1>
+                <p>Meaningful connections start here.</p>
+                <a class="dc-primary-cta" href="/discover.html">Explore matches <span aria-hidden="true">→</span></a>
+              </div>
+              <div class="dc-welcome-quote">“Real people.<br>Real conversations.<br>Real dates.”</div>
+            </section>
+
+            <section class="dc-stat-grid" aria-label="Your account overview">
+              <article class="dc-stat-card">
+                <span class="dc-stat-icon" aria-hidden="true">♡</span>
+                <div><strong id="stat-profile-percent">—</strong><span>Profile complete</span></div>
+                <a href="/profile.html" aria-label="Complete your profile">↗</a>
+              </article>
+              <article class="dc-stat-card">
+                <span class="dc-stat-icon" aria-hidden="true">⌕</span>
+                <div><strong id="stat-suggestions">—</strong><span>Suggested members</span></div>
+                <a href="/discover.html" aria-label="See suggested members">↗</a>
+              </article>
+              <article class="dc-stat-card">
+                <span class="dc-stat-icon" aria-hidden="true">♡</span>
+                <div><strong id="stat-introductions">—</strong><span>Introduction requests</span></div>
+                <a href="/introductions.html" aria-label="View introduction requests">↗</a>
+              </article>
+              <article class="dc-stat-card dc-stat-plan">
+                <span class="dc-stat-icon" aria-hidden="true">♛</span>
+                <div><strong>Explorer</strong><span>Current plan · Free</span></div>
+                <a href="/#pricing" aria-label="Review membership plans">↗</a>
+              </article>
+            </section>
+
+            <section class="dc-section-block" id="recommended" aria-labelledby="recommended-title">
+              <div class="dc-section-heading">
+                <div><span class="dc-section-kicker">A MORE CONSIDERED WAY TO MEET</span><h2 id="recommended-title">Recommended for you</h2><p>Suggestions based on your preferences and mutual intentions.</p></div>
+                <a href="/discover.html" class="dc-view-all">View all <span aria-hidden="true">→</span></a>
+              </div>
+              <div id="dashboard-recommendations-loading" class="dc-inline-state" role="status">Finding compatible members…</div>
+              <div id="dashboard-recommendations-error" class="dc-inline-state dc-state-error" role="alert" hidden></div>
+              <div id="dashboard-recommendations-empty" class="dc-empty-card" hidden>
+                <span class="dc-empty-icon" aria-hidden="true">♡</span>
+                <div><h3>Your recommendations will appear here.</h3><p>Complete your profile and enable discovery to see real members whose preferences may fit yours.</p></div>
+                <a href="/profile.html" class="dc-secondary-cta">Complete profile ↗</a>
+              </div>
+              <div class="dc-recommendation-grid" id="dashboard-recommendations" hidden></div>
+              <p class="dc-data-note" id="dashboard-recommendation-note" hidden>Recommendations are a ranking aid—not a prediction of chemistry or a guarantee of a date.</p>
+            </section>
+
+            <section class="dc-section-block dc-introductions-section" id="introductions" aria-labelledby="dashboard-introductions-title">
+              <div class="dc-section-heading">
+                <div><span class="dc-section-kicker">MUTUAL CONSENT, ALWAYS</span><h2 id="dashboard-introductions-title">Your introductions</h2><p>Requests you have sent and responses from other members.</p></div>
+                <a href="/introductions.html" class="dc-view-all">View all <span aria-hidden="true">→</span></a>
+              </div>
+              <div id="dashboard-intro-loading" class="dc-inline-state" role="status">Loading your introductions…</div>
+              <div id="dashboard-intro-error" class="dc-inline-state dc-state-error" role="alert" hidden></div>
+              <div id="dashboard-intro-empty" class="dc-empty-card" hidden>
+                <span class="dc-empty-icon" aria-hidden="true">♡</span>
+                <div><h3>No introduction requests yet.</h3><p>When you request an introduction—or someone requests one from you—it will appear here.</p></div>
+                <a href="/discover.html" class="dc-secondary-cta">Discover members ↗</a>
+              </div>
+              <div class="dc-intro-list" id="dashboard-introductions-list" hidden></div>
+            </section>
+          </div>
+
+          <aside class="dc-right-rail" aria-label="Your account details">
+            <section class="dc-rail-card dc-profile-card" aria-labelledby="profile-card-title">
+              <div class="dc-profile-card-top">
+                <span class="dc-avatar dc-avatar-large" id="member-avatar-large" aria-hidden="true">♡</span>
+                <div><h2 id="profile-card-title">Your profile</h2><p id="profile-card-name">Member</p><span class="dc-plan-badge">Explorer · Free</span></div>
+              </div>
+              <a href="/profile.html" class="dc-edit-profile">Edit profile <span aria-hidden="true">↗</span></a>
+              <div class="dc-profile-progress-wrap">
+                <div class="dc-progress-ring" id="dashboard-progress-ring" aria-hidden="true"><span>♡</span></div>
+                <div class="dc-progress-copy"><strong><span id="dashboard-profile-percent">—</span> complete</strong><p id="profile-summary">Add the details that help us understand what matters to you.</p></div>
+              </div>
+              <div class="dc-profile-quick-links">
+                <a href="/profile.html"><span aria-hidden="true">♙</span><small>Profile</small></a>
+                <a href="/profile.html#preferences"><span aria-hidden="true">⚙</span><small>Preferences</small></a>
+                <a href="/discover.html"><span aria-hidden="true">♡</span><small>Discovery</small></a>
+              </div>
+            </section>
+
+            <section class="dc-rail-card dc-messages-card" id="recent-messages" aria-labelledby="recent-messages-title">
+              <div class="dc-rail-heading"><h2 id="recent-messages-title">Recent messages</h2><span class="dc-coming-soon">COMING NEXT</span></div>
+              <div class="dc-message-empty">
+                <span class="dc-message-empty-icon" aria-hidden="true">▱</span>
+                <strong>Your message space is waiting.</strong>
+                <p>Messaging will be available after mutual introductions and the chat module are enabled.</p>
+                <a href="/introductions.html">View introductions <span aria-hidden="true">→</span></a>
+              </div>
+            </section>
+
+            <section class="dc-plan-promo" aria-labelledby="dc-plan-promo-title">
+              <span class="dc-promo-kicker">YOUR NEXT CHAPTER</span>
+              <h2 id="dc-plan-promo-title">Make room for<br><em>more meaningful</em><br>introductions.</h2>
+              <p>Explore the plans we are preparing for members who want more support.</p>
+              <div class="dc-plan-price-row"><span>Date Plus</span><strong>₹799<small>/month</small></strong></div>
+              <div class="dc-plan-price-row"><span>Private Concierge</span><strong>₹1,499<small>/month</small></strong></div>
+              <a href="/#pricing" class="dc-primary-cta dc-promo-cta">Explore plans <span aria-hidden="true">→</span></a>
+              <small class="dc-plan-disclaimer">Plan checkout is not active yet.</small>
+            </section>
+          </aside>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <nav class="dc-bottom-nav" aria-label="Mobile navigation">
+    <a class="is-active" href="/dashboard.html" aria-current="page"><span aria-hidden="true">⌂</span><small>Home</small></a>
+    <a href="/discover.html"><span aria-hidden="true">⌕</span><small>Discover</small></a>
+    <a href="#recommended"><span aria-hidden="true">♡</span><small>Matches</small></a>
+    <a href="/introductions.html"><span aria-hidden="true">♧</span><small>Introductions</small></a>
+    <a href="/profile.html"><span aria-hidden="true">♙</span><small>Profile</small></a>
+  </nav>
+</body>
+</html>
