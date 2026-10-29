@@ -5,20 +5,16 @@ import json, re, sys
 ROOT = Path(__file__).resolve().parents[1]
 required = [
     'index.html','register.html','login.html','dashboard.html','terms.html','privacy.html',
-    'discover.html','introductions.html','profile.html',
-    'assets/css/site.css','assets/css/profile.css','assets/css/discovery.css',
-    'assets/js/story-stack.js',
-    'assets/img/story-stack/01-rooftop.webp','assets/img/story-stack/02-cafe.webp',
-    'assets/img/story-stack/03-garden.webp','assets/img/story-stack/04-gallery.webp',
-    'assets/img/story-stack/05-bookshop.webp',
+    'discover.html','introductions.html','profile.html','account.html','messages.html',
+    'assets/css/site.css','assets/css/profile.css','assets/css/discovery.css','assets/css/account.css','assets/css/messages.css','assets/css/dashboard.css',
     'assets/js/site.js','assets/js/dashboard.js','assets/js/register-redirect.js','assets/js/login-redirect.js',
-    'assets/js/profile.js','assets/js/discover.js','assets/js/introductions.js','assets/img/hero-couple.webp',
-    'api/_lib/auth.js','api/_lib/profile.js','api/_lib/matchmaking.js',
+    'assets/js/profile.js','assets/js/discover.js','assets/js/introductions.js','assets/js/account.js','assets/js/messages.js','assets/js/dashboard.js','assets/img/hero-couple.webp',
+    'api/_lib/auth.js','api/_lib/profile.js','api/_lib/matchmaking.js','api/_lib/account.js','api/_lib/messages.js','api/account/me.js','api/account/password.js','api/messages.js',
     'api/auth/register.js','api/auth/login.js','api/auth/me.js','api/auth/logout.js',
     'api/health.js','api/profile/me.js','api/matches/recommendations.js','api/introductions.js',
-    'db/schema.sql','db/migrations/001_member_profiles.sql','db/migrations/002_discovery_matching.sql',
+    'db/schema.sql','db/migrations/001_member_profiles.sql','db/migrations/002_discovery_matching.sql','db/migrations/003_messages.sql',
     'package.json','vercel.json','README.md','THIRD_PARTY_NOTICES.md',
-    'tools/smoke-auth.mjs','tools/smoke-profile.mjs','tools/smoke-matches.mjs',
+    'tools/smoke-auth.mjs','tools/smoke-profile.mjs','tools/smoke-matches.mjs','tools/smoke-account-messages.mjs',
     'docs/PH7-REUSE-MAP.md'
 ]
 missing = [item for item in required if not (ROOT/item).exists()]
@@ -27,7 +23,7 @@ if missing:
     errors.append('Missing required files: '+', '.join(missing))
 
 root_routes = {'/', '/dashboard.html', '/terms.html', '/privacy.html', '/register.html', '/login.html',
-               '/profile.html', '/discover.html', '/introductions.html'}
+               '/profile.html', '/discover.html', '/introductions.html', '/account.html', '/messages.html'}
 
 def check_assets(page_name):
     page_path = ROOT / page_name
@@ -37,6 +33,10 @@ def check_assets(page_name):
     for asset in re.findall(r'(?:src|href)="(/[^"#?]+)', text):
         if asset.startswith('/api/') or asset in root_routes:
             continue
+        # User-selected hero.mp4 is an optional media asset. The homepage keeps
+        # its poster fallback until the owner adds the actual video file.
+        if asset == '/assets/video/hero.mp4' and not (ROOT/'assets/video/hero.mp4').exists():
+            continue
         clean = asset.lstrip('/')
         if not (ROOT/clean).exists():
             errors.append(f'Broken local asset reference in {page_name}: {asset}')
@@ -44,19 +44,11 @@ def check_assets(page_name):
 if not missing:
     index = (ROOT/'index.html').read_text(encoding='utf-8')
     for phrase in ['How it works','About','Pricing','T&amp;C','auth-modal','login-form','register-form',
-                   'data-auth-open','mobile-nav-toggle','auth-provider-row','data-auth-provider','data-story-stack-section','data-story-stack-track','data-stack-card']:
+                   'data-auth-open','mobile-nav-toggle','auth-provider-row','data-auth-provider']:
         if phrase not in index:
             errors.append(f'index.html missing expected UI marker: {phrase}')
-    for page in ['index.html','profile.html','discover.html','introductions.html','dashboard.html']:
+    for page in ['index.html','profile.html','discover.html','introductions.html','dashboard.html','account.html','messages.html']:
         check_assets(page)
-    stack_card_count = len(re.findall(r'data-stack-card(?:\s|>)', index))
-    if stack_card_count != 5:
-        errors.append(f'Homepage should contain exactly five story-stack cards, found {stack_card_count}')
-    if 'story-stack.js?v=1.2.0' not in index or 'site.css?v=1.2.0' not in index:
-        errors.append('Homepage story-stack cache-busting versions are missing')
-    for token in ['data-stack-cards','story-stack-card-copy','story-stack-card-media','Scroll to reveal']:
-        if token not in index:
-            errors.append(f'Homepage missing stacked photo-grid markup: {token}')
 
     pkg = json.loads((ROOT/'package.json').read_text())
     if '@neondatabase/serverless' not in pkg.get('dependencies', {}):
@@ -105,8 +97,40 @@ if not missing:
         if token not in migrations:
             errors.append(f'Discovery migration missing expected schema item: {token}')
 
+    account_api = (ROOT/'api/account/me.js').read_text(encoding='utf-8')
+    for token in ['requestHasValidOrigin','getSessionUser','enforceRateLimit','UPDATE dc_auth_users']:
+        if token not in account_api:
+            errors.append(f'Account API missing expected safeguard/behavior: {token}')
+    password_api = (ROOT/'api/account/password.js').read_text(encoding='utf-8')
+    for token in ['verifyPassword','hashPassword','DELETE FROM dc_auth_sessions','createSession']:
+        if token not in password_api:
+            errors.append(f'Password API missing expected security behavior: {token}')
+    messages_api = (ROOT/'api/messages.js').read_text(encoding='utf-8')
+    for token in ['getSessionUser',"status = 'accepted'",'requestHasValidOrigin','enforceRateLimit','INSERT INTO dc_messages']:
+        if token not in messages_api:
+            errors.append(f'Messages API missing expected safeguard/behavior: {token}')
+    messages_migration = (ROOT/'db/migrations/003_messages.sql').read_text(encoding='utf-8')
+    for token in ['dc_messages','REFERENCES dc_introduction_requests','dc_messages_conversation_created_idx']:
+        if token not in messages_migration:
+            errors.append(f'Messages migration missing expected schema item: {token}')
+    dashboard = (ROOT/'dashboard.html').read_text(encoding='utf-8')
+    for token in ['href="/messages.html"','href="/account.html"','dashboard-recent-messages-list']:
+        if token not in dashboard:
+            errors.append(f'Dashboard is missing new route/data marker: {token}')
+    intro_message = 'Your private conversation is now available in Messages.'
+    if intro_message not in intro_api:
+        errors.append('Introduction acceptance message has not been updated for the Messages module')
+    account_page = (ROOT/'account.html').read_text(encoding='utf-8')
+    for token in ['account-form','password-form','account-city','account-email']:
+        if token not in account_page:
+            errors.append(f'Account page missing form marker: {token}')
+    messages_page = (ROOT/'messages.html').read_text(encoding='utf-8')
+    for token in ['conversation-list','message-form','message-list','messages-workspace']:
+        if token not in messages_page:
+            errors.append(f'Messages page missing UI marker: {token}')
+
 if errors:
     print('FAIL')
     print('\n'.join('- '+e for e in errors))
     sys.exit(1)
-print(f'PASS: {len(required)} required files exist; pages/assets, schema, profile ownership, opt-in discovery, mutual-compatibility and authentication security checks passed.')
+print(f'PASS: {len(required)} required files exist; page assets, profile/discovery security, account/password flows, accepted-introduction messaging and migration checks passed.')

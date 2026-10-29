@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#100a10">
+  <meta name="description" content="Manage your Date Concierge account and security settings.">
+  <title>Account settings — Date Concierge</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/css/site.css?v=1.2.0">
+  <link rel="stylesheet" href="/assets/css/account.css?v=0.1.0">
+  <script src="/assets/js/account.js?v=0.1.0" defer></script>
+</head>
+<body class="dc-account-page">
+  <a class="dca-skip" href="#account-main">Skip to account settings</a>
+  <header class="dca-topbar">
+    <a class="dca-brand" href="/dashboard.html"><span class="dca-brand-icon" aria-hidden="true">♡</span><span>date concierge<span class="dca-dot">.</span></span></a>
+    <div class="dca-top-actions">
+      <a class="dca-top-link" href="/dashboard.html">← My space</a>
+      <button class="dca-logout" id="account-logout" type="button">Log out ↗</button>
+    </div>
+  </header>
+
+  <main id="account-main" class="dca-main">
+    <div class="dca-page-heading">
+      <div><span class="dca-eyebrow">YOUR SPACE, YOUR CHOICES</span><h1>Account <em>settings</em></h1><p>Manage your personal details and keep your account secure.</p></div>
+      <a href="/profile.html" class="dca-secondary-link">Dating profile ↗</a>
+    </div>
+    <div class="dca-page-error" id="account-page-error" role="alert" hidden></div>
+    <div class="dca-loading" id="account-loading" role="status">Loading your account…</div>
+
+    <div class="dca-grid" id="account-content" hidden>
+      <section class="dca-panel dca-personal-panel" aria-labelledby="personal-title">
+        <div class="dca-panel-heading"><span class="dca-panel-icon" aria-hidden="true">♙</span><div><h2 id="personal-title">Personal details</h2><p>These details belong to your Date Concierge account.</p></div></div>
+        <form id="account-form" novalidate>
+          <label for="account-name">Display name</label>
+          <input id="account-name" name="displayName" type="text" minlength="2" maxlength="80" autocomplete="name" required>
+          <label for="account-city">City</label>
+          <input id="account-city" name="city" type="text" minlength="2" maxlength="80" autocomplete="address-level2" required>
+          <label for="account-email">Email address</label>
+          <input id="account-email" name="email" type="email" readonly aria-describedby="email-note">
+          <p class="dca-field-note" id="email-note">Email changes require an email-verification flow and are not available yet.</p>
+          <label for="account-birth-date">Date of birth</label>
+          <input id="account-birth-date" name="birthDate" type="text" readonly aria-describedby="birth-note">
+          <p class="dca-field-note" id="birth-note">Your date of birth is private and cannot be edited here.</p>
+          <div class="dca-form-status" id="account-form-status" role="status" aria-live="polite" hidden></div>
+          <button class="dca-primary-button" id="account-save" type="submit">Save changes <span aria-hidden="true">→</span></button>
+        </form>
+      </section>
+
+      <section class="dca-panel dca-security-panel" aria-labelledby="security-title">
+        <div class="dca-panel-heading"><span class="dca-panel-icon" aria-hidden="true">♢</span><div><h2 id="security-title">Password & security</h2><p>Use a unique password to protect your account.</p></div></div>
+        <form id="password-form" novalidate>
+          <label for="current-password">Current password</label>
+          <input id="current-password" name="currentPassword" type="password" autocomplete="current-password" required maxlength="128">
+          <label for="new-password">New password</label>
+          <input id="new-password" name="newPassword" type="password" autocomplete="new-password" minlength="10" maxlength="128" aria-describedby="password-note" required>
+          <p class="dca-field-note" id="password-note">Use at least 10 characters. Changing your password signs out other sessions.</p>
+          <label for="confirm-password">Confirm new password</label>
+          <input id="confirm-password" name="confirmPassword" type="password" autocomplete="new-password" minlength="10" maxlength="128" required>
+          <div class="dca-form-status" id="password-form-status" role="status" aria-live="polite" hidden></div>
+          <button class="dca-primary-button" id="password-save" type="submit">Update password <span aria-hidden="true">→</span></button>
+        </form>
+        <div class="dca-security-note"><span aria-hidden="true">♡</span><p><strong>Your privacy comes first.</strong><br>Your password is stored as a secure hash; it is never displayed in your account settings.</p></div>
+      </section>
+
+      <section class="dca-panel dca-email-panel" aria-labelledby="membership-title">
+        <div class="dca-panel-heading"><span class="dca-panel-icon" aria-hidden="true">♛</span><div><h2 id="membership-title">Membership</h2><p>Your current access level.</p></div></div>
+        <div class="dca-membership-row"><div><span class="dca-plan-label">CURRENT PLAN</span><strong>Explorer · Free</strong><p>Paid checkout is not active yet.</p></div><span class="dca-free-badge">FREE</span></div>
+        <div class="dca-plan-row"><span>Date Plus</span><strong>₹799 <small>/ month</small></strong></div>
+        <div class="dca-plan-row"><span>Private Concierge</span><strong>₹1,499 <small>/ month</small></strong></div>
+        <a class="dca-secondary-button" href="/#pricing">Compare membership plans ↗</a>
+      </section>
+
+      <section class="dca-panel dca-account-info" aria-labelledby="account-info-title">
+        <div class="dca-panel-heading"><span class="dca-panel-icon" aria-hidden="true">✓</span><div><h2 id="account-info-title">Account information</h2><p>Useful details about your account.</p></div></div>
+        <div class="dca-info-row"><span>Member since</span><strong id="account-created">—</strong></div>
+        <div class="dca-info-row"><span>Account status</span><strong class="dca-status-active">Active</strong></div>
+        <div class="dca-info-row"><span>Login method</span><strong>Email & password</strong></div>
+        <a class="dca-secondary-button" href="/privacy.html">Review privacy policy ↗</a>
+      </section>
+    </div>
+  </main>
+
+  <nav class="dca-bottom-nav" aria-label="Member navigation">
+    <a href="/dashboard.html"><span aria-hidden="true">⌂</span><small>Home</small></a>
+    <a href="/discover.html"><span aria-hidden="true">⌕</span><small>Discover</small></a>
+    <a href="/introductions.html"><span aria-hidden="true">♧</span><small>Intros</small></a>
+    <a href="/messages.html"><span aria-hidden="true">▱</span><small>Messages</small></a>
+    <a class="is-active" href="/account.html" aria-current="page"><span aria-hidden="true">⚙</span><small>Account</small></a>
+  </nav>
+</body>
+</html>

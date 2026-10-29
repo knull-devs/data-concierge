@@ -231,6 +231,57 @@
     return row;
   }
 
+  function renderRecentMessage(conversation) {
+    const link = text('a', 'dc-recent-message', '');
+    link.href = `/messages.html?introductionId=${encodeURIComponent(conversation.introductionId)}`;
+    const initials = safeInitials(conversation.member?.name).slice(0, 2);
+    link.append(text('span', 'dc-recent-message-avatar', initials));
+    const copy = text('span', 'dc-recent-message-copy', '');
+    copy.append(text('strong', '', conversation.member?.name || 'Date Concierge member'));
+    const preview = conversation.lastMessage
+      ? `${conversation.lastMessageFromMe ? 'You: ' : ''}${conversation.lastMessage}`
+      : 'Your introduction is accepted. Say hello when you’re ready.';
+    copy.append(text('span', '', preview));
+    link.append(copy);
+    const meta = text('span', 'dc-recent-message-meta', conversation.lastMessageAt ? new Intl.DateTimeFormat(undefined, { hour: 'numeric', minute: '2-digit' }).format(new Date(conversation.lastMessageAt)) : 'New');
+    if (Number(conversation.unreadCount) > 0) meta.append(text('b', '', String(Math.min(99, Number(conversation.unreadCount)))));
+    link.append(meta);
+    return link;
+  }
+
+  async function loadRecentMessages() {
+    const loading = byId('dashboard-messages-loading');
+    const errorBox = byId('dashboard-messages-error');
+    const empty = byId('dashboard-messages-empty');
+    const list = byId('dashboard-recent-messages-list');
+    if (!loading || !errorBox || !empty || !list) return;
+    try {
+      const { response, data } = await requestJson('/api/messages', { headers: { Accept: 'application/json' } });
+      loading.hidden = true;
+      if (!response.ok) {
+        errorBox.textContent = data.error || 'Messages could not be loaded.';
+        errorBox.hidden = false;
+        return;
+      }
+      const conversations = Array.isArray(data.conversations) ? data.conversations : [];
+      if (!conversations.length) { empty.hidden = false; list.hidden = true; return; }
+      const unreadTotal = conversations.reduce((sum, item) => sum + Math.max(0, Number(item.unreadCount) || 0), 0);
+      list.replaceChildren(...conversations.slice(0, 4).map(renderRecentMessage));
+      list.hidden = false;
+      empty.hidden = true;
+      const messageLink = document.querySelector('.dc-top-icon[href="/messages.html"]');
+      if (messageLink && unreadTotal > 0 && !messageLink.querySelector('.dc-message-unread-dot')) {
+        const dot = text('span', 'dc-message-unread-dot', String(Math.min(99, unreadTotal)));
+        dot.setAttribute('aria-label', `${unreadTotal} unread messages`);
+        messageLink.append(dot);
+      }
+    } catch (error) {
+      loading.hidden = true;
+      errorBox.textContent = error.message || 'Messages could not be loaded.';
+      errorBox.hidden = false;
+    }
+  }
+
   async function loadProfile() {
     try {
       const { response, data } = await requestJson('/api/profile/me', { headers: { Accept: 'application/json' } });
@@ -255,7 +306,7 @@
       updateMember(data.user || {});
       if (loading) loading.hidden = true;
       if (content) content.hidden = false;
-      await Promise.allSettled([loadProfile(), loadRecommendations(), loadIntroductions()]);
+      await Promise.allSettled([loadProfile(), loadRecommendations(), loadIntroductions(), loadRecentMessages()]);
     } catch (error) {
       if (error.message === 'Your session has expired. Please sign in again.') return;
       renderGlobalError(error.message || 'Could not load your account. Please refresh and try again.');

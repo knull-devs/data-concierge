@@ -1,0 +1,86 @@
+/* Date Concierge account settings — mobile-first responsive UI */
+:root { --dca-bg:#100a10; --dca-panel:#1a1119; --dca-panel-2:#241521; --dca-border:rgba(235,159,190,.17); --dca-border-strong:rgba(235,159,190,.34); --dca-text:#fff5f9; --dca-muted:#b9a7b2; --dca-pink:#f184ac; --dca-plum:#7a1d49; }
+body.dc-account-page { margin:0; min-height:100vh; padding-bottom:80px; color:var(--dca-text); background:radial-gradient(ellipse at 85% 0%,rgba(117,29,72,.18),transparent 36rem),var(--dca-bg); font-family:var(--sans,Inter,system-ui,-apple-system,"Segoe UI",sans-serif); -webkit-font-smoothing:antialiased; overflow-x:clip; }
+.dc-account-page *, .dc-account-page *::before, .dc-account-page *::after { box-sizing:border-box; }
+.dc-account-page [hidden] { display:none !important; }
+.dc-account-page a { color:inherit; text-decoration:none; -webkit-tap-highlight-color:transparent; }
+.dc-account-page button, .dc-account-page input { font:inherit; }
+.dca-skip { position:fixed; top:8px; left:8px; z-index:200; transform:translateY(-150%); background:#fff; color:#24121e !important; padding:10px 14px; border-radius:10px; }
+.dca-skip:focus { transform:translateY(0); }
+.dca-topbar { min-height:76px; padding:12px clamp(16px,3vw,44px); display:flex; justify-content:space-between; align-items:center; gap:16px; border-bottom:1px solid rgba(236,181,205,.12); background:rgba(15,9,14,.94); position:sticky; top:0; z-index:40; backdrop-filter:blur(16px); }
+.dca-brand { display:inline-flex; align-items:center; gap:10px; font-family:var(--serif,Georgia,serif); font-size:clamp(21px,2.3vw,27px); letter-spacing:-.045em; white-space:nowrap; }
+.dca-brand-icon { width:37px; height:37px; display:grid; place-items:center; border:1.4px solid var(--dca-pink); border-radius:13px 13px 15px 15px; color:var(--dca-pink); font-size:25px; }
+.dca-dot { color:var(--dca-pink); }
+.dca-top-actions { display:flex; align-items:center; gap:10px; }
+.dca-top-link, .dca-logout { min-height:39px; display:inline-flex; align-items:center; justify-content:center; padding:0 14px; border:1px solid var(--dca-border-strong); border-radius:999px; background:transparent; color:#ffe5ef; font-size:12px; font-weight:750; cursor:pointer; }
+.dca-logout { border-color:transparent; color:var(--dca-muted); }
+.dca-top-link:hover, .dca-logout:hover { background:rgba(241,132,172,.09); color:#fff; }
+.dca-main { width:min(1120px,100%); margin:0 auto; padding:clamp(22px,4vw,46px) clamp(15px,3.2vw,36px) 56px; }
+.dca-page-heading { display:flex; align-items:flex-end; justify-content:space-between; gap:18px; margin-bottom:28px; }
+.dca-eyebrow { color:var(--dca-pink); font-size:10px; font-weight:850; letter-spacing:.17em; }
+.dca-page-heading h1 { margin:8px 0 9px; font-family:var(--serif,Georgia,serif); font-size:clamp(34px,5vw,52px); line-height:1.02; font-weight:500; letter-spacing:-.05em; }
+.dca-page-heading h1 em { color:var(--dca-pink); font-weight:500; }
+.dca-page-heading p { margin:0; max-width:570px; color:var(--dca-muted); font-size:13px; line-height:1.65; }
+.dca-secondary-link { flex:0 0 auto; padding-bottom:3px; color:var(--dca-pink); font-size:12px; font-weight:750; }
+.dca-grid { display:grid; grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr); gap:16px; align-items:start; }
+.dca-panel { min-width:0; padding:clamp(17px,2.5vw,26px); border:1px solid var(--dca-border); border-radius:22px; background:linear-gradient(145deg,rgba(31,20,30,.97),rgba(20,12,19,.98)); box-shadow:0 12px 40px rgba(0,0,0,.08); }
+.dca-panel-heading { display:flex; gap:12px; align-items:center; margin-bottom:23px; }
+.dca-panel-icon { flex:0 0 43px; width:43px; height:43px; display:grid; place-items:center; border-radius:15px; background:rgba(241,132,172,.12); color:var(--dca-pink); font-size:24px; }
+.dca-panel-heading h2 { margin:0 0 5px; font-family:var(--serif,Georgia,serif); font-weight:500; font-size:22px; letter-spacing:-.025em; }
+.dca-panel-heading p { margin:0; color:var(--dca-muted); font-size:11px; line-height:1.5; }
+.dca-account-page form { display:grid; gap:9px; }
+.dca-account-page label { margin-top:6px; color:#f3dce7; font-size:11px; font-weight:750; }
+.dca-account-page input { width:100%; min-height:46px; border:1px solid rgba(232,177,201,.22); border-radius:12px; padding:11px 13px; outline:none; background:rgba(255,248,251,.045); color:#fff5f9; font-size:16px; }
+.dca-account-page input:focus { border-color:var(--dca-pink); box-shadow:0 0 0 3px rgba(241,132,172,.12); }
+.dca-account-page input[readonly] { color:#c5b3bd; background:rgba(255,255,255,.025); }
+.dca-field-note { margin:0 0 2px; color:#9c8995; font-size:10px; line-height:1.55; }
+.dca-primary-button { width:100%; min-height:46px; display:flex; align-items:center; justify-content:space-between; gap:12px; margin-top:9px; padding:0 16px; border:0; border-radius:13px; color:#2c0f20; background:linear-gradient(105deg,#ff9abc,#eb6d9d); font-size:12px; font-weight:850; cursor:pointer; box-shadow:0 9px 22px rgba(216,68,124,.14); }
+.dca-primary-button:disabled { opacity:.65; cursor:wait; }
+.dca-primary-button span { font-size:18px; }
+.dca-form-status, .dca-page-error { padding:11px 13px; border:1px solid rgba(235,159,190,.22); border-radius:12px; color:#ffdce8; background:rgba(105,27,54,.22); font-size:11px; line-height:1.5; overflow-wrap:anywhere; }
+.dca-form-status.is-success { border-color:rgba(103,216,165,.3); color:#b5f3d5; background:rgba(30,108,76,.15); }
+.dca-page-error { margin:0 0 16px; }
+.dca-loading { padding:26px 17px; color:var(--dca-muted); }
+.dca-security-note { display:flex; gap:12px; align-items:flex-start; margin-top:20px; padding:14px; border-radius:15px; background:rgba(241,132,172,.07); color:var(--dca-muted); font-size:10px; line-height:1.6; }
+.dca-security-note > span { color:var(--dca-pink); font-size:23px; line-height:1; }
+.dca-security-note p { margin:0; }
+.dca-security-note strong { color:#fff0f6; }
+.dca-email-panel, .dca-account-info { grid-column:span 1; }
+.dca-membership-row { display:flex; justify-content:space-between; gap:10px; align-items:center; padding:14px; border:1px solid var(--dca-border); border-radius:14px; background:rgba(241,132,172,.055); }
+.dca-plan-label { display:block; margin-bottom:7px; color:var(--dca-pink); font-size:8px; font-weight:850; letter-spacing:.16em; }
+.dca-membership-row strong { display:block; font-family:var(--serif,Georgia,serif); font-size:19px; font-weight:500; }
+.dca-membership-row p { margin:5px 0 0; color:var(--dca-muted); font-size:10px; }
+.dca-free-badge { padding:5px 8px; border-radius:999px; background:rgba(241,132,172,.12); color:var(--dca-pink); font-size:9px; font-weight:900; }
+.dca-plan-row, .dca-info-row { display:flex; justify-content:space-between; align-items:center; gap:12px; padding:14px 2px; border-bottom:1px solid rgba(235,159,190,.1); color:#e5d3dd; font-size:11px; }
+.dca-plan-row strong { color:#fff5f9; font-size:13px; white-space:nowrap; }
+.dca-plan-row small { color:var(--dca-muted); font-size:9px; font-weight:500; }
+.dca-secondary-button { display:flex; align-items:center; justify-content:center; min-height:42px; margin-top:16px; padding:9px 12px; border:1px solid var(--dca-border-strong); border-radius:12px; color:#ffdbe7; font-size:11px; font-weight:750; text-align:center; }
+.dca-secondary-button:hover { background:rgba(241,132,172,.08); }
+.dca-info-row strong { text-align:right; color:#fff1f7; font-size:11px; }
+.dca-info-row .dca-status-active { color:#7de4b5; }
+.dca-bottom-nav { display:none; }
+@media (max-width:760px) {
+  body.dc-account-page { padding-bottom:calc(76px + env(safe-area-inset-bottom)); }
+  .dca-topbar { min-height:65px; padding:10px 14px; }
+  .dca-brand { gap:8px; font-size:22px; }
+  .dca-brand-icon { width:32px; height:32px; font-size:22px; }
+  .dca-top-actions { gap:4px; }
+  .dca-top-link { min-height:35px; padding:0 10px; font-size:11px; }
+  .dca-logout { width:35px; min-height:35px; padding:0; font-size:0; }
+  .dca-logout::before { content:"↗"; font-size:16px; }
+  .dca-main { padding:24px 15px 34px; }
+  .dca-page-heading { display:block; margin-bottom:20px; }
+  .dca-page-heading h1 { font-size:39px; }
+  .dca-page-heading p { max-width:100%; font-size:12px; }
+  .dca-secondary-link { display:inline-flex; margin-top:12px; }
+  .dca-grid { grid-template-columns:minmax(0,1fr); gap:13px; }
+  .dca-panel { padding:18px 16px; border-radius:19px; }
+  .dca-panel-heading { margin-bottom:18px; }
+  .dca-panel-heading h2 { font-size:21px; }
+  .dca-bottom-nav { position:fixed; z-index:60; right:0; bottom:0; left:0; display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:2px; padding:8px 6px calc(8px + env(safe-area-inset-bottom)); border-top:1px solid rgba(235,159,190,.15); background:rgba(15,9,14,.96); backdrop-filter:blur(18px); }
+  .dca-bottom-nav a { display:grid; justify-items:center; gap:3px; padding:6px 1px; border-radius:12px; color:#9f8b98; min-width:0; }
+  .dca-bottom-nav a span { font-size:21px; line-height:1.1; }
+  .dca-bottom-nav a small { font-size:9px; white-space:nowrap; }
+  .dca-bottom-nav a.is-active { background:rgba(241,132,172,.13); color:var(--dca-pink); }
+}
+@media (prefers-reduced-motion:reduce) { .dca-account-page *, .dca-account-page *::before, .dca-account-page *::after { scroll-behavior:auto !important; transition:none !important; animation:none !important; } }

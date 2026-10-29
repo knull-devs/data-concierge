@@ -140,12 +140,12 @@ export default async function handler(req, res) {
             UPDATE dc_introduction_requests SET status = 'accepted', updated_at = NOW(), responded_at = NOW()
             WHERE id = ${existing.id} AND status = 'pending' RETURNING id, status
           `;
-          if (accepted.length) return sendJson(res, 200, { ok: true, mutual: true, id: accepted[0].id, status: accepted[0].status, message: 'It is mutual — the introduction is accepted by both of you.' });
+          if (accepted.length) return sendJson(res, 200, { ok: true, mutual: true, id: accepted[0].id, status: accepted[0].status, message: 'It is mutual — your private conversation is now available in Messages.' });
         }
         if (existing.requester_id === user.id && existing.status === 'pending') {
           return sendJson(res, 200, { ok: true, existing: true, id: existing.id, status: existing.status, message: 'You have already requested this introduction.' });
         }
-        if (existing.status === 'accepted') return sendJson(res, 200, { ok: true, existing: true, id: existing.id, status: existing.status, message: 'This introduction is already accepted.' });
+        if (existing.status === 'accepted') return sendJson(res, 200, { ok: true, existing: true, id: existing.id, status: existing.status, message: 'This introduction is already accepted. Open Messages to continue your conversation.' });
         return sendJson(res, 409, { error: 'An introduction request for this member already exists.', status: existing.status });
       }
 
@@ -166,7 +166,7 @@ export default async function handler(req, res) {
         const row = duplicate[0];
         if (row?.requester_id === candidateId && row?.recipient_id === user.id && row?.status === 'pending') {
           const accepted = await sql`UPDATE dc_introduction_requests SET status = 'accepted', updated_at = NOW(), responded_at = NOW() WHERE id = ${row.id} AND status = 'pending' RETURNING id, status`;
-          if (accepted.length) return sendJson(res, 200, { ok: true, mutual: true, id: row.id, status: 'accepted', message: 'It is mutual — the introduction is accepted by both of you.' });
+          if (accepted.length) return sendJson(res, 200, { ok: true, mutual: true, id: row.id, status: 'accepted', message: 'It is mutual — your private conversation is now available in Messages.' });
         }
         return sendJson(res, 409, { error: 'An introduction request for this member already exists.', status: row?.status || 'pending' });
       }
@@ -196,7 +196,7 @@ export default async function handler(req, res) {
       RETURNING id, status, updated_at, responded_at
     `;
     if (!updated.length) return sendJson(res, 409, { error: 'This request has already been handled.' });
-    return sendJson(res, 200, { ok: true, ...updated[0], message: nextStatus === 'accepted' ? 'Introduction accepted. Messaging will be enabled in a later milestone.' : 'Introduction declined.' });
+    return sendJson(res, 200, { ok: true, ...updated[0], message: nextStatus === 'accepted' ? 'Introduction accepted. Your private conversation is now available in Messages.' : 'Introduction declined.' });
   } catch (error) {
     console.error('Introductions API error:', error?.code || error?.name || 'unknown');
     const setup = error?.code === '42P01' || error?.code === '42703';

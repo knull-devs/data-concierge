@@ -383,3 +383,23 @@ body.dc-dashboard {
   .dc-primary-cta, .dc-upgrade-top, .dc-nav-item, .dc-view-all span { transition: none; }
 }
 @keyframes dc-card-in { from { opacity: 0; transform: translateY(9px); } to { opacity: 1; transform: translateY(0); } }
+
+/* Account + private messaging links added in feature set v0.1 */
+.dc-account-link { display:flex; align-items:center; gap:11px; min-width:0; color:inherit; text-decoration:none; }
+.dc-account-link:focus-visible { outline:2px solid var(--dc-pink); outline-offset:3px; border-radius:12px; }
+.dc-recent-message-list { display:grid; gap:3px; padding-top:10px; }
+.dc-recent-message { display:flex; align-items:center; gap:10px; min-width:0; padding:10px 0; border-bottom:1px solid rgba(237,176,200,.08); color:inherit; text-decoration:none; }
+.dc-recent-message:last-child { border-bottom:0; }
+.dc-recent-message:hover .dc-recent-message-copy strong { color:var(--dc-pink-bright); }
+.dc-recent-message-avatar { display:grid; place-items:center; flex:0 0 38px; width:38px; height:38px; border:1px solid rgba(240,127,169,.32); border-radius:50%; color:#ffdce8; background:linear-gradient(135deg,#67334f,#211420); font-family:var(--serif,Georgia,serif); font-size:16px; }
+.dc-recent-message-copy { display:grid; gap:4px; flex:1; min-width:0; }
+.dc-recent-message-copy strong { color:#fff3f8; font-size:10px; font-weight:800; }
+.dc-recent-message-copy span { max-width:100%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; color:var(--dc-muted); font-size:9px; }
+.dc-recent-message-meta { display:grid; justify-items:end; align-content:center; gap:5px; color:var(--dc-muted-2); font-size:8px; white-space:nowrap; }
+.dc-recent-message-meta b { display:grid; place-items:center; min-width:16px; height:16px; padding:0 4px; border-radius:999px; background:var(--dc-pink); color:#351020; font-size:8px; }
+.dc-message-unread-dot { position:absolute; top:-1px; right:-3px; min-width:15px; height:15px; display:grid; place-items:center; padding:0 3px; border-radius:999px; background:var(--dc-pink); color:#2d1020; font-size:8px; font-weight:900; }
+.dc-messages-card .dc-rail-heading .dc-view-all { font-size:10px; }
+@media (max-width:820px) {
+  .dc-account-link { gap:0; }
+  .dc-account-copy { display:none; }
+}

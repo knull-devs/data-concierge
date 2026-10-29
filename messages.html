@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#100a10">
+  <meta name="description" content="Private conversations after a mutually accepted Date Concierge introduction.">
+  <title>Messages — Date Concierge</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/css/site.css?v=1.2.0">
+  <link rel="stylesheet" href="/assets/css/messages.css?v=0.1.0">
+  <script src="/assets/js/messages.js?v=0.1.0" defer></script>
+</head>
+<body class="dcm-page">
+  <a class="dcm-skip" href="#messages-main">Skip to messages</a>
+  <header class="dcm-topbar">
+    <a class="dcm-brand" href="/dashboard.html"><span class="dcm-brand-icon" aria-hidden="true">♡</span><span>date concierge<span class="dcm-dot">.</span></span></a>
+    <nav class="dcm-top-links" aria-label="Member navigation"><a href="/dashboard.html">My space</a><a href="/introductions.html">Introductions</a><a href="/account.html">Account</a></nav>
+    <button class="dcm-logout" id="messages-logout" type="button" aria-label="Log out">Log out ↗</button>
+  </header>
+
+  <main id="messages-main" class="dcm-main">
+    <div class="dcm-heading"><div><span class="dcm-eyebrow">AFTER THE INTRODUCTION</span><h1>Your <em>conversations</em></h1><p>Chat privately once you have both accepted an introduction.</p></div><button class="dcm-refresh" id="messages-refresh" type="button">↻ Refresh</button></div>
+    <div class="dcm-page-error" id="messages-page-error" role="alert" hidden></div>
+    <div class="dcm-loading" id="messages-loading" role="status">Loading your conversations…</div>
+
+    <section class="dcm-workspace" id="messages-workspace" hidden aria-label="Messages workspace">
+      <aside class="dcm-conversation-pane" id="conversation-pane" aria-label="Conversation list">
+        <div class="dcm-pane-heading"><div><h2>Inbox</h2><p id="conversation-count">Your accepted introductions</p></div><span class="dcm-inbox-icon" aria-hidden="true">▱</span></div>
+        <div class="dcm-search-wrap"><span aria-hidden="true">⌕</span><input id="conversation-search" type="search" placeholder="Search conversations" aria-label="Search conversations" autocomplete="off"></div>
+        <div class="dcm-list-state" id="conversation-list-loading" role="status" hidden>Loading inbox…</div>
+        <div class="dcm-list-state dcm-error-state" id="conversation-list-error" role="alert" hidden></div>
+        <div class="dcm-no-conversations" id="conversation-list-empty" hidden><span aria-hidden="true">♡</span><h3>Your inbox starts with mutual interest.</h3><p>When you and another member both accept an introduction, your private conversation will appear here.</p><a href="/introductions.html">View introductions ↗</a></div>
+        <div class="dcm-conversation-list" id="conversation-list" hidden></div>
+      </aside>
+
+      <section class="dcm-thread-pane" id="thread-pane" aria-label="Selected conversation">
+        <div class="dcm-thread-placeholder" id="thread-placeholder"><span class="dcm-thread-heart" aria-hidden="true">♡</span><h2>Good conversations start gently.</h2><p>Choose a conversation to continue getting to know someone.</p><a href="/introductions.html">Review introductions ↗</a></div>
+        <div class="dcm-thread" id="thread-content" hidden>
+          <header class="dcm-thread-header"><button class="dcm-back-to-inbox" id="messages-back" type="button" aria-label="Back to inbox">←</button><span class="dcm-person-avatar" id="thread-avatar" aria-hidden="true">♡</span><div class="dcm-thread-person"><strong id="thread-name">Member</strong><span id="thread-location">Accepted introduction</span></div><span class="dcm-consent-badge">Mutual</span></header>
+          <div class="dcm-thread-context"><span aria-hidden="true">♡</span><p>This conversation is available because you both accepted an introduction. Take it at a pace that feels comfortable.</p></div>
+          <div class="dcm-message-list" id="message-list" role="log" aria-live="polite" aria-relevant="additions text"></div>
+          <div class="dcm-thread-error" id="thread-error" role="alert" hidden></div>
+          <form class="dcm-composer" id="message-form">
+            <label class="dcm-visually-hidden" for="message-input">Write a message</label>
+            <textarea id="message-input" name="message" rows="1" maxlength="2000" placeholder="Write a thoughtful message…" required></textarea>
+            <div class="dcm-composer-bottom"><span id="message-character-count">0 / 2000</span><button type="submit" id="send-message-button">Send <span aria-hidden="true">↗</span></button></div>
+          </form>
+        </div>
+      </section>
+    </section>
+    <p class="dcm-safety-note"><span aria-hidden="true">♢</span> Keep personal details private until you feel comfortable. You can block or report a member from their profile.</p>
+  </main>
+
+  <nav class="dcm-bottom-nav" aria-label="Member navigation">
+    <a href="/dashboard.html"><span aria-hidden="true">⌂</span><small>Home</small></a>
+    <a href="/discover.html"><span aria-hidden="true">⌕</span><small>Discover</small></a>
+    <a href="/introductions.html"><span aria-hidden="true">♧</span><small>Intros</small></a>
+    <a class="is-active" href="/messages.html" aria-current="page"><span aria-hidden="true">▱</span><small>Messages</small></a>
+    <a href="/account.html"><span aria-hidden="true">⚙</span><small>Account</small></a>
+  </nav>
+</body>
+</html>

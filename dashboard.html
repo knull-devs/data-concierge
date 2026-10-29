@@ -27,7 +27,7 @@
 
     <div class="dc-top-actions">
       <a class="dc-upgrade-top" href="/#pricing"><span aria-hidden="true">♛</span> Upgrade</a>
-      <a class="dc-top-icon" href="#recent-messages" aria-label="Messages">
+      <a class="dc-top-icon" href="/messages.html" aria-label="Open messages">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3h11A2.5 2.5 0 0 1 20 5.5v8a2.5 2.5 0 0 1-2.5 2.5H10l-5 4v-4.4A2.5 2.5 0 0 1 4 13.5z"></path><path d="M8 8h8M8 11h5"></path></svg>
       </a>
       <a class="dc-top-icon" href="/introductions.html" aria-label="Introduction requests">
@@ -35,8 +35,10 @@
         <span class="dc-notification-dot" aria-hidden="true"></span>
       </a>
       <div class="dc-account-menu">
-        <span class="dc-avatar dc-avatar-top" id="member-avatar" aria-hidden="true">♡</span>
-        <span class="dc-account-copy"><strong id="member-full-name">Member</strong><small id="member-plan-label">Explorer · Free</small></span>
+        <a class="dc-account-link" href="/account.html" aria-label="Manage account settings">
+          <span class="dc-avatar dc-avatar-top" id="member-avatar" aria-hidden="true">♡</span>
+          <span class="dc-account-copy"><strong id="member-full-name">Member</strong><small id="member-plan-label">Explorer · Free</small></span>
+        </a>
         <button id="logout-button" class="dc-logout-button" type="button" aria-label="Log out" title="Log out">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 4H5v16h5"></path><path d="M13 8l4 4-4 4M7 12h10"></path></svg>
         </button>
@@ -50,11 +52,12 @@
         <a class="dc-nav-item is-active" href="/dashboard.html" aria-current="page"><span class="dc-nav-icon" aria-hidden="true">⌂</span><span>Home</span></a>
         <a class="dc-nav-item" href="/discover.html"><span class="dc-nav-icon" aria-hidden="true">⌕</span><span>Discover</span></a>
         <a class="dc-nav-item" href="#recommended"><span class="dc-nav-icon" aria-hidden="true">♡</span><span>Matches</span><span class="dc-nav-count" id="side-match-count" hidden>0</span></a>
-        <a class="dc-nav-item" href="#recent-messages"><span class="dc-nav-icon" aria-hidden="true">▱</span><span>Messages</span></a>
+        <a class="dc-nav-item" href="/messages.html"><span class="dc-nav-icon" aria-hidden="true">▱</span><span>Messages</span></a>
         <a class="dc-nav-item" href="/introductions.html"><span class="dc-nav-icon" aria-hidden="true">♧</span><span>Introductions</span><span class="dc-nav-count" id="side-intro-count" hidden>0</span></a>
         <a class="dc-nav-item" href="/profile.html"><span class="dc-nav-icon" aria-hidden="true">♙</span><span>My Profile</span></a>
         <a class="dc-nav-item" href="/#pricing"><span class="dc-nav-icon" aria-hidden="true">♛</span><span>My Plan</span></a>
         <a class="dc-nav-item" href="/profile.html#preferences"><span class="dc-nav-icon" aria-hidden="true">⚙</span><span>Preferences</span></a>
+        <a class="dc-nav-item" href="/account.html"><span class="dc-nav-icon" aria-hidden="true">♢</span><span>Account settings</span></a>
       </nav>
 
       <section class="dc-sidebar-plan" aria-labelledby="sidebar-plan-title">
@@ -165,13 +168,16 @@
             </section>
 
             <section class="dc-rail-card dc-messages-card" id="recent-messages" aria-labelledby="recent-messages-title">
-              <div class="dc-rail-heading"><h2 id="recent-messages-title">Recent messages</h2><span class="dc-coming-soon">COMING NEXT</span></div>
-              <div class="dc-message-empty">
+              <div class="dc-rail-heading"><h2 id="recent-messages-title">Recent messages</h2><a class="dc-view-all" href="/messages.html">View all <span aria-hidden="true">→</span></a></div>
+              <div class="dc-inline-state" id="dashboard-messages-loading" role="status">Checking your accepted introductions…</div>
+              <div class="dc-inline-state dc-state-error" id="dashboard-messages-error" role="alert" hidden></div>
+              <div class="dc-message-empty" id="dashboard-messages-empty" hidden>
                 <span class="dc-message-empty-icon" aria-hidden="true">▱</span>
-                <strong>Your message space is waiting.</strong>
-                <p>Messaging will be available after mutual introductions and the chat module are enabled.</p>
+                <strong>Your inbox starts with mutual interest.</strong>
+                <p>Private messaging appears when both people accept an introduction.</p>
                 <a href="/introductions.html">View introductions <span aria-hidden="true">→</span></a>
               </div>
+              <div class="dc-recent-message-list" id="dashboard-recent-messages-list" hidden></div>
             </section>
 
             <section class="dc-plan-promo" aria-labelledby="dc-plan-promo-title">
